@@ -1,200 +1,564 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MySkillSwapNow</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
 <style>
+* {
+box-sizing: border-box;
+}
 
-body{
+body {
+margin: 0;
 font-family: Arial, sans-serif;
-padding: 30px;
-background:#f5f5f5;
-color:#222;
+background: #f3f4f6;
+color: #111827;
 }
 
-.card{
-background:white;
-border-radius:14px;
-padding:20px;
-margin-bottom:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
+.app {
+max-width: 480px;
+margin: 0 auto;
+min-height: 100vh;
+background: #f9fafb;
 }
 
-.badge{
-display:inline-block;
-background:#1f7a1f;
-color:white;
-padding:6px 12px;
-border-radius:20px;
-font-size:14px;
-margin-top:10px;
+.topbar {
+background: #111827;
+color: white;
+padding: 18px 16px 14px;
+position: sticky;
+top: 0;
+z-index: 10;
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-.light-badge{
-display:inline-block;
-background:#e9f7ea;
-color:#1f7a1f;
-padding:6px 12px;
-border-radius:20px;
-font-size:13px;
-margin:4px 6px 0 0;
+.topbar h1 {
+margin: 0;
+font-size: 28px;
+line-height: 1.1;
 }
 
-.score{
-font-size:36px;
-font-weight:bold;
-color:#1f7a1f;
+.topbar p {
+margin: 6px 0 0;
+color: #d1d5db;
+font-size: 14px;
 }
 
-.muted{
-color:#666;
-font-size:14px;
+.content {
+padding: 14px;
 }
 
-input{
-padding:10px;
-width:70%;
-max-width:400px;
+.tabs {
+display: flex;
+gap: 8px;
+overflow-x: auto;
+margin-bottom: 14px;
+padding-bottom: 4px;
 }
 
-button{
-border:none;
-background:black;
-color:white;
-padding:10px 16px;
-border-radius:8px;
-cursor:pointer;
-margin-top:10px;
+.tab {
+border: none;
+background: #e5e7eb;
+color: #111827;
+padding: 10px 14px;
+border-radius: 999px;
+font-size: 14px;
+white-space: nowrap;
+cursor: pointer;
 }
 
-.credit-buttons button{
-margin-right:10px;
+.tab.active {
+background: #111827;
+color: white;
 }
 
+.card {
+background: white;
+border-radius: 18px;
+padding: 16px;
+margin-bottom: 14px;
+box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+}
+
+.section-title {
+margin: 0 0 10px;
+font-size: 22px;
+}
+
+.subtext {
+color: #6b7280;
+font-size: 14px;
+margin-top: 4px;
+}
+
+.badge {
+display: inline-block;
+background: #15803d;
+color: white;
+padding: 7px 11px;
+border-radius: 999px;
+font-size: 12px;
+margin: 6px 6px 0 0;
+}
+
+.soft-badge {
+display: inline-block;
+background: #dcfce7;
+color: #166534;
+padding: 7px 11px;
+border-radius: 999px;
+font-size: 12px;
+margin: 6px 6px 0 0;
+}
+
+.score {
+font-size: 42px;
+font-weight: bold;
+color: #15803d;
+margin: 8px 0 2px;
+}
+
+.wallet {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.wallet-balance {
+font-size: 42px;
+font-weight: bold;
+margin: 0;
+}
+
+input, select {
+width: 100%;
+padding: 13px 12px;
+margin-top: 8px;
+border: 1px solid #d1d5db;
+border-radius: 12px;
+font-size: 16px;
+background: white;
+}
+
+button.primary,
+button.secondary,
+button.small-btn {
+border: none;
+border-radius: 12px;
+padding: 12px 14px;
+font-size: 15px;
+cursor: pointer;
+}
+
+button.primary {
+background: #111827;
+color: white;
+width: 100%;
+margin-top: 10px;
+}
+
+button.secondary {
+background: #e5e7eb;
+color: #111827;
+width: 100%;
+margin-top: 10px;
+}
+
+.button-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+margin-top: 10px;
+}
+
+.button-row button {
+width: 100%;
+border: none;
+border-radius: 12px;
+padding: 12px 10px;
+font-size: 14px;
+cursor: pointer;
+background: #111827;
+color: white;
+}
+
+ul {
+padding-left: 20px;
+margin: 10px 0 0;
+}
+
+li {
+margin-bottom: 8px;
+line-height: 1.35;
+}
+
+.match-box {
+background: #f9fafb;
+border: 1px solid #e5e7eb;
+border-radius: 14px;
+padding: 12px;
+margin-top: 10px;
+}
+
+.match-label {
+font-size: 13px;
+color: #6b7280;
+margin-bottom: 6px;
+}
+
+.leader {
+display: flex;
+justify-content: space-between;
+gap: 10px;
+padding: 12px 0;
+border-bottom: 1px solid #e5e7eb;
+}
+
+.leader:last-child {
+border-bottom: none;
+}
+
+.small {
+color: #6b7280;
+font-size: 13px;
+margin-top: 4px;
+}
+
+.hidden {
+display: none;
+}
+
+.emergency {
+border: 2px solid #fecaca;
+background: #fff7f7;
+}
+
+.emergency-badge {
+display: inline-block;
+background: #dc2626;
+color: white;
+padding: 7px 11px;
+border-radius: 999px;
+font-size: 12px;
+margin-bottom: 10px;
+}
+
+.footer-space {
+height: 10px;
+}
 </style>
-
 </head>
-
 <body>
-
+<div class="app">
+<div class="topbar">
 <h1>MySkillSwapNow</h1>
 <p>Trade skills. Share equipment. Help locally.</p>
+</div>
 
+<div class="content">
+<div class="tabs">
+<button class="tab active" onclick="showTab('market', this)">Marketplace</button>
+<button class="tab" onclick="showTab('emergency', this)">Emergency</button>
+<button class="tab" onclick="showTab('leaderboard', this)">Leaderboard</button>
+</div>
 
+<div id="market">
 <div class="card">
-
-<h2>Verified Neighbor</h2>
-
-<h3>John D.</h3>
-
+<div class="section-title">Verified Neighbor</div>
+<strong>John D.</strong>
+<div>
 <span class="badge">Verified Neighbor</span>
-
-<p class="muted">Trusted local member</p>
-
+<span class="badge">Top Local Helper</span>
+</div>
+<p class="subtext">Trusted local member</p>
 <div class="score">92</div>
-
-<p class="muted">Trust Score</p>
-
-<span class="light-badge">Email Verified</span>
-<span class="light-badge">Phone Verified</span>
-<span class="light-badge">5 Completed Swaps</span>
-
+<div class="subtext">Trust Score</div>
+<div>
+<span class="soft-badge">Email Verified</span>
+<span class="soft-badge">Phone Verified</span>
+<span class="soft-badge">5 Completed Swaps</span>
 </div>
-
-
+</div>
 
 <div class="card">
-
-<h2>Your Skill Credits</h2>
-
-<h1 id="creditBalance">10</h1>
-
-<p class="muted">Available Skill Credits</p>
-
-<div class="credit-buttons">
-
-<button onclick="earnCredits()">Earn +1 Credit</button>
-
-<button onclick="spendCredits()">Spend -1 Credit</button>
-
+<div class="section-title">Your Skill Credits</div>
+<div class="wallet">
+<div>
+<p id="creditBalance" class="wallet-balance">10</p>
+<div class="subtext">Available Skill Credits</div>
 </div>
-
 </div>
-
-
+<div class="button-row">
+<button onclick="earnCredits()">Earn +1</button>
+<button onclick="spendCredits()">Spend -1</button>
+</div>
+</div>
 
 <div class="card">
+<div class="section-title">Set Your Area</div>
+<input id="city" placeholder="City" value="Las Vegas">
+<input id="zip" placeholder="ZIP Code" value="89122">
+<input id="radius" placeholder="Miles radius" value="10">
+<button class="primary" onclick="updateLocation()">Update Location</button>
+<p id="locationText" class="subtext">Showing listings near Las Vegas within 10 miles.</p>
+</div>
 
-<h2>Post a Skill Request</h2>
+<div class="card">
+<div class="section-title">Smart Skill Match</div>
+<input id="searchInput" placeholder="Try: hang my TV, pull weeds, jump my car, babysit tonight">
+<button class="primary" onclick="matchSkill()">Find Best Match</button>
+
+<div class="match-box">
+<div class="match-label">Best Match</div>
+<div id="matchResult">No search yet.</div>
+<div id="matchHelpers" class="small"></div>
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">Post a Skill Request</div>
+<select id="category">
+<option>Home Repair</option>
+<option>Yard Work</option>
+<option>Moving Help</option>
+<option>Childcare</option>
+<option>Auto Help</option>
+<option>Equipment Loan</option>
+<option>Pet Help</option>
+<option>Tutoring</option>
+</select>
 
 <input id="skillInput" placeholder="Describe the help you need">
-
-<br>
-
-<button onclick="addSkill()">Post Skill</button>
+<button class="primary" onclick="addSkill()">Post Request</button>
 
 <ul id="skillList">
-
-<li>Need help fixing fence – 2 skill credits</li>
-<li>Offering HVAC repair – verified neighbor</li>
-<li>Tractor available for loan</li>
-<li>Dog walking request – 1 skill credit</li>
-<li>Pressure washer available</li>
-
+<li>Fence repair help — 2 credits — 3 miles away</li>
+<li>HVAC repair — verified neighbor — 5 miles away</li>
+<li>Tractor available for loan — 8 miles away</li>
 </ul>
-
 </div>
 
+<div class="card">
+<div class="section-title">Nearby Listings</div>
+<p class="subtext">Nearby help is what makes a nationwide app actually useful.</p>
+<ul id="nearbyList">
+<li>TV wall mounting — 2 miles away</li>
+<li>Weed pulling and yard cleanup — 4 miles away</li>
+<li>Moving help request — 6 miles away</li>
+<li>Dog walking request — 3 miles away</li>
+</ul>
+</div>
+</div>
+
+<div id="emergency" class="hidden">
+<div class="card emergency">
+<div class="emergency-badge">Emergency Priority</div>
+<div class="section-title">Emergency Help Requests</div>
+<p class="subtext">For urgent local help when time matters.</p>
+
+<ul id="emergencyList">
+<li>Car battery jump — 2 miles away</li>
+<li>Locked out of house — 1 mile away</li>
+<li>Need help lifting couch tonight — 3 miles away</li>
+</ul>
+
+<input id="emergencyInput" placeholder="Describe emergency help needed">
+<button class="primary" onclick="addEmergency()">Post Emergency</button>
+</div>
+
+<div class="card">
+<div class="section-title">Childcare Trust Layer</div>
+<span class="badge">Childcare Verified</span>
+<p class="subtext">For sensitive categories, verified identity and safety checks matter more than anything.</p>
+</div>
+</div>
+
+<div id="leaderboard" class="hidden">
+<div class="card">
+<div class="section-title">Top Helpers Near You</div>
+
+<div class="leader">
+<div>
+<strong>1. Mike R.</strong>
+<div class="small">Fence repair, hauling, moving help</div>
+</div>
+<div><strong>34 jobs</strong></div>
+</div>
+
+<div class="leader">
+<div>
+<strong>2. Sarah T.</strong>
+<div class="small">Childcare, tutoring, pet help</div>
+</div>
+<div><strong>29 jobs</strong></div>
+</div>
+
+<div class="leader">
+<div>
+<strong>3. Carlos M.</strong>
+<div class="small">HVAC, maintenance, equipment help</div>
+</div>
+<div><strong>25 jobs</strong></div>
+</div>
+</div>
+</div>
+
+<div class="footer-space"></div>
+</div>
+</div>
 
 <script>
+let credits = 10;
 
-let credits = 10
-
-function earnCredits(){
-
-credits++
-
-document.getElementById("creditBalance").innerText = credits
-
+function earnCredits() {
+credits++;
+document.getElementById("creditBalance").innerText = credits;
 }
 
-function spendCredits(){
-
-if(credits > 0){
-
-credits--
-
-document.getElementById("creditBalance").innerText = credits
-
+function spendCredits() {
+if (credits > 0) {
+credits--;
+document.getElementById("creditBalance").innerText = credits;
+}
 }
 
+function addSkill() {
+let input = document.getElementById("skillInput");
+let list = document.getElementById("skillList");
+let category = document.getElementById("category").value;
+let city = document.getElementById("city").value || "your area";
+let radius = document.getElementById("radius").value || "10";
+
+if (input.value.trim() === "") return;
+
+let li = document.createElement("li");
+li.innerText = category + " — " + input.value + " — near " + city + " within " + radius + " miles";
+list.appendChild(li);
+
+input.value = "";
 }
 
+function addEmergency() {
+let input = document.getElementById("emergencyInput");
+let list = document.getElementById("emergencyList");
 
+if (input.value.trim() === "") return;
 
-function addSkill(){
+let li = document.createElement("li");
+li.innerText = input.value;
+list.appendChild(li);
 
-const input = document.getElementById('skillInput')
-
-const list = document.getElementById('skillList')
-
-if(input.value.trim() === '') return
-
-const li = document.createElement('li')
-
-li.textContent = input.value
-
-list.appendChild(li)
-
-input.value = ''
-
+input.value = "";
 }
 
+function updateLocation() {
+let city = document.getElementById("city").value || "Unknown City";
+let zip = document.getElementById("zip").value || "00000";
+let radius = document.getElementById("radius").value || "10";
+
+document.getElementById("locationText").innerText =
+"Showing listings near " + city + ", " + zip + " within " + radius + " miles.";
+
+document.getElementById("nearbyList").innerHTML = `
+<li>TV wall mounting — 2 miles away in ${city}</li>
+<li>Weed pulling and yard cleanup — 4 miles away in ${city}</li>
+<li>Moving help request — 6 miles away in ${city}</li>
+<li>Dog walking request — 3 miles away in ${city}</li>
+`;
+}
+
+function showTab(tab, el) {
+document.getElementById("market").classList.add("hidden");
+document.getElementById("emergency").classList.add("hidden");
+document.getElementById("leaderboard").classList.add("hidden");
+
+document.getElementById(tab).classList.remove("hidden");
+
+let tabs = document.querySelectorAll(".tab");
+tabs.forEach(t => t.classList.remove("active"));
+el.classList.add("active");
+}
+
+function matchSkill() {
+let input = document.getElementById("searchInput").value.toLowerCase().trim();
+let result = document.getElementById("matchResult");
+let helpers = document.getElementById("matchHelpers");
+
+if (input === "") {
+result.innerText = "Please enter a request.";
+helpers.innerText = "";
+return;
+}
+
+let category = "General Help";
+let suggested = "Nearby helper match available.";
+
+if (
+input.includes("tv") ||
+input.includes("mount") ||
+input.includes("hang") ||
+input.includes("wall install")
+) {
+category = "Home Repair / TV Mounting";
+suggested = "Best match: TV mounting, wall install, drill/anchor setup.";
+} else if (
+input.includes("weed") ||
+input.includes("weeds") ||
+input.includes("yard") ||
+input.includes("grass") ||
+input.includes("mow") ||
+input.includes("landscape")
+) {
+category = "Yard Work";
+suggested = "Best match: weed pulling, mowing, yard cleanup, landscaping.";
+} else if (
+input.includes("move") ||
+input.includes("couch") ||
+input.includes("haul") ||
+input.includes("lift")
+) {
+category = "Moving Help";
+suggested = "Best match: lifting help, hauling, furniture moving.";
+} else if (
+input.includes("jump") ||
+input.includes("battery") ||
+input.includes("car") ||
+input.includes("tire") ||
+input.includes("oil")
+) {
+category = "Auto Help";
+suggested = "Best match: jump start, tire help, basic auto support.";
+} else if (
+input.includes("child") ||
+input.includes("kid") ||
+input.includes("babysit") ||
+input.includes("watch my kids")
+) {
+category = "Childcare";
+suggested = "Best match: childcare, sitter support, family help.";
+} else if (
+input.includes("dog") ||
+input.includes("pet") ||
+input.includes("walk")
+) {
+category = "Pet Help";
+suggested = "Best match: dog walking, pet sitting, feeding support.";
+} else if (
+input.includes("tutor") ||
+input.includes("math") ||
+input.includes("school") ||
+input.includes("study")
+) {
+category = "Tutoring";
+suggested = "Best match: tutoring, homework help, study support.";
+}
+
+result.innerHTML = "<strong>Category:</strong> " + category + "<br><strong>Suggested Match:</strong> " + suggested;
+helpers.innerText = "Top nearby matches: John D. (2 miles), Sarah T. (4 miles), Mike R. (5 miles)";
+}
 </script>
-
-
 </body>
-
 </html>
