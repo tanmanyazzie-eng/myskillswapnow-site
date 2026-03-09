@@ -1,96 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillsSwapNow</title>
-
 <style>
-
-body{
-font-family:Arial;
-background:#f3f4f6;
-margin:0;
-display:flex;
-justify-content:center;
+body {
+font-family: Arial, Helvetica, sans-serif;
+background: #f3f4f6;
+margin: 0;
+display: flex;
+justify-content: center;
 }
 
-.container{
-width:420px;
-padding:20px;
+.container {
+width: 420px;
+padding: 20px;
 }
 
-.header{
-background:#111827;
-color:white;
-padding:25px;
-border-radius:12px;
-text-align:center;
-margin-bottom:20px;
+.header {
+background: #111827;
+color: white;
+padding: 25px;
+border-radius: 12px;
+text-align: center;
+margin-bottom: 20px;
 }
 
-.card{
-background:white;
-padding:16px;
-border-radius:10px;
-margin-bottom:16px;
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
+.card {
+background: white;
+padding: 16px;
+border-radius: 10px;
+margin-bottom: 16px;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-button{
-padding:10px 14px;
-border:none;
-border-radius:8px;
-cursor:pointer;
+button {
+padding: 10px 14px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+margin-right: 8px;
 }
 
-.primary{
-background:#111827;
-color:white;
-width:100%;
-margin-top:10px;
+.primary {
+background: #111827;
+color: white;
+width: 100%;
+margin-top: 10px;
+margin-right: 0;
 }
 
-input,textarea,select{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:8px;
-border:1px solid #ccc;
+input,
+textarea,
+select {
+width: 100%;
+padding: 10px;
+margin-top: 10px;
+border-radius: 8px;
+border: 1px solid #ccc;
+box-sizing: border-box;
 }
 
-.job{
-border:1px solid #eee;
-padding:10px;
-border-radius:8px;
-margin-top:10px;
+.job {
+border: 1px solid #eee;
+padding: 10px;
+border-radius: 8px;
+margin-top: 10px;
 }
-
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
 <div class="header">
 <h2>MySkillsSwapNow</h2>
 <p>Trade skills. Get help. Make money.</p>
 </div>
 
 <div class="card">
-
 <button onclick="signUp()">Sign Up</button>
 <button onclick="login()">Login</button>
 <button onclick="logout()">Logout</button>
-
 </div>
 
 <div class="card">
-
 <h3>Create Request</h3>
 
-<input id="title" placeholder="What do you need help with?">
+<input id="title" placeholder="What do you need help with?" />
 
 <textarea id="description" placeholder="Describe the job"></textarea>
 
@@ -102,140 +98,129 @@ margin-top:10px;
 <option>Tutoring</option>
 </select>
 
-<input id="budget" placeholder="Budget $">
+<input id="budget" placeholder="Budget $" />
 
 <button class="primary" onclick="postSkill()">Post Job</button>
-
 </div>
 
 <div class="card">
-
 <h3>Available Jobs</h3>
-
 <div id="jobs"></div>
-
 </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
+const supabaseUrl = "https://szkbplrqutkedxyhruh.supabase.co";
+const supabaseKey = "sb_publishable_RUITc0pMsVY3_QLEWM6vPA_dcRVCILg";
 
-const supabaseUrl="https://szkbplrqutkedxyhruh.supabase.co"
+const appSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-const supabaseKey="sb_publishable_RUITc0pMsVY3_QLEWM6vPA_dcRVCILg"
+async function signUp() {
+const email = prompt("Enter email");
+const password = prompt("Enter password");
 
-const supabase=window.supabase.createClient(supabaseUrl,supabaseKey)
-
-async function signUp(){
-
-const email=prompt("Enter email")
-
-const password=prompt("Enter password")
-
-const {error}=await supabase.auth.signUp({
-email:email,
-password:password
-})
-
-if(error){
-alert(error.message)
-}else{
-alert("Account created")
+if (!email || !password) {
+alert("Email and password required");
+return;
 }
 
+const { error } = await appSupabase.auth.signUp({
+email,
+password
+});
+
+if (error) {
+alert(error.message);
+} else {
+alert("Account created");
+}
 }
 
-async function login(){
+async function login() {
+const email = prompt("Email");
+const password = prompt("Password");
 
-const email=prompt("Email")
-
-const password=prompt("Password")
-
-const {error}=await supabase.auth.signInWithPassword({
-email:email,
-password:password
-})
-
-if(error){
-alert(error.message)
-}else{
-alert("Logged in")
+if (!email || !password) {
+alert("Email and password required");
+return;
 }
 
+const { error } = await appSupabase.auth.signInWithPassword({
+email,
+password
+});
+
+if (error) {
+alert(error.message);
+} else {
+alert("Logged in");
+}
 }
 
-async function logout(){
-
-await supabase.auth.signOut()
-
-alert("Logged out")
-
+async function logout() {
+await appSupabase.auth.signOut();
+alert("Logged out");
 }
 
-async function postSkill(){
+async function postSkill() {
+const title = document.getElementById("title").value.trim();
+const description = document.getElementById("description").value.trim();
+const category = document.getElementById("category").value;
+const budget = document.getElementById("budget").value.trim();
 
-const title=document.getElementById("title").value
-
-const description=document.getElementById("description").value
-
-const category=document.getElementById("category").value
-
-const budget=document.getElementById("budget").value
-
-if(!title){
-alert("Enter a title")
-return
+if (!title) {
+alert("Enter a job title");
+return;
 }
 
-const {error}=await supabase
+const { error } = await appSupabase
 .from("jobs")
-.insert([{title,description,category,budget}])
+.insert([{ title, description, category, budget }]);
 
-if(error){
-alert(error.message)
-}else{
-loadJobs()
+if (error) {
+alert(error.message);
+} else {
+document.getElementById("title").value = "";
+document.getElementById("description").value = "";
+document.getElementById("budget").value = "";
+loadJobs();
+}
 }
 
-}
-
-async function loadJobs(){
-
-const {data}=await supabase
+async function loadJobs() {
+const { data, error } = await appSupabase
 .from("jobs")
 .select("*")
-.order("created_at",{ascending:false})
+.order("created_at", { ascending: false });
 
-const list=document.getElementById("jobs")
+const list = document.getElementById("jobs");
+list.innerHTML = "";
 
-list.innerHTML=""
-
-if(!data)return
-
-data.forEach(job=>{
-
-const div=document.createElement("div")
-
-div.className="job"
-
-div.innerHTML=`
-<b>${job.title}</b>
-<p>${job.description||""}</p>
-<p>${job.category}</p>
-<p>$${job.budget}</p>
-`
-
-list.appendChild(div)
-
-})
-
+if (error) {
+list.innerHTML = "Could not load jobs";
+return;
 }
 
-loadJobs()
+if (!data || data.length === 0) {
+list.innerHTML = "No jobs posted yet";
+return;
+}
 
+data.forEach((job) => {
+const div = document.createElement("div");
+div.className = "job";
+div.innerHTML = `
+<b>${job.title}</b>
+<p>${job.description || ""}</p>
+<p>${job.category || ""}</p>
+<p>$${job.budget || ""}</p>
+`;
+list.appendChild(div);
+});
+}
+
+loadJobs();
 </script>
-
 </body>
 </html>
