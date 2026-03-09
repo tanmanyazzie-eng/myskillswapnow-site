@@ -170,6 +170,66 @@ list.appendChild(div);
 }
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
+<script>
+
+const supabaseUrl = "YOUR_SUPABASE_URL"
+const supabaseKey = "YOUR_PUBLISHABLE_KEY"
+
+const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+async function postSkill(){
+
+const title = document.getElementById("title").value
+const description = document.getElementById("description").value
+const category = document.getElementById("category").value
+const budget = document.getElementById("budget").value
+
+const { data, error } = await supabase
+.from("jobs")
+.insert([{ title, description, category, budget }])
+
+if(error){
+alert("Error posting job")
+console.log(error)
+}else{
+alert("Job posted!")
+loadJobs()
+}
+
+}
+
+async function loadJobs(){
+
+const { data } = await supabase
+.from("jobs")
+.select("*")
+.order("created_at",{ascending:false})
+
+const list = document.getElementById("skills")
+list.innerHTML=""
+
+data.forEach(job=>{
+
+const div = document.createElement("div")
+div.className="skill"
+
+div.innerHTML = `
+<h3>${job.title}</h3>
+<p>${job.description}</p>
+<p><strong>Category:</strong> ${job.category}</p>
+<p><strong>Budget:</strong> $${job.budget}</p>
+`
+
+list.appendChild(div)
+
+})
+
+}
+
+loadJobs()
+
+</script>
 </body>
 </html>
