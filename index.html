@@ -8,7 +8,7 @@
 <style>
 
 body{
-font-family:Arial,Helvetica,sans-serif;
+font-family:Arial;
 background:#f3f4f6;
 margin:0;
 display:flex;
@@ -51,10 +51,6 @@ width:100%;
 margin-top:10px;
 }
 
-.auth button{
-margin-right:8px;
-}
-
 input,textarea,select{
 width:100%;
 padding:10px;
@@ -82,10 +78,12 @@ margin-top:10px;
 <p>Trade skills. Get help. Make money.</p>
 </div>
 
-<div class="card auth">
+<div class="card">
+
 <button onclick="signUp()">Sign Up</button>
 <button onclick="login()">Login</button>
 <button onclick="logout()">Logout</button>
+
 </div>
 
 <div class="card">
@@ -111,8 +109,11 @@ margin-top:10px;
 </div>
 
 <div class="card">
+
 <h3>Available Jobs</h3>
+
 <div id="jobs"></div>
+
 </div>
 
 </div>
@@ -121,129 +122,118 @@ margin-top:10px;
 
 <script>
 
-const supabaseUrl = "https://szkbplrqutkedxyhruh.supabase.co";
+const supabaseUrl="https://szkbplrqutkedxyhruh.supabase.co"
 
-const supabaseKey = "sb_publishable_RUITc0pMsVY3_QLEWM6vPA_dcRVCILg";
+const supabaseKey="sb_publishable_RUITc0pMsVY3_QLEWM6vPA_dcRVCILg"
 
-const supabase = window.supabase.createClient(
-supabaseUrl,
-supabaseKey
-);
+const supabase=window.supabase.createClient(supabaseUrl,supabaseKey)
 
 async function signUp(){
 
-const email = prompt("Enter email");
-const password = prompt("Enter password");
+const email=prompt("Enter email")
 
-if(!email || !password){
-alert("Email and password required");
-return;
-}
+const password=prompt("Enter password")
 
-const { error } = await supabase.auth.signUp({
-email: email,
-password: password
-});
+const {error}=await supabase.auth.signUp({
+email:email,
+password:password
+})
 
 if(error){
-alert(error.message);
+alert(error.message)
 }else{
-alert("Account created");
+alert("Account created")
 }
 
 }
 
 async function login(){
 
-const email = prompt("Email");
-const password = prompt("Password");
+const email=prompt("Email")
 
-const { error } = await supabase.auth.signInWithPassword({
-email: email,
-password: password
-});
+const password=prompt("Password")
+
+const {error}=await supabase.auth.signInWithPassword({
+email:email,
+password:password
+})
 
 if(error){
-alert(error.message);
+alert(error.message)
 }else{
-alert("Logged in");
+alert("Logged in")
 }
 
 }
 
 async function logout(){
 
-await supabase.auth.signOut();
-alert("Logged out");
+await supabase.auth.signOut()
+
+alert("Logged out")
 
 }
 
 async function postSkill(){
 
-const title = document.getElementById("title").value;
-const description = document.getElementById("description").value;
-const category = document.getElementById("category").value;
-const budget = document.getElementById("budget").value;
+const title=document.getElementById("title").value
+
+const description=document.getElementById("description").value
+
+const category=document.getElementById("category").value
+
+const budget=document.getElementById("budget").value
 
 if(!title){
-alert("Enter a job title");
-return;
+alert("Enter a title")
+return
 }
 
-const { error } = await supabase
+const {error}=await supabase
 .from("jobs")
-.insert([
-{
-title,
-description,
-category,
-budget
-}
-]);
+.insert([{title,description,category,budget}])
 
 if(error){
-alert(error.message);
+alert(error.message)
 }else{
-loadJobs();
+loadJobs()
 }
 
 }
 
 async function loadJobs(){
 
-const { data } = await supabase
+const {data}=await supabase
 .from("jobs")
 .select("*")
-.order("created_at",{ascending:false});
+.order("created_at",{ascending:false})
 
-const list = document.getElementById("jobs");
+const list=document.getElementById("jobs")
 
-list.innerHTML="";
+list.innerHTML=""
 
-if(!data || data.length===0){
-list.innerHTML="No jobs posted yet";
-return;
-}
+if(!data)return
 
 data.forEach(job=>{
 
-const div=document.createElement("div");
-div.className="job";
+const div=document.createElement("div")
+
+div.className="job"
 
 div.innerHTML=`
 <b>${job.title}</b>
-<p>${job.description || ""}</p>
+<p>${job.description||""}</p>
 <p>${job.category}</p>
 <p>$${job.budget}</p>
-`;
+`
 
-list.appendChild(div);
+list.appendChild(div)
 
-});
+})
 
 }
 
-loadJobs();
+loadJobs()
 
 </script>
 
