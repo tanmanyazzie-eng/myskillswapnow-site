@@ -2,94 +2,321 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillSwapNow</title>
-
 <style>
-
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#e6e6e6;
-color:#222;
+* {
+box-sizing: border-box;
 }
 
-header{
-background:#111;
-color:white;
-padding:20px;
-text-align:center;
+body {
+margin: 0;
+font-family: Arial, Helvetica, sans-serif;
+background: #f3f4f6;
+color: #111827;
 }
 
-header h1{
-margin:0;
-font-size:36px;
-letter-spacing:2px;
+.app-shell {
+max-width: 430px;
+margin: 0 auto;
+min-height: 100vh;
+background: #f9fafb;
+position: relative;
+box-shadow: 0 0 30px rgba(0,0,0,0.08);
+padding-bottom: 90px;
 }
 
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
+.topbar {
+background: linear-gradient(180deg, #111111 0%, #1f2937 100%);
+color: white;
+padding: 28px 20px 22px;
 }
 
-.card{
-background:white;
-padding:20px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,.1);
+.brand {
+font-size: 34px;
+font-weight: 800;
+letter-spacing: -0.8px;
+margin: 0 0 6px;
+text-align: center;
 }
 
-input, textarea, select{
-width:100%;
-padding:12px;
-margin-top:10px;
-margin-bottom:15px;
-border-radius:6px;
-border:1px solid #ccc;
+.tagline {
+margin: 0;
+text-align: center;
+font-size: 14px;
+color: #e5e7eb;
 }
 
-button{
-background:black;
-color:white;
-border:none;
-padding:14px;
-border-radius:8px;
-cursor:pointer;
-font-size:16px;
+.hero {
+margin: 16px;
+background: linear-gradient(135deg, #111827 0%, #374151 100%);
+color: white;
+border-radius: 18px;
+padding: 18px;
+box-shadow: 0 10px 25px rgba(0,0,0,0.12);
 }
 
-button:hover{
-background:#333;
+.hero h2 {
+margin: 0 0 8px;
+font-size: 22px;
 }
 
-.skill{
-border-bottom:1px solid #eee;
-padding:10px 0;
+.hero p {
+margin: 0 0 14px;
+color: #e5e7eb;
+line-height: 1.4;
+font-size: 14px;
 }
 
-.skill:last-child{
-border-bottom:none;
+.hero-badges {
+display: flex;
+gap: 8px;
+flex-wrap: wrap;
 }
 
+.badge {
+background: rgba(255,255,255,0.12);
+border: 1px solid rgba(255,255,255,0.14);
+border-radius: 999px;
+padding: 7px 11px;
+font-size: 12px;
+color: #f9fafb;
+}
+
+.section {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+
+.section-title {
+font-size: 18px;
+font-weight: 700;
+margin: 0 0 12px;
+}
+
+.card {
+background: white;
+border-radius: 18px;
+padding: 16px;
+box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+border: 1px solid #ececec;
+}
+
+.quick-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+}
+
+.quick-item {
+background: #ffffff;
+border: 1px solid #e5e7eb;
+border-radius: 14px;
+padding: 14px;
+font-weight: 600;
+text-align: center;
+box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.quick-item span {
+display: block;
+font-size: 12px;
+color: #6b7280;
+margin-top: 4px;
+font-weight: 500;
+}
+
+input, textarea, select {
+width: 100%;
+padding: 14px;
+margin-top: 10px;
+margin-bottom: 12px;
+border-radius: 12px;
+border: 1px solid #d1d5db;
+font-size: 14px;
+background: #fff;
+outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+border-color: #111827;
+box-shadow: 0 0 0 3px rgba(17,24,39,0.08);
+}
+
+textarea {
+min-height: 90px;
+resize: vertical;
+}
+
+.primary-btn {
+background: #111827;
+color: white;
+border: none;
+width: 100%;
+padding: 14px;
+border-radius: 12px;
+font-size: 15px;
+font-weight: 700;
+cursor: pointer;
+transition: 0.2s ease;
+}
+
+.primary-btn:hover {
+background: #000;
+transform: translateY(-1px);
+}
+
+.job-list {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.job-card {
+background: white;
+border-radius: 16px;
+padding: 16px;
+border: 1px solid #e5e7eb;
+box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.job-title {
+font-size: 18px;
+font-weight: 700;
+margin: 0 0 8px;
+}
+
+.job-desc {
+margin: 0 0 10px;
+color: #4b5563;
+line-height: 1.4;
+font-size: 14px;
+}
+
+.job-meta {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-bottom: 12px;
+}
+
+.meta-pill {
+background: #f3f4f6;
+color: #111827;
+border-radius: 999px;
+padding: 7px 10px;
+font-size: 12px;
+font-weight: 600;
+}
+
+.job-actions {
+display: flex;
+gap: 10px;
+}
+
+.secondary-btn,
+.message-btn {
+flex: 1;
+border: none;
+border-radius: 12px;
+padding: 12px;
+font-weight: 700;
+cursor: pointer;
+}
+
+.message-btn {
+background: #111827;
+color: white;
+}
+
+.secondary-btn {
+background: #eef2f7;
+color: #111827;
+}
+
+.empty-state {
+text-align: center;
+color: #6b7280;
+padding: 20px 10px;
+font-size: 14px;
+}
+
+.bottom-nav {
+position: fixed;
+left: 50%;
+transform: translateX(-50%);
+bottom: 0;
+width: 100%;
+max-width: 430px;
+background: white;
+border-top: 1px solid #e5e7eb;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+box-shadow: 0 -4px 18px rgba(0,0,0,0.06);
+}
+
+.nav-item {
+text-align: center;
+font-size: 12px;
+color: #6b7280;
+font-weight: 600;
+}
+
+.nav-item.active {
+color: #111827;
+}
+
+.nav-icon {
+display: block;
+font-size: 18px;
+margin-bottom: 4px;
+}
+
+@media (max-width: 480px) {
+.brand {
+font-size: 28px;
+}
+
+.hero h2 {
+font-size: 20px;
+}
+}
 </style>
 </head>
-
 <body>
+<div class="app-shell">
+<div class="topbar">
+<h1 class="brand">MySkillSwapNow</h1>
+<p class="tagline">Trade skills. Get help. Make money.</p>
+</div>
 
-<header>
-<h1>MySkillSwapNow</h1>
-<p>Trade skills. Get help. Make money.</p>
-</header>
+<div class="hero">
+<h2>Find help fast</h2>
+<p>Post a job, browse local skills, and connect with people who can get it done today.</p>
+<div class="hero-badges">
+<div class="badge">TV Mounting</div>
+<div class="badge">Yard Work</div>
+<div class="badge">Moving Help</div>
+<div class="badge">Tutoring</div>
+</div>
+</div>
 
-<div class="container">
+<div class="section">
+<h3 class="section-title">Popular Categories</h3>
+<div class="quick-grid">
+<div class="quick-item">Hang TV<span>Home Help</span></div>
+<div class="quick-item">Pull Weeds<span>Yard Work</span></div>
+<div class="quick-item">Move Furniture<span>Moving Help</span></div>
+<div class="quick-item">House Cleaning<span>Cleaning</span></div>
+</div>
+</div>
 
+<div class="section">
 <div class="card">
-<h2>Create Request</h2>
+<h3 class="section-title">Create Request</h3>
 
-<input id="title" placeholder="What do you need help with? (ex: Hang TV)"/>
-
+<input id="title" placeholder="What do you need help with? (ex: Hang TV)" />
 <textarea id="description" placeholder="Describe the job"></textarea>
 
 <select id="category">
@@ -102,134 +329,112 @@ border-bottom:none;
 
 <input id="budget" placeholder="Budget $" />
 
-<button onclick="postSkill()">Post Job</button>
-
+<button class="primary-btn" onclick="postSkill()">Post Job</button>
+</div>
 </div>
 
-<div class="card">
-<h2>Available Jobs</h2>
-<div id="skills"></div>
+<div class="section">
+<h3 class="section-title">Available Jobs</h3>
+<div id="skills" class="job-list">
+<div class="card empty-state">No jobs posted yet.</div>
+</div>
+</div>
 </div>
 
+<div class="bottom-nav">
+<div class="nav-item active">
+<span class="nav-icon">⌂</span>
+Home
+</div>
+<div class="nav-item">
+<span class="nav-icon">⌕</span>
+Search
+</div>
+<div class="nav-item">
+<span class="nav-icon">💬</span>
+Messages
+</div>
+<div class="nav-item">
+<span class="nav-icon">👤</span>
+Profile
+</div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
+const supabaseUrl = "http://szkbplrqutkedxylhruh.supabase.co";
+const supabaseKey = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
 
-let skills=[];
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-function postSkill(){
+async function postSkill() {
+const title = document.getElementById("title").value.trim();
+const description = document.getElementById("description").value.trim();
+const category = document.getElementById("category").value;
+const budget = document.getElementById("budget").value.trim();
 
-const title=document.getElementById("title").value;
-const description=document.getElementById("description").value;
-const category=document.getElementById("category").value;
-const budget=document.getElementById("budget").value;
-
-if(!title){
-alert("Enter job title");
+if (!title) {
+alert("Please enter a job title");
 return;
 }
 
-const job={
-title,
-description,
-category,
-budget
-};
+const { error } = await supabase
+.from("jobs")
+.insert([{ title, description, category, budget }]);
 
-skills.push(job);
-
-renderJobs();
-
-document.getElementById("title").value="";
-document.getElementById("description").value="";
-document.getElementById("budget").value="";
+if (error) {
+alert("Error posting job");
+console.log(error);
+} else {
+document.getElementById("title").value = "";
+document.getElementById("description").value = "";
+document.getElementById("budget").value = "";
+loadJobs();
+}
 }
 
-function renderJobs(){
+async function loadJobs() {
+const { data, error } = await supabase
+.from("jobs")
+.select("*")
+.order("created_at", { ascending: false });
 
-const list=document.getElementById("skills");
-list.innerHTML="";
+const list = document.getElementById("skills");
+list.innerHTML = "";
 
-skills.forEach((job)=>{
+if (error) {
+list.innerHTML = `<div class="card empty-state">Could not load jobs.</div>`;
+console.log(error);
+return;
+}
 
-const div=document.createElement("div");
-div.className="skill";
+if (!data || data.length === 0) {
+list.innerHTML = `<div class="card empty-state">No jobs posted yet.</div>`;
+return;
+}
 
-div.innerHTML=`
-<h3>${job.title}</h3>
-<p>${job.description}</p>
-<p><strong>Category:</strong> ${job.category}</p>
-<p><strong>Budget:</strong> $${job.budget}</p>
-<button onclick="alert('Messaging will require subscription after 2 messages.')">Message</button>
+data.forEach((job) => {
+const div = document.createElement("div");
+div.className = "job-card";
+
+div.innerHTML = `
+<h4 class="job-title">${job.title || ""}</h4>
+<p class="job-desc">${job.description || ""}</p>
+<div class="job-meta">
+<span class="meta-pill">${job.category || "General"}</span>
+<span class="meta-pill">Budget: $${job.budget || "0"}</span>
+</div>
+<div class="job-actions">
+<button class="secondary-btn">View</button>
+<button class="message-btn" onclick="alert('Messaging feature comes next.')">Message</button>
+</div>
 `;
 
 list.appendChild(div);
-
 });
-
 }
 
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<script>
-
-const supabaseUrl = "YOUR_SUPABASE_URL"
-const supabaseKey = "YOUR_PUBLISHABLE_KEY"
-
-const supabase = supabase.createClient(supabaseUrl, supabaseKey)
-
-async function postSkill(){
-
-const title = document.getElementById("title").value
-const description = document.getElementById("description").value
-const category = document.getElementById("category").value
-const budget = document.getElementById("budget").value
-
-const { data, error } = await supabase
-.from("jobs")
-.insert([{ title, description, category, budget }])
-
-if(error){
-alert("Error posting job")
-console.log(error)
-}else{
-alert("Job posted!")
-loadJobs()
-}
-
-}
-
-async function loadJobs(){
-
-const { data } = await supabase
-.from("jobs")
-.select("*")
-.order("created_at",{ascending:false})
-
-const list = document.getElementById("skills")
-list.innerHTML=""
-
-data.forEach(job=>{
-
-const div = document.createElement("div")
-div.className="skill"
-
-div.innerHTML = `
-<h3>${job.title}</h3>
-<p>${job.description}</p>
-<p><strong>Category:</strong> ${job.category}</p>
-<p><strong>Budget:</strong> $${job.budget}</p>
-`
-
-list.appendChild(div)
-
-})
-
-}
-
-loadJobs()
-
+loadJobs();
 </script>
 </body>
 </html>
