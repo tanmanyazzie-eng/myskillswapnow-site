@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillSwapNow</title>
 <style>
 * {
@@ -12,7 +12,7 @@ box-sizing: border-box;
 body {
 margin: 0;
 font-family: Arial, sans-serif;
-background: #f3f4f6;
+background: #d1d5db;
 color: #111827;
 }
 
@@ -20,75 +20,97 @@ color: #111827;
 max-width: 480px;
 margin: 0 auto;
 min-height: 100vh;
-background: #f9fafb;
+background: #e5e7eb;
+box-shadow: 0 0 24px rgba(0,0,0,0.12);
+position: relative;
+overflow: hidden;
+}
+
+.screen {
+min-height: 100vh;
+}
+
+.hidden {
+display: none !important;
 }
 
 .topbar {
-background: #111827;
+background: linear-gradient(135deg, #111827, #1f2937);
 color: white;
 padding: 18px 16px 14px;
 position: sticky;
 top: 0;
 z-index: 10;
-box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.topbar h1 {
+.logo-3d {
 margin: 0;
-font-size: 28px;
-line-height: 1.1;
+font-size: 30px;
+line-height: 1.05;
+font-weight: 900;
+letter-spacing: 0.4px;
+color: #ffffff;
+text-shadow:
+1px 1px 0 #9ca3af,
+2px 2px 0 #6b7280,
+3px 3px 0 #4b5563,
+4px 4px 6px rgba(0,0,0,0.35);
 }
 
 .topbar p {
-margin: 6px 0 0;
+margin: 8px 0 0;
 color: #d1d5db;
 font-size: 14px;
 }
 
 .content {
 padding: 14px;
+padding-bottom: 90px;
 }
 
-.tabs {
-display: flex;
-gap: 8px;
-overflow-x: auto;
-margin-bottom: 14px;
-padding-bottom: 4px;
-}
-
-.tab {
-border: none;
-background: #e5e7eb;
-color: #111827;
-padding: 10px 14px;
-border-radius: 999px;
-font-size: 14px;
-white-space: nowrap;
-cursor: pointer;
-}
-
-.tab.active {
-background: #111827;
+.hero {
+background: linear-gradient(135deg, #111827, #374151);
 color: white;
+border-radius: 22px;
+padding: 20px;
+margin-bottom: 14px;
+box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+.hero h2 {
+margin: 0 0 8px;
+font-size: 25px;
+line-height: 1.1;
+}
+
+.hero p {
+margin: 0;
+color: #e5e7eb;
+font-size: 14px;
+line-height: 1.45;
 }
 
 .card {
-background: white;
+background: #f3f4f6;
+border: 1px solid #d1d5db;
 border-radius: 18px;
 padding: 16px;
 margin-bottom: 14px;
-box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+box-shadow: 0 3px 12px rgba(0,0,0,0.07);
 }
 
 .section-title {
 margin: 0 0 10px;
-font-size: 22px;
+font-size: 21px;
+color: #111827;
+font-weight: 800;
 }
 
 .subtext {
-color: #6b7280;
+color: #4b5563;
 font-size: 14px;
+line-height: 1.4;
 margin-top: 4px;
 }
 
@@ -100,12 +122,35 @@ padding: 7px 11px;
 border-radius: 999px;
 font-size: 12px;
 margin: 6px 6px 0 0;
+box-shadow: 0 2px 6px rgba(21,128,61,0.2);
 }
 
 .soft-badge {
 display: inline-block;
 background: #dcfce7;
 color: #166534;
+padding: 7px 11px;
+border-radius: 999px;
+font-size: 12px;
+margin: 6px 6px 0 0;
+border: 1px solid #bbf7d0;
+}
+
+.alert-badge {
+display: inline-block;
+background: #dc2626;
+color: white;
+padding: 7px 11px;
+border-radius: 999px;
+font-size: 12px;
+margin: 0 6px 10px 0;
+box-shadow: 0 2px 6px rgba(220,38,38,0.2);
+}
+
+.premium-badge {
+display: inline-block;
+background: #7c3aed;
+color: white;
 padding: 7px 11px;
 border-radius: 999px;
 font-size: 12px;
@@ -119,52 +164,112 @@ color: #15803d;
 margin: 8px 0 2px;
 }
 
-.wallet {
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 12px;
-flex-wrap: wrap;
-}
-
 .wallet-balance {
 font-size: 42px;
 font-weight: bold;
 margin: 0;
+color: #111827;
+}
+
+.progress-wrap {
+margin-top: 10px;
+}
+
+.progress-bar {
+width: 100%;
+height: 10px;
+background: #d1d5db;
+border-radius: 999px;
+overflow: hidden;
+}
+
+.progress-fill {
+width: 72%;
+height: 100%;
+background: linear-gradient(90deg, #111827, #374151);
+}
+
+.profile-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+margin-bottom: 8px;
+}
+
+.avatar {
+width: 60px;
+height: 60px;
+border-radius: 18px;
+background: linear-gradient(135deg, #111827, #374151);
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+font-size: 20px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.slide {
+background: #f9fafb;
+border: 1px solid #d1d5db;
+border-radius: 20px;
+padding: 20px;
+margin-bottom: 14px;
+box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+}
+
+.slide-icon {
+width: 58px;
+height: 58px;
+border-radius: 18px;
+background: linear-gradient(135deg, #111827, #374151);
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 24px;
+margin-bottom: 14px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
 input, select {
 width: 100%;
 padding: 13px 12px;
 margin-top: 8px;
-border: 1px solid #d1d5db;
+border: 1px solid #cbd5e1;
 border-radius: 12px;
 font-size: 16px;
 background: white;
+color: #111827;
 }
 
-button.primary,
-button.secondary,
-button.small-btn {
+button {
 border: none;
 border-radius: 12px;
 padding: 12px 14px;
 font-size: 15px;
 cursor: pointer;
-}
-
-button.primary {
-background: #111827;
-color: white;
-width: 100%;
 margin-top: 10px;
+transition: transform 0.08s ease, opacity 0.2s ease;
 }
 
-button.secondary {
+button:active {
+transform: scale(0.98);
+}
+
+.primary {
+width: 100%;
+background: linear-gradient(135deg, #111827, #374151);
+color: white;
+box-shadow: 0 4px 10px rgba(17,24,39,0.2);
+}
+
+.secondary {
+width: 100%;
 background: #e5e7eb;
 color: #111827;
-width: 100%;
-margin-top: 10px;
 }
 
 .button-row {
@@ -176,27 +281,62 @@ margin-top: 10px;
 
 .button-row button {
 width: 100%;
+background: linear-gradient(135deg, #111827, #374151);
+color: white;
+}
+
+.bottom-nav {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+max-width: 480px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+background: #f9fafb;
+border-top: 1px solid #d1d5db;
+box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+z-index: 11;
+}
+
+.bottom-nav button {
+background: #f9fafb;
+color: #111827;
 border: none;
-border-radius: 12px;
-padding: 12px 10px;
-font-size: 14px;
-cursor: pointer;
+border-radius: 0;
+padding: 12px 6px;
+margin: 0;
+font-size: 12px;
+}
+
+.bottom-nav button.active {
 background: #111827;
 color: white;
 }
 
-ul {
-padding-left: 20px;
-margin: 10px 0 0;
+.listing-card {
+background: white;
+border-radius: 14px;
+padding: 12px;
+margin-top: 10px;
+border: 1px solid #e5e7eb;
+box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
 }
 
-li {
-margin-bottom: 8px;
+.listing-title {
+font-weight: bold;
+margin-bottom: 4px;
+}
+
+.listing-meta {
+color: #6b7280;
+font-size: 13px;
 line-height: 1.35;
 }
 
 .match-box {
-background: #f9fafb;
+background: white;
 border: 1px solid #e5e7eb;
 border-radius: 14px;
 padding: 12px;
@@ -207,6 +347,11 @@ margin-top: 10px;
 font-size: 13px;
 color: #6b7280;
 margin-bottom: 6px;
+}
+
+.emergency-card {
+background: #fef2f2;
+border: 2px solid #fecaca;
 }
 
 .leader {
@@ -224,73 +369,222 @@ border-bottom: none;
 .small {
 color: #6b7280;
 font-size: 13px;
+line-height: 1.4;
 margin-top: 4px;
 }
 
-.hidden {
-display: none;
+ul {
+padding-left: 20px;
+margin: 10px 0 0;
 }
 
-.emergency {
-border: 2px solid #fecaca;
-background: #fff7f7;
+li {
+margin-bottom: 9px;
+line-height: 1.4;
 }
 
-.emergency-badge {
-display: inline-block;
-background: #dc2626;
-color: white;
-padding: 7px 11px;
-border-radius: 999px;
-font-size: 12px;
+.chat-box {
+background: white;
+border: 1px solid #d1d5db;
+border-radius: 16px;
+padding: 12px;
+max-height: 260px;
+overflow-y: auto;
 margin-bottom: 10px;
 }
 
-.footer-space {
-height: 10px;
+.chat-msg {
+background: #e5e7eb;
+color: #111827;
+padding: 10px 12px;
+border-radius: 12px;
+margin-bottom: 8px;
+font-size: 14px;
+}
+
+.chat-msg.me {
+background: #111827;
+color: white;
+margin-left: 30px;
+}
+
+.chat-msg.system {
+background: #ede9fe;
+color: #5b21b6;
+}
+
+.usage-box {
+background: #ffffff;
+border: 1px solid #d1d5db;
+border-radius: 14px;
+padding: 12px;
+margin-bottom: 10px;
+}
+
+.overlay {
+position: fixed;
+inset: 0;
+background: rgba(17,24,39,0.65);
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 16px;
+z-index: 50;
+}
+
+.modal {
+width: 100%;
+max-width: 400px;
+background: #f9fafb;
+border-radius: 20px;
+padding: 20px;
+box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+border: 1px solid #d1d5db;
+}
+
+.modal h2 {
+margin-top: 0;
+margin-bottom: 8px;
+font-size: 24px;
+}
+
+.price {
+font-size: 36px;
+font-weight: bold;
+color: #111827;
+margin: 8px 0;
+}
+
+.strike {
+text-decoration: line-through;
+color: #6b7280;
+font-size: 14px;
 }
 </style>
 </head>
 <body>
 <div class="app">
+
+<div id="welcomeScreen" class="screen">
+<div class="content">
+<div class="hero">
+<h2 class="logo-3d">MySkillSwapNow</h2>
+<p>Launch-ready mockup for a nationwide local trust network with smart skill matching, emergency help, credits, verified users, and premium chat access.</p>
+</div>
+
+<div class="slide">
+<div class="slide-icon">🤝</div>
+<h2 class="section-title">Trade skills locally</h2>
+<p class="subtext">Find trusted nearby help for repairs, moving, yard work, childcare, tutoring, pet help, and equipment lending.</p>
+</div>
+
+<div class="slide">
+<div class="slide-icon">💬</div>
+<h2 class="section-title">Free preview, then premium unlock</h2>
+<p class="subtext">Users can send 2 messages and 1 image upload for free, then the app prompts for a $4.99/month subscription.</p>
+</div>
+
+<div class="slide">
+<div class="slide-icon">⭐</div>
+<h2 class="section-title">Trust-first platform</h2>
+<p class="subtext">Verified neighbors, trust scores, skill credits, and emergency priority features make the platform more valuable than a listing board.</p>
+</div>
+
+<button class="primary" onclick="goToScreen('signinScreen')">Sign In</button>
+<button class="secondary" onclick="goToScreen('createAccountScreen')">Create Account</button>
+<button class="secondary" onclick="goToScreen('mainAppScreen')">Preview App</button>
+</div>
+</div>
+
+<div id="signinScreen" class="screen hidden">
 <div class="topbar">
-<h1>MySkillSwapNow</h1>
+<h1 class="logo-3d" style="font-size:24px;">MySkillSwapNow</h1>
+<p>Sign in to your local trust network</p>
+</div>
+<div class="content">
+<div class="card">
+<div class="section-title">Welcome Back</div>
+<input placeholder="Email">
+<input placeholder="Password" type="password">
+<button class="primary" onclick="goToScreen('mainAppScreen')">Sign In</button>
+<button class="secondary" onclick="goToScreen('welcomeScreen')">Back</button>
+</div>
+</div>
+</div>
+
+<div id="createAccountScreen" class="screen hidden">
+<div class="topbar">
+<h1 class="logo-3d" style="font-size:24px;">MySkillSwapNow</h1>
+<p>Create your account</p>
+</div>
+<div class="content">
+<div class="card">
+<div class="section-title">Create Profile</div>
+<input placeholder="Full Name">
+<input placeholder="Email">
+<input placeholder="Phone Number">
+<input placeholder="ZIP Code">
+<select>
+<option>Select Main Skill</option>
+<option>Home Repair</option>
+<option>Yard Work</option>
+<option>Moving Help</option>
+<option>Childcare</option>
+<option>Auto Help</option>
+<option>Equipment Loan</option>
+<option>Pet Help</option>
+<option>Tutoring</option>
+</select>
+<button class="primary" onclick="goToScreen('mainAppScreen')">Create Account</button>
+<button class="secondary" onclick="goToScreen('welcomeScreen')">Back</button>
+</div>
+</div>
+</div>
+
+<div id="mainAppScreen" class="screen hidden">
+<div class="topbar">
+<h1 class="logo-3d">MySkillSwapNow</h1>
 <p>Trade skills. Share equipment. Help locally.</p>
 </div>
 
 <div class="content">
-<div class="tabs">
-<button class="tab active" onclick="showTab('market', this)">Marketplace</button>
-<button class="tab" onclick="showTab('emergency', this)">Emergency</button>
-<button class="tab" onclick="showTab('leaderboard', this)">Leaderboard</button>
+<div id="homeTab">
+<div class="hero">
+<h2>Nationwide App, Local Trust</h2>
+<p>Find nearby help, earn skill credits, chat with helpers, and build a trusted reputation city by city.</p>
 </div>
 
-<div id="market">
 <div class="card">
-<div class="section-title">Verified Neighbor</div>
-<strong>John D.</strong>
+<div class="profile-row">
+<div>
+<div class="section-title">John D.</div>
+<div class="subtext">Las Vegas, NV • ZIP 89122</div>
+</div>
+<div class="avatar">JD</div>
+</div>
+
 <div>
 <span class="badge">Verified Neighbor</span>
 <span class="badge">Top Local Helper</span>
+<span class="soft-badge">Childcare Verified</span>
+<span id="premiumStatusBadge" class="premium-badge hidden">Premium Active</span>
 </div>
-<p class="subtext">Trusted local member</p>
+
 <div class="score">92</div>
 <div class="subtext">Trust Score</div>
-<div>
-<span class="soft-badge">Email Verified</span>
-<span class="soft-badge">Phone Verified</span>
-<span class="soft-badge">5 Completed Swaps</span>
+
+<div class="progress-wrap">
+<div class="subtext">Profile completion: 72%</div>
+<div class="progress-bar">
+<div class="progress-fill"></div>
+</div>
 </div>
 </div>
 
 <div class="card">
 <div class="section-title">Your Skill Credits</div>
-<div class="wallet">
-<div>
 <p id="creditBalance" class="wallet-balance">10</p>
 <div class="subtext">Available Skill Credits</div>
-</div>
-</div>
 <div class="button-row">
 <button onclick="earnCredits()">Earn +1</button>
 <button onclick="spendCredits()">Spend -1</button>
@@ -298,26 +592,46 @@ height: 10px;
 </div>
 
 <div class="card">
-<div class="section-title">Set Your Area</div>
+<div class="section-title">Set Your Location</div>
 <input id="city" placeholder="City" value="Las Vegas">
 <input id="zip" placeholder="ZIP Code" value="89122">
 <input id="radius" placeholder="Miles radius" value="10">
 <button class="primary" onclick="updateLocation()">Update Location</button>
-<p id="locationText" class="subtext">Showing listings near Las Vegas within 10 miles.</p>
+<p id="locationText" class="subtext">Showing listings near Las Vegas, 89122 within 10 miles.</p>
 </div>
 
 <div class="card">
-<div class="section-title">Smart Skill Match</div>
+<div class="section-title">Smart Skill Match Search</div>
 <input id="searchInput" placeholder="Try: hang my TV, pull weeds, jump my car, babysit tonight">
 <button class="primary" onclick="matchSkill()">Find Best Match</button>
 
 <div class="match-box">
 <div class="match-label">Best Match</div>
 <div id="matchResult">No search yet.</div>
-<div id="matchHelpers" class="small"></div>
+<div id="matchHelpers" class="small" style="margin-top:8px;"></div>
 </div>
 </div>
 
+<div class="card">
+<div class="section-title">Nearby Listings</div>
+<div id="nearbyCards">
+<div class="listing-card">
+<div class="listing-title">TV wall mounting</div>
+<div class="listing-meta">2 miles away • Home Repair</div>
+</div>
+<div class="listing-card">
+<div class="listing-title">Weed pulling and yard cleanup</div>
+<div class="listing-meta">4 miles away • Yard Work</div>
+</div>
+<div class="listing-card">
+<div class="listing-title">Moving help request</div>
+<div class="listing-meta">6 miles away • Moving Help</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="marketTab" class="hidden">
 <div class="card">
 <div class="section-title">Post a Skill Request</div>
 <select id="category">
@@ -330,7 +644,6 @@ height: 10px;
 <option>Pet Help</option>
 <option>Tutoring</option>
 </select>
-
 <input id="skillInput" placeholder="Describe the help you need">
 <button class="primary" onclick="addSkill()">Post Request</button>
 
@@ -342,22 +655,19 @@ height: 10px;
 </div>
 
 <div class="card">
-<div class="section-title">Nearby Listings</div>
-<p class="subtext">Nearby help is what makes a nationwide app actually useful.</p>
-<ul id="nearbyList">
-<li>TV wall mounting — 2 miles away</li>
-<li>Weed pulling and yard cleanup — 4 miles away</li>
-<li>Moving help request — 6 miles away</li>
-<li>Dog walking request — 3 miles away</li>
-</ul>
+<div class="section-title">Sensitive Category Trust Layer</div>
+<span class="soft-badge">Childcare Verified</span>
+<span class="soft-badge">Phone Verified</span>
+<span class="soft-badge">ZIP Verified</span>
+<p class="subtext">High-trust categories should require stronger identity and safer matching.</p>
 </div>
 </div>
 
-<div id="emergency" class="hidden">
-<div class="card emergency">
-<div class="emergency-badge">Emergency Priority</div>
+<div id="emergencyTab" class="hidden">
+<div class="card emergency-card">
+<span class="alert-badge">Emergency Priority</span>
 <div class="section-title">Emergency Help Requests</div>
-<p class="subtext">For urgent local help when time matters.</p>
+<p class="subtext">Fast nearby help for urgent but non-911 situations.</p>
 
 <ul id="emergencyList">
 <li>Car battery jump — 2 miles away</li>
@@ -368,15 +678,9 @@ height: 10px;
 <input id="emergencyInput" placeholder="Describe emergency help needed">
 <button class="primary" onclick="addEmergency()">Post Emergency</button>
 </div>
-
-<div class="card">
-<div class="section-title">Childcare Trust Layer</div>
-<span class="badge">Childcare Verified</span>
-<p class="subtext">For sensitive categories, verified identity and safety checks matter more than anything.</p>
-</div>
 </div>
 
-<div id="leaderboard" class="hidden">
+<div id="leaderboardTab" class="hidden">
 <div class="card">
 <div class="section-title">Top Helpers Near You</div>
 
@@ -404,14 +708,67 @@ height: 10px;
 <div><strong>25 jobs</strong></div>
 </div>
 </div>
+
+<div class="card">
+<div class="section-title">Premium Messaging Demo</div>
+<div class="usage-box">
+<div class="small">Free messages used: <span id="msgCountText">0</span> / 2</div>
+<div class="small">Free pictures used: <span id="imgCountText">0</span> / 1</div>
+<div class="small">Subscription status: <span id="subStatusText">Free</span></div>
 </div>
 
-<div class="footer-space"></div>
+<div class="chat-box" id="chatBox">
+<div class="chat-msg system">Welcome to chat. You can send 2 free messages and 1 free image before premium is required.</div>
 </div>
+
+<input id="chatInput" placeholder="Type a message">
+<button class="primary" onclick="sendMessage()">Send Message</button>
+<button class="secondary" onclick="uploadPicture()">Upload Picture</button>
+</div>
+</div>
+</div>
+
+<div class="bottom-nav">
+<button id="navHome" class="active" onclick="showAppTab('home')">Home</button>
+<button id="navMarket" onclick="showAppTab('market')">Market</button>
+<button id="navEmergency" onclick="showAppTab('emergency')">Emergency</button>
+<button id="navLeaderboard" onclick="showAppTab('leaderboard')">Chat</button>
+</div>
+</div>
+
+<!-- SUBSCRIPTION MODAL -->
+<div id="paywallOverlay" class="overlay hidden">
+<div class="modal">
+<h2>Unlock Premium</h2>
+<p class="subtext">You’ve used your free chat limit.</p>
+<div class="price">$4.99<span style="font-size:16px;font-weight:normal;">/month</span></div>
+<p class="subtext">
+Includes:
+unlimited messaging,
+unlimited picture uploads,
+premium badge,
+and priority matching.
+</p>
+<button class="primary" onclick="subscribeNow()">Subscribe Now</button>
+<button class="secondary" onclick="closePaywall()">Not Now</button>
+</div>
+</div>
+
 </div>
 
 <script>
 let credits = 10;
+let messageCount = 0;
+let imageCount = 0;
+let isSubscribed = false;
+
+function goToScreen(screenId) {
+document.getElementById("welcomeScreen").classList.add("hidden");
+document.getElementById("signinScreen").classList.add("hidden");
+document.getElementById("createAccountScreen").classList.add("hidden");
+document.getElementById("mainAppScreen").classList.add("hidden");
+document.getElementById(screenId).classList.remove("hidden");
+}
 
 function earnCredits() {
 credits++;
@@ -437,7 +794,6 @@ if (input.value.trim() === "") return;
 let li = document.createElement("li");
 li.innerText = category + " — " + input.value + " — near " + city + " within " + radius + " miles";
 list.appendChild(li);
-
 input.value = "";
 }
 
@@ -450,7 +806,6 @@ if (input.value.trim() === "") return;
 let li = document.createElement("li");
 li.innerText = input.value;
 list.appendChild(li);
-
 input.value = "";
 }
 
@@ -462,24 +817,20 @@ let radius = document.getElementById("radius").value || "10";
 document.getElementById("locationText").innerText =
 "Showing listings near " + city + ", " + zip + " within " + radius + " miles.";
 
-document.getElementById("nearbyList").innerHTML = `
-<li>TV wall mounting — 2 miles away in ${city}</li>
-<li>Weed pulling and yard cleanup — 4 miles away in ${city}</li>
-<li>Moving help request — 6 miles away in ${city}</li>
-<li>Dog walking request — 3 miles away in ${city}</li>
+document.getElementById("nearbyCards").innerHTML = `
+<div class="listing-card">
+<div class="listing-title">TV wall mounting</div>
+<div class="listing-meta">2 miles away in ${city} • Home Repair</div>
+</div>
+<div class="listing-card">
+<div class="listing-title">Weed pulling and yard cleanup</div>
+<div class="listing-meta">4 miles away in ${city} • Yard Work</div>
+</div>
+<div class="listing-card">
+<div class="listing-title">Moving help request</div>
+<div class="listing-meta">6 miles away in ${city} • Moving Help</div>
+</div>
 `;
-}
-
-function showTab(tab, el) {
-document.getElementById("market").classList.add("hidden");
-document.getElementById("emergency").classList.add("hidden");
-document.getElementById("leaderboard").classList.add("hidden");
-
-document.getElementById(tab).classList.remove("hidden");
-
-let tabs = document.querySelectorAll(".tab");
-tabs.forEach(t => t.classList.remove("active"));
-el.classList.add("active");
 }
 
 function matchSkill() {
@@ -496,62 +847,25 @@ return;
 let category = "General Help";
 let suggested = "Nearby helper match available.";
 
-if (
-input.includes("tv") ||
-input.includes("mount") ||
-input.includes("hang") ||
-input.includes("wall install")
-) {
+if (input.includes("tv") || input.includes("mount") || input.includes("hang")) {
 category = "Home Repair / TV Mounting";
 suggested = "Best match: TV mounting, wall install, drill/anchor setup.";
-} else if (
-input.includes("weed") ||
-input.includes("weeds") ||
-input.includes("yard") ||
-input.includes("grass") ||
-input.includes("mow") ||
-input.includes("landscape")
-) {
+} else if (input.includes("weed") || input.includes("yard") || input.includes("grass") || input.includes("mow")) {
 category = "Yard Work";
 suggested = "Best match: weed pulling, mowing, yard cleanup, landscaping.";
-} else if (
-input.includes("move") ||
-input.includes("couch") ||
-input.includes("haul") ||
-input.includes("lift")
-) {
+} else if (input.includes("move") || input.includes("couch") || input.includes("haul") || input.includes("lift")) {
 category = "Moving Help";
 suggested = "Best match: lifting help, hauling, furniture moving.";
-} else if (
-input.includes("jump") ||
-input.includes("battery") ||
-input.includes("car") ||
-input.includes("tire") ||
-input.includes("oil")
-) {
+} else if (input.includes("jump") || input.includes("battery") || input.includes("car") || input.includes("tire")) {
 category = "Auto Help";
 suggested = "Best match: jump start, tire help, basic auto support.";
-} else if (
-input.includes("child") ||
-input.includes("kid") ||
-input.includes("babysit") ||
-input.includes("watch my kids")
-) {
+} else if (input.includes("child") || input.includes("kid") || input.includes("babysit")) {
 category = "Childcare";
 suggested = "Best match: childcare, sitter support, family help.";
-} else if (
-input.includes("dog") ||
-input.includes("pet") ||
-input.includes("walk")
-) {
+} else if (input.includes("dog") || input.includes("pet") || input.includes("walk")) {
 category = "Pet Help";
 suggested = "Best match: dog walking, pet sitting, feeding support.";
-} else if (
-input.includes("tutor") ||
-input.includes("math") ||
-input.includes("school") ||
-input.includes("study")
-) {
+} else if (input.includes("tutor") || input.includes("math") || input.includes("study")) {
 category = "Tutoring";
 suggested = "Best match: tutoring, homework help, study support.";
 }
@@ -559,6 +873,126 @@ suggested = "Best match: tutoring, homework help, study support.";
 result.innerHTML = "<strong>Category:</strong> " + category + "<br><strong>Suggested Match:</strong> " + suggested;
 helpers.innerText = "Top nearby matches: John D. (2 miles), Sarah T. (4 miles), Mike R. (5 miles)";
 }
+
+function showAppTab(tab) {
+document.getElementById("homeTab").classList.add("hidden");
+document.getElementById("marketTab").classList.add("hidden");
+document.getElementById("emergencyTab").classList.add("hidden");
+document.getElementById("leaderboardTab").classList.add("hidden");
+
+document.getElementById("navHome").classList.remove("active");
+document.getElementById("navMarket").classList.remove("active");
+document.getElementById("navEmergency").classList.remove("active");
+document.getElementById("navLeaderboard").classList.remove("active");
+
+if (tab === "home") {
+document.getElementById("homeTab").classList.remove("hidden");
+document.getElementById("navHome").classList.add("active");
+}
+if (tab === "market") {
+document.getElementById("marketTab").classList.remove("hidden");
+document.getElementById("navMarket").classList.add("active");
+}
+if (tab === "emergency") {
+document.getElementById("emergencyTab").classList.remove("hidden");
+document.getElementById("navEmergency").classList.add("active");
+}
+if (tab === "leaderboard") {
+document.getElementById("leaderboardTab").classList.remove("hidden");
+document.getElementById("navLeaderboard").classList.add("active");
+}
+}
+
+function updateUsageDisplay() {
+document.getElementById("msgCountText").innerText = messageCount;
+document.getElementById("imgCountText").innerText = imageCount;
+document.getElementById("subStatusText").innerText = isSubscribed ? "Premium" : "Free";
+}
+
+function openPaywall() {
+document.getElementById("paywallOverlay").classList.remove("hidden");
+}
+
+function closePaywall() {
+document.getElementById("paywallOverlay").classList.add("hidden");
+}
+
+function subscribeNow() {
+isSubscribed = true;
+document.getElementById("paywallOverlay").classList.add("hidden");
+document.getElementById("premiumStatusBadge").classList.remove("hidden");
+updateUsageDisplay();
+
+const box = document.getElementById("chatBox");
+const msg = document.createElement("div");
+msg.className = "chat-msg system";
+msg.innerText = "Premium unlocked. You now have unlimited messages and picture uploads.";
+box.appendChild(msg);
+box.scrollTop = box.scrollHeight;
+}
+
+function sendMessage() {
+let input = document.getElementById("chatInput");
+let box = document.getElementById("chatBox");
+let text = input.value.trim();
+
+if (text === "") return;
+
+if (!isSubscribed && messageCount >= 2) {
+openPaywall();
+return;
+}
+
+const msg = document.createElement("div");
+msg.className = "chat-msg me";
+msg.innerText = text;
+box.appendChild(msg);
+box.scrollTop = box.scrollHeight;
+
+input.value = "";
+
+if (!isSubscribed) {
+messageCount++;
+updateUsageDisplay();
+if (messageCount >= 2) {
+const warn = document.createElement("div");
+warn.className = "chat-msg system";
+warn.innerText = "You’ve used your 2 free messages. Subscribe to continue chatting.";
+box.appendChild(warn);
+box.scrollTop = box.scrollHeight;
+openPaywall();
+}
+}
+}
+
+function uploadPicture() {
+let box = document.getElementById("chatBox");
+
+if (!isSubscribed && imageCount >= 1) {
+openPaywall();
+return;
+}
+
+const msg = document.createElement("div");
+msg.className = "chat-msg";
+msg.innerText = "📷 Picture uploaded successfully.";
+box.appendChild(msg);
+box.scrollTop = box.scrollHeight;
+
+if (!isSubscribed) {
+imageCount++;
+updateUsageDisplay();
+if (imageCount >= 1) {
+const warn = document.createElement("div");
+warn.className = "chat-msg system";
+warn.innerText = "You’ve used your 1 free picture upload. Subscribe for unlimited uploads.";
+box.appendChild(warn);
+box.scrollTop = box.scrollHeight;
+}
+}
+}
+
+updateUsageDisplay();
 </script>
 </body>
 </html>
