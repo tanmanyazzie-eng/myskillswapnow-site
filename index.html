@@ -561,6 +561,19 @@ placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding"
 </div>
 
 <!-- EXISTING SECTION -->
+  <div style="background:#f4f4f4;padding:15px;border-radius:10px;margin-bottom:15px">
+
+<h3>Login / Sign Up</h3>
+
+<input id="email" placeholder="Email" style="width:100%;margin-bottom:6px">
+
+<input id="password" type="password" placeholder="Password" style="width:100%;margin-bottom:6px">
+
+<button onclick="login()">Login</button>
+<button onclick="signUp()">Sign Up</button>
+
+</div>
+
 <h3>Create Request</h3>
 
 <div class="toggle-row">
@@ -931,6 +944,12 @@ Area: <strong>${escapeHtml(capitalize(area))}</strong>
 }
 
 async function postSkill() {
+const { data: { user } } = await app.auth.getUser();
+
+if (!user) {
+alert("Please login before posting a job.");
+return;
+}  
 const title = document.getElementById("title").value.trim();
 const descriptionRaw = document.getElementById("description").value.trim();
 const category = document.getElementById("category").value;
