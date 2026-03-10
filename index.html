@@ -549,16 +549,7 @@ placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding"
 </div>
 
 <div class="card">
-  <!-- LOGIN / SIGNUP BOX -->
-<div id="authBox">
-<h3>Login / Sign Up</h3>
-
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-
-<button onclick="signUp()">Sign Up</button>
-<button onclick="login()">Login</button>
-</div>
+  
 
 <!-- EXISTING SECTION -->
   <div style="background:#f4f4f4;padding:15px;border-radius:10px;margin-bottom:15px">
@@ -569,8 +560,10 @@ placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding"
 
 <input id="password" type="password" placeholder="Password" style="width:100%;margin-bottom:6px">
 
-<button onclick="login()">Login</button>
+<div style="display:flex;gap:8px;margin-top:8px;">
 <button onclick="signUp()">Sign Up</button>
+<button onclick="login()">Login</button>
+</div>
 
 </div>
 
@@ -851,8 +844,10 @@ document.getElementById("matchResult").textContent =
 }
 
 async function loadJobs() {
+
 const statusEl = document.getElementById("jobsStatus");
 const listEl = document.getElementById("jobsList");
+  
 statusEl.textContent = "Loading jobs...";
 listEl.innerHTML = "";
 
@@ -944,6 +939,7 @@ Area: <strong>${escapeHtml(capitalize(area))}</strong>
 }
 
 async function postSkill() {
+
 const { data: { user } } = await app.auth.getUser();
 
 if (!user) {
@@ -970,6 +966,7 @@ title,
 description: `${descriptionRaw} [AREA:${areaType}]`,
 category,
 budget: finalBudget
+user_email: user email,
 };
 
 try {
