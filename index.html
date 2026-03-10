@@ -41,16 +41,29 @@ border-bottom-right-radius: 24px;
 box-shadow: 0 10px 22px rgba(2, 6, 23, 0.18);
 }
 
+.brand-wrap {
+text-align: center;
+perspective: 900px;
+}
+
 .brand {
 margin: 0;
 font-size: 2rem;
-font-weight: 800;
-text-align: center;
-letter-spacing: -0.5px;
+font-weight: 900;
+letter-spacing: -0.6px;
+color: #ffffff;
+text-shadow:
+0 1px 0 #cbd5e1,
+0 2px 0 #94a3b8,
+0 3px 0 #64748b,
+0 4px 0 #475569,
+0 10px 18px rgba(0,0,0,0.35);
+transform: rotateX(8deg);
+display: inline-block;
 }
 
 .tagline {
-margin: 8px 0 0;
+margin: 10px 0 0;
 text-align: center;
 color: rgba(255,255,255,0.92);
 font-size: 1rem;
@@ -266,12 +279,6 @@ color: white;
 width: 100%;
 }
 
-.btn-premium {
-background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%);
-color: white;
-width: 100%;
-}
-
 .action-row {
 display: flex;
 gap: 10px;
@@ -312,6 +319,7 @@ padding: 16px 12px;
 text-align: center;
 font-weight: 800;
 box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+cursor: pointer;
 }
 
 .quick-item span {
@@ -320,6 +328,11 @@ margin-top: 4px;
 color: #64748b;
 font-size: 0.86rem;
 font-weight: 500;
+}
+
+.quick-item:hover {
+border-color: #1d4ed8;
+transform: translateY(-1px);
 }
 
 .algorithm-box {
@@ -504,19 +517,21 @@ margin-bottom: 4px;
 <body>
 <div class="app-shell">
 <div class="header">
+<div class="brand-wrap">
 <h1 class="brand">MySkillsSwapNow</h1>
+</div>
 <p class="tagline">Trade skills. Get help. Make money.</p>
 
 <div class="hero-card">
 <div class="hero-title">Nationwide App. Local Trust.</div>
 <div class="hero-text">
-Hire with cash, trade with credits, unlock premium chat, and use emergency help for non-medical, non-police, non-fire needs.
+Hire with cash, trade with credits, unlock premium chat, and jump straight from popular services into posting your request.
 </div>
 <div class="hero-badges">
 <div class="hero-badge">Cash Jobs</div>
 <div class="hero-badge">Skill Credits</div>
-<div class="hero-badge">Premium Chat</div>
-<div class="hero-badge">Emergency Help</div>
+<div class="hero-badge">Quick Post</div>
+<div class="hero-badge">Smart Matching</div>
 </div>
 </div>
 </div>
@@ -554,14 +569,14 @@ Hire with cash, trade with credits, unlock premium chat, and use emergency help 
 <div class="card">
 <div class="sub-title">Most Popular Services</div>
 <div class="quick-grid">
-<div class="quick-item">Plumbing<span>Pipes, drains, toilets</span></div>
-<div class="quick-item">HVAC<span>AC, heater, vents</span></div>
-<div class="quick-item">Electrical<span>Wiring, outlets, lights</span></div>
-<div class="quick-item">Moving<span>Furniture, hauling, lifting</span></div>
-<div class="quick-item">Lawn<span>Grass, weeds, yard care</span></div>
-<div class="quick-item">Welding<span>Metal repair, fabrication</span></div>
-<div class="quick-item">Car Detail<span>Wash, vacuum, polish</span></div>
-<div class="quick-item">Barber<span>Haircuts, fades, trims</span></div>
+<div class="quick-item" onclick="quickFillJob('Plumbing')">Plumbing<span>Pipes, drains, toilets</span></div>
+<div class="quick-item" onclick="quickFillJob('HVAC')">HVAC<span>AC, heater, vents</span></div>
+<div class="quick-item" onclick="quickFillJob('Electrical')">Electrical<span>Wiring, outlets, lights</span></div>
+<div class="quick-item" onclick="quickFillJob('Moving')">Moving<span>Furniture, hauling, lifting</span></div>
+<div class="quick-item" onclick="quickFillJob('Lawn')">Lawn<span>Grass, weeds, yard care</span></div>
+<div class="quick-item" onclick="quickFillJob('Welding')">Welding<span>Metal repair, fabrication</span></div>
+<div class="quick-item" onclick="quickFillJob('Car Detail')">Car Detail<span>Wash, vacuum, polish</span></div>
+<div class="quick-item" onclick="quickFillJob('Barber')">Barber<span>Haircuts, fades, trims</span></div>
 </div>
 </div>
 
@@ -608,7 +623,7 @@ Includes:
 <div id="marketSection" class="section">
 <div class="card">
 <div class="sub-title">Smart Search & Match</div>
-<input id="smartSearch" placeholder="Try: plumbing trade, hvac repair, electrical help, barber haircut swap, welding, car detail" />
+<input id="smartSearch" placeholder="Try: plumbing leak, hvac repair, electrical help, moving furniture, lawn cleanup, welding repair, car detail, barber haircut trade" />
 <button class="btn-primary" onclick="findBestMatch()">Find Best Match</button>
 <div id="matchResult" class="algorithm-box"></div>
 </div>
@@ -814,6 +829,49 @@ const categoryKeywords = {
 "Emergency Help": ["urgent","asap","jump","battery","lockout","flat tire"]
 };
 
+const quickFillTemplates = {
+"Plumbing": {
+title: "Need plumbing help",
+description: "Need help with a plumbing issue such as leak repair, clogged drain, faucet replacement, toilet repair, or pipe work.",
+category: "Plumbing"
+},
+"HVAC": {
+title: "Need HVAC repair or service",
+description: "Need help with AC, heater, thermostat, airflow, or cooling / heating issues.",
+category: "HVAC"
+},
+"Electrical": {
+title: "Need electrical help",
+description: "Need help with wiring, outlets, breakers, switches, lighting, or electrical troubleshooting.",
+category: "Electrical"
+},
+"Moving": {
+title: "Need moving help",
+description: "Need help moving furniture, lifting heavy items, loading, unloading, or hauling.",
+category: "Moving"
+},
+"Lawn": {
+title: "Need lawn / yard work",
+description: "Need help with mowing, weeds, trimming, cleanup, landscaping, or general yard work.",
+category: "Lawn"
+},
+"Welding": {
+title: "Need welding work",
+description: "Need help with welding, metal fabrication, repair, or custom metal work.",
+category: "Welding"
+},
+"Car Detail": {
+title: "Need car detailing",
+description: "Need help with interior cleaning, exterior wash, vacuuming, polish, or full car detail.",
+category: "Car Detail"
+},
+"Barber": {
+title: "Need barber / haircut service",
+description: "Looking for haircut, fade, lineup, beard trim, or barber service. Can pay cash or trade credits.",
+category: "Barber"
+}
+};
+
 function normalize(text) {
 return String(text || "")
 .toLowerCase()
@@ -912,7 +970,7 @@ return score;
 
 function buildSmartSuggestion(query, topMatches) {
 if (!topMatches.length) {
-return "No close matches yet. Try phrases like: plumbing leak, hvac repair, electrical outlet help, moving furniture, lawn cleanup, welding repair, car detail, barber haircut trade.";
+return "No close matches yet. Try phrases like: plumbing leak, hvac repair, electrical help, moving furniture, lawn cleanup, welding repair, car detail, barber haircut trade.";
 }
 
 const top = topMatches[0];
@@ -966,6 +1024,17 @@ document.getElementById("nav-" + name).classList.add("active");
 if (name === "track" && map) {
 setTimeout(() => map.invalidateSize(), 200);
 }
+}
+
+function quickFillJob(serviceName) {
+const item = quickFillTemplates[serviceName];
+if (!item) return;
+
+showSection("market");
+document.getElementById("title").value = item.title;
+document.getElementById("description").value = item.description;
+document.getElementById("category").value = item.category;
+document.getElementById("budget").focus();
 }
 
 function updatePremiumUI() {
@@ -1188,7 +1257,6 @@ return;
 }
 
 const request = prompt("Describe your non-medical / non-police / non-fire emergency request.");
-
 if (!request) return;
 
 alert("Emergency request submitted: " + request);
@@ -1365,4 +1433,3 @@ updatePremiumUI();
 </script>
 </body>
 </html>
-
