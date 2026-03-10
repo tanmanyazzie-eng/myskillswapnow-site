@@ -549,6 +549,18 @@ placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding"
 </div>
 
 <div class="card">
+  <!-- LOGIN / SIGNUP BOX -->
+<div id="authBox">
+<h3>Login / Sign Up</h3>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="signUp()">Sign Up</button>
+<button onclick="login()">Login</button>
+</div>
+
+<!-- EXISTING SECTION -->
 <h3>Create Request</h3>
 
 <div class="toggle-row">
@@ -1159,6 +1171,31 @@ return s.charAt(0).toUpperCase() + s.slice(1);
 
 loadJobs();
 updateChatLockNotice();
+  async function signUp() {
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+const { error } = await app.auth.signUp({
+email: email,
+password: password
+});
+
+if (error) alert(error.message);
+else alert("Account created!");
+}
+
+async function login() {
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+const { error } = await app.auth.signInWithPassword({
+email: email,
+password: password
+});
+
+if (error) alert(error.message);
+else alert("Logged in!");
+}
 </script>
 </body>
 </html>
