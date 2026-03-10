@@ -2,350 +2,149 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillSwapNow</title>
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-crossorigin=""
-/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <style>
-:root {
---bg: #eef2f7;
---card: #ffffff;
---navy: #071b55;
---navy-2: #102967;
---text: #0f172a;
---muted: #64748b;
---line: #dbe3ef;
---success: #16a34a;
---shadow: 0 10px 30px rgba(7, 27, 85, 0.10);
---radius: 24px;
-}
-
-* { box-sizing: border-box; }
-
-html, body {
-margin: 0;
-padding: 0;
-background: var(--bg);
-color: var(--text);
-font-family: Arial, Helvetica, sans-serif;
-}
-
 body {
-max-width: 540px;
+margin: 0;
+font-family: Arial, sans-serif;
+background: #f2f3f5;
+color: #111;
+}
+
+.app-shell {
+max-width: 430px;
 margin: 0 auto;
-min-height: 100vh;
-padding-bottom: 96px;
+padding: 14px 14px 90px;
 }
 
 .section {
 display: none;
-padding: 0 18px 20px;
 }
 
 .section.active {
 display: block;
 }
 
-.hero {
-background: linear-gradient(180deg, var(--navy), var(--navy-2));
-color: white;
-border-bottom-left-radius: 36px;
-border-bottom-right-radius: 36px;
-padding: 24px 18px 26px;
-box-shadow: var(--shadow);
-}
-
-.hero-title {
-margin: 8px 0 8px;
-font-size: 44px;
-font-weight: 900;
-letter-spacing: -1px;
-text-align: center;
-color: #fff;
-text-shadow:
-0 2px 0 rgba(255,255,255,0.35),
-0 6px 14px rgba(0,0,0,0.35);
-}
-
-.hero-sub {
-text-align: center;
-font-size: 18px;
-margin: 0 0 20px;
-color: rgba(255,255,255,0.9);
-}
-
-.hero-card {
-background: rgba(255,255,255,0.10);
-border: 1px solid rgba(255,255,255,0.12);
-border-radius: 24px;
-padding: 18px;
-}
-
-.hero-card h2 {
-margin: 0 0 10px;
-font-size: 28px;
-line-height: 1.1;
-}
-
-.hero-card p {
-margin: 0;
-color: rgba(255,255,255,0.92);
-line-height: 1.45;
-font-size: 16px;
-}
-
-.chip-row {
-display: flex;
-gap: 10px;
-flex-wrap: wrap;
-margin-top: 16px;
-}
-
-.chip {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-border-radius: 999px;
-border: 1px solid rgba(255,255,255,0.12);
-padding: 11px 16px;
-background: rgba(255,255,255,0.10);
-color: white;
-font-weight: 700;
-font-size: 14px;
-}
-
 .card {
-background: var(--card);
-border-radius: var(--radius);
-box-shadow: var(--shadow);
-padding: 18px;
-margin-top: 18px;
+background: #fff;
+border-radius: 18px;
+padding: 16px;
+margin-bottom: 14px;
+box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
-.card h3 {
+h2, h3 {
 margin: 0 0 12px;
-font-size: 22px;
 }
 
-.muted {
-color: var(--muted);
-}
-
-.profile-card {
-display: flex;
-gap: 16px;
-align-items: flex-start;
-}
-
-.avatar {
-margin-left: auto;
-width: 84px;
-height: 84px;
-border-radius: 28px;
-background: var(--navy);
-color: white;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 28px;
-font-weight: 800;
-flex-shrink: 0;
-}
-
-.pill-row {
-display: flex;
-gap: 12px;
-flex-wrap: wrap;
-margin: 16px 0;
-}
-
-.pill {
-padding: 12px 16px;
-border-radius: 999px;
-background: #e9f5eb;
-color: #166534;
-font-weight: 700;
-}
-
-.trust-wrap {
-margin-top: 12px;
-display: flex;
-gap: 16px;
-align-items: flex-end;
-}
-
-.trust-score {
-font-size: 74px;
-line-height: 0.9;
-color: var(--success);
-font-weight: 900;
-}
-
-.progress {
-width: 100%;
-height: 20px;
-border-radius: 999px;
-overflow: hidden;
-background: #dbe3ef;
-margin-top: 14px;
-}
-
-.progress > div {
-height: 100%;
-width: 76%;
-background: linear-gradient(90deg, var(--navy), #2563eb);
-}
-
-.service-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 12px;
-margin-top: 12px;
-}
-
-.service-btn {
-border: 1px solid var(--line);
-background: #f8fafc;
-color: var(--text);
-border-radius: 20px;
-padding: 16px 12px;
-text-align: left;
-cursor: pointer;
-font-size: 16px;
-font-weight: 800;
-}
-
-.service-btn small {
-display: block;
-margin-top: 4px;
-color: var(--muted);
-font-weight: 600;
-}
-
-.toggle-row {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 12px;
-}
-
-.toggle-btn {
-border: 2px solid var(--line);
-background: #f8fafc;
-color: var(--text);
-border-radius: 22px;
-padding: 16px 12px;
-font-size: 16px;
-font-weight: 900;
-cursor: pointer;
-min-height: 72px;
-}
-
-.toggle-btn.active {
-background: var(--navy);
-color: white;
-border-color: var(--navy);
-}
-
-.toggle-btn.small {
-min-height: auto;
-border-radius: 999px;
-padding: 10px 14px;
-font-size: 14px;
-font-weight: 800;
+.mini-note {
+font-size: 13px;
+color: #666;
+margin-top: 8px;
 }
 
 input, textarea, select {
 width: 100%;
-border: 2px solid #d6dee8;
-border-radius: 18px;
-padding: 18px 16px;
+box-sizing: border-box;
+border: 1px solid #ddd;
+border-radius: 14px;
+padding: 14px;
 font-size: 16px;
-outline: none;
-background: white;
-color: var(--text);
-margin-top: 12px;
+margin-bottom: 10px;
+background: #fff;
 }
 
 textarea {
-min-height: 120px;
+min-height: 90px;
 resize: vertical;
 }
 
 .primary-btn {
 width: 100%;
 border: none;
-border-radius: 18px;
-background: var(--navy);
-color: white;
-padding: 18px 16px;
-margin-top: 16px;
+border-radius: 16px;
+padding: 15px;
 font-size: 18px;
-font-weight: 900;
+font-weight: 700;
+background: #081a78;
+color: #fff;
 cursor: pointer;
 }
 
-.secondary-btn {
-width: 100%;
-border: 2px solid var(--line);
+.toggle-row,
+.filter-row,
+.auth-btn-row {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+}
+
+.toggle-btn,
+.filter-btn,
+.auth-btn {
+border: 1px solid #dfe3ea;
+background: #fff;
 border-radius: 18px;
-background: #f8fafc;
-color: var(--text);
-padding: 16px;
-margin-top: 12px;
-font-size: 16px;
-font-weight: 800;
+padding: 12px 16px;
+font-weight: 700;
 cursor: pointer;
+color: #111;
 }
 
-.job-list {
-display: grid;
-gap: 14px;
-margin-top: 14px;
+.toggle-btn.active,
+.filter-btn.active,
+.auth-btn.primary {
+background: #081a78;
+color: #fff;
+border-color: #081a78;
 }
 
 .job-card {
-border: 1px solid var(--line);
-border-radius: 18px;
+border: 1px solid #ececec;
+border-radius: 16px;
 padding: 14px;
-background: #f9fbfd;
+margin-bottom: 12px;
+background: #fff;
 }
 
 .job-head {
 display: flex;
 justify-content: space-between;
-gap: 12px;
 align-items: flex-start;
+gap: 10px;
 }
 
 .job-title {
 font-size: 18px;
-font-weight: 900;
-margin: 0;
+font-weight: 700;
+margin-bottom: 6px;
 }
 
 .job-badge {
-background: #e7eefb;
-color: var(--navy);
-border-radius: 999px;
+background: #081a78;
+color: #fff;
 padding: 8px 12px;
-font-size: 12px;
-font-weight: 800;
+border-radius: 14px;
+font-weight: 700;
 white-space: nowrap;
 }
 
 .job-meta {
-margin-top: 8px;
-color: var(--muted);
 font-size: 14px;
-line-height: 1.45;
+color: #444;
+line-height: 1.4;
+}
+
+.status-text {
+font-size: 14px;
+color: #666;
+margin-top: 6px;
 }
 
 .bottom-nav {
@@ -354,219 +153,86 @@ left: 50%;
 transform: translateX(-50%);
 bottom: 0;
 width: 100%;
-max-width: 540px;
-background: rgba(4, 9, 21, 0.98);
-border-top-left-radius: 26px;
-border-top-right-radius: 26px;
-padding: 12px 8px 14px;
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 6px;
-z-index: 999;
+max-width: 430px;
+background: #050505;
+color: #fff;
+display: flex;
+justify-content: space-around;
+padding: 12px 0 10px;
+border-top-left-radius: 16px;
+border-top-right-radius: 16px;
+z-index: 50;
 }
 
 .nav-item {
-color: rgba(255,255,255,0.78);
+font-size: 12px;
 text-align: center;
+opacity: 0.8;
 cursor: pointer;
-padding: 8px 4px;
-border-radius: 14px;
-font-size: 13px;
-font-weight: 700;
 }
 
 .nav-item.active {
-color: white;
-}
-
-.nav-icon {
-display: block;
-font-size: 20px;
-margin-bottom: 4px;
-}
-
-.mini-note {
-font-size: 13px;
-color: var(--muted);
-margin-top: 10px;
-}
-
-.locked {
-border: 1px dashed #f59e0b;
-background: #fff7ed;
-color: #92400e;
-border-radius: 18px;
-padding: 14px;
+opacity: 1;
 font-weight: 700;
-margin-top: 12px;
-}
-
-.hidden {
-display: none !important;
 }
 
 #map {
 width: 100%;
-height: 260px;
-border-radius: 20px;
-margin-top: 14px;
-overflow: hidden;
-border: 1px solid var(--line);
+height: 220px;
+border-radius: 14px;
+margin-top: 8px;
+display: none;
 }
 
-.track-note {
-background: #ecfeff;
-color: #164e63;
-border: 1px solid #bae6fd;
-border-radius: 18px;
-padding: 14px;
-margin-top: 12px;
-font-weight: 700;
-line-height: 1.4;
+.top-title {
+font-size: 26px;
+font-weight: 800;
+margin-bottom: 14px;
+text-align: center;
+}
+
+.subtle {
+font-size: 13px;
+color: #666;
 }
 </style>
 </head>
 <body>
-<section id="home" class="section active">
-<div class="hero">
-<div class="hero-title">MySkillSwapNow</div>
-<p class="hero-sub">Trade skills. Get help. Make money.</p>
-
-<div class="hero-card">
-<h2>Demand Pulse + Hybrid Filters</h2>
-<p>
-The app surfaces what’s hot locally, lets users quick-post from top services,
-and ranks matches by payment type plus urban/rural logic.
-</p>
-
-<div class="chip-row">
-<div class="chip">Demand Pulse</div>
-<div class="chip">Cash Jobs</div>
-<div class="chip">Credit Swaps</div>
-<div class="chip">Urban + Rural</div>
-</div>
-</div>
-</div>
-
-<div class="section active" style="display:block; padding:18px 18px 0;">
-<div class="card profile-card">
-<div style="flex:1;">
-<h3 style="font-size:28px; margin-bottom:8px;">Local Member</h3>
-<div class="muted" style="font-size:18px; line-height:1.45;">
-Hybrid model ready for city and rural communities
-</div>
-
-<div class="pill-row">
-<div class="pill">Verified Member</div>
-<div class="pill">On-Time Arrival</div>
-<div class="pill">Top Rated</div>
-</div>
-
-<div class="trust-wrap">
-<div class="trust-score">94</div>
-<div>
-<div style="font-size:26px; font-weight:900;">Trust Score</div>
-<div class="muted" style="font-size:16px;">Profile completion 76%</div>
-</div>
-</div>
-
-<div class="progress"><div></div></div>
-</div>
-<div class="avatar">MS</div>
-</div>
-
-<div class="card">
-<h3>Most Popular Services</h3>
-<div class="service-grid">
-<button class="service-btn" onclick="quickFillService('Plumbing')">
-Plumbing
-<small>Leaks, drains, toilets</small>
-</button>
-<button class="service-btn" onclick="quickFillService('HVAC')">
-HVAC
-<small>AC, heater, thermostat</small>
-</button>
-<button class="service-btn" onclick="quickFillService('Electrical')">
-Electrical
-<small>Outlets, lights, breakers</small>
-</button>
-<button class="service-btn" onclick="quickFillService('Moving')">
-Moving
-<small>Lift, haul, transport</small>
-</button>
-<button class="service-btn" onclick="quickFillService('Lawn')">
-Lawn
-<small>Mowing, weeds, cleanup</small>
-</button>
-<button class="service-btn" onclick="quickFillService('Welding')">
-Welding
-<small>Repair, fabrication</small>
-</button>
-<button class="service-btn" onclick="quickFillService('Car Detail')">
-Car Detail
-<small>Interior, wash, wax</small>
-</button>
-<button class="service-btn" onclick="quickFillService('Barber')">
-Barber
-<small>Haircut, beard, lineup</small>
-</button>
-</div>
-</div>
-</div>
-</section>
-
-<section id="market" class="section">
-<div class="card">
-<h3>Area Mode</h3>
-<div class="chip-row">
-<button class="toggle-btn small active" id="area-all" onclick="setAreaFilter('all')">All Areas</button>
-<button class="toggle-btn small" id="area-urban" onclick="setAreaFilter('urban')">Urban</button>
-<button class="toggle-btn small" id="area-rural" onclick="setAreaFilter('rural')">Rural</button>
-</div>
-<div class="mini-note" id="areaHelp">All Areas: balanced ranking for both cities and rural regions.</div>
-</div>
+<div class="app-shell">
+<div id="home" class="section active">
+<div class="top-title">MySkillSwapNow</div>
 
 <div class="card">
 <h3>Payment Filters</h3>
-<div class="chip-row">
-<button class="toggle-btn small active" id="pay-all" onclick="setPaymentFilter('all')">All</button>
-<button class="toggle-btn small" id="pay-cash" onclick="setPaymentFilter('cash')">Cash</button>
-<button class="toggle-btn small" id="pay-credits" onclick="setPaymentFilter('credits')">Credits</button>
-<button class="toggle-btn small" id="pay-both" onclick="setPaymentFilter('both')">Cash or Credits</button>
-<button class="toggle-btn small" id="pay-emergency" onclick="setPaymentFilter('emergency')">Emergency</button>
+<div class="filter-row">
+<button class="filter-btn active" id="paymentFilter-all" onclick="setPaymentFilter('all')">All</button>
+<button class="filter-btn" id="paymentFilter-cash" onclick="setPaymentFilter('cash')">Cash</button>
+<button class="filter-btn" id="paymentFilter-credit" onclick="setPaymentFilter('credit')">Credits</button>
+<button class="filter-btn" id="paymentFilter-both" onclick="setPaymentFilter('both')">Cash or Credits</button>
+<button class="filter-btn" id="paymentFilter-emergency" onclick="setPaymentFilter('emergency')">Emergency</button>
 </div>
 </div>
 
 <div class="card">
 <h3>Smart Search & Match</h3>
-<input
-id="searchInput"
-type="text"
-placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding"
-/>
+<input id="smartSearch" type="text" placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding" />
 <button class="primary-btn" onclick="findBestMatch()">Find Best Match</button>
 <div class="mini-note" id="matchResult">Use keywords to rank jobs and suggest compatible services.</div>
 </div>
 
 <div class="card">
-  
-
-<!-- EXISTING SECTION -->
-  <div style="background:#f4f4f4;padding:15px;border-radius:10px;margin-bottom:15px">
-
 <h3>Login / Sign Up</h3>
-
-<input id="email" placeholder="Email" style="width:100%;margin-bottom:6px">
-
-<input id="password" type="password" placeholder="Password" style="width:100%;margin-bottom:6px">
-
-<div style="display:flex;gap:8px;margin-top:8px;">
-<button onclick="signUp()">Sign Up</button>
-<button onclick="login()">Login</button>
+<input id="email" placeholder="Email" />
+<input id="password" type="password" placeholder="Password" />
+<div class="auth-btn-row">
+<button class="auth-btn primary" onclick="signUp()">Sign Up</button>
+<button class="auth-btn" onclick="login()">Login</button>
+<button class="auth-btn" onclick="logout()">Logout</button>
+</div>
+<div class="status-text" id="authStatus">Not logged in</div>
 </div>
 
-</div>
-
+<div class="card">
 <h3>Create Request</h3>
 
 <div class="toggle-row">
@@ -582,193 +248,93 @@ placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding"
 <option>Plumbing</option>
 <option>HVAC</option>
 <option>Electrical</option>
-<option>Moving</option>
-<option>Lawn</option>
-<option>Welding</option>
-<option>Car Detail</option>
+<option>Handyman</option>
+<option>Landscaping</option>
+<option>Cleaning</option>
 <option>Barber</option>
-<option>General Labor</option>
+<option>Welding</option>
+<option>General</option>
 </select>
 
 <select id="listingArea">
-<option value="Urban">Urban</option>
-<option value="Rural">Rural</option>
+<option value="urban">Urban</option>
+<option value="rural">Rural</option>
+<option value="suburban">Suburban</option>
 </select>
 
 <input id="budget" type="text" placeholder="80" />
 
 <button class="primary-btn" onclick="postSkill()">Post Job</button>
+<div class="status-text" id="postStatus"></div>
 </div>
 
 <div class="card">
 <h3>Available Jobs</h3>
-<div class="muted" id="jobsStatus">Loading jobs...</div>
-<div id="jobsList" class="job-list"></div>
+<div id="jobsStatus" class="status-text">Loading jobs...</div>
+<div id="jobsList"></div>
 </div>
-</section>
+</div>
 
-<section id="credits" class="section">
+<div id="market" class="section">
+<div class="card">
+<h3>Market</h3>
+<div class="subtle">Browse live requests and matches.</div>
+</div>
+</div>
+
+<div id="credits" class="section">
 <div class="card">
 <h3>Credits</h3>
-<div style="font-size:42px; font-weight:900; color:var(--navy);" id="creditsValue">10</div>
-<div class="muted">Use credits to trade services instead of cash.</div>
-<button class="secondary-btn" onclick="earnCreditsDemo()">Demo: Earn 2 Credits</button>
+<div class="subtle">Credit features coming next.</div>
 </div>
-</section>
+</div>
 
-<section id="track" class="section">
+<div id="track" class="section">
 <div class="card">
 <h3>Track</h3>
-<div class="muted">
-Track your route to a customer, business, or job destination and notify when you’re on the way or arrived.
-</div>
-<input id="destinationInput" type="text" placeholder="Enter destination address or business name" />
-<div class="toggle-row" style="margin-top:12px;">
-<button class="toggle-btn active" onclick="setDestination()">Set Destination</button>
-<button class="toggle-btn" onclick="startTracking()">Start Tracking</button>
-<button class="toggle-btn" onclick="stopTracking()">Stop</button>
-</div>
+<div class="subtle">Tracking features coming next.</div>
 <div id="map"></div>
-<div id="trackStatus" class="track-note">Tracking idle. Set a destination, then start tracking.</div>
 </div>
-</section>
+</div>
 
-<section id="chat" class="section">
+<div id="chat" class="section">
 <div class="card">
 <h3>Chat</h3>
-<div id="chatLockNotice" class="locked">
-Chat is free for 2 messages and 1 image upload. Upgrade to continue.
+<div class="subtle" id="chatLockNotice">Login and future premium rules will control chat access.</div>
 </div>
-
-<textarea id="chatMessage" placeholder="Send a message"></textarea>
-<button class="primary-btn" onclick="sendChatMessage()">Send Message</button>
-
-<input id="imageUpload" type="file" accept="image/*" />
-<button class="secondary-btn" onclick="uploadImageDemo()">Upload Image</button>
-
-<div id="chatFeed" class="job-list" style="margin-top:16px;"></div>
 </div>
-</section>
+</div>
 
 <div class="bottom-nav">
-<div class="nav-item active" onclick="showSection('home')" id="nav-home">
-<span class="nav-icon">⌂</span>Home
+<div class="nav-item active" id="nav-home" onclick="showSection('home')">Home</div>
+<div class="nav-item" id="nav-market" onclick="showSection('market')">Market</div>
+<div class="nav-item" id="nav-credits" onclick="showSection('credits')">Credits</div>
+<div class="nav-item" id="nav-track" onclick="showSection('track')">Track</div>
+<div class="nav-item" id="nav-chat" onclick="showSection('chat')">Chat</div>
 </div>
-<div class="nav-item" onclick="showSection('market')" id="nav-market">
-<span class="nav-icon">▣</span>Market
-</div>
-<div class="nav-item" onclick="showSection('credits')" id="nav-credits">
-<span class="nav-icon">◎</span>Credits
-</div>
-<div class="nav-item" onclick="showSection('track')" id="nav-track">
-<span class="nav-icon">◉</span>Track
-</div>
-<div class="nav-item" onclick="showSection('chat')" id="nav-chat">
-<span class="nav-icon">◔</span>Chat
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
 <script>
 const supabaseUrl = "https://szkbplrqutkedxylhruh.supabase.co";
-const supabaseKey = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
+const supabaseKey = "PASTE_YOUR_CURRENT_WORKING_ANON_KEY_HERE";
 const app = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 let requestMode = "cash";
 let paymentFilter = "all";
-let areaMode = "all";
-let skillCredits = 10;
 let cachedJobs = [];
-let isPremium = false;
-let freeMessagesUsed = 0;
-let freeImagesUsed = 0;
+let map = null;
 
-let map;
-let userMarker = null;
-let destinationMarker = null;
-let routeLine = null;
-let watchId = null;
-let destinationLatLng = null;
-let arrivalTriggered = false;
-let onTheWayTriggered = false;
-
-const serviceTemplates = {
-"Plumbing": {
-title: "Need plumbing help",
-description: "Need help with a plumbing issue such as leak repair, clogged drain, faucet replacement, toilet repair, or pipe work.",
-category: "Plumbing",
-budget: "80"
-},
-"HVAC": {
-title: "Need HVAC help",
-description: "Need help with an AC or heater issue such as no cooling, thermostat problems, airflow trouble, or unit service.",
-category: "HVAC",
-budget: "120"
-},
-"Electrical": {
-title: "Need electrical help",
-description: "Need help with an electrical issue such as outlet replacement, light repair, breaker troubleshooting, or wiring.",
-category: "Electrical",
-budget: "95"
-},
-"Moving": {
-title: "Need moving help",
-description: "Need help lifting, loading, unloading, hauling, or moving furniture and boxes.",
-category: "Moving",
-budget: "100"
-},
-"Lawn": {
-title: "Need lawn help",
-description: "Need help with mowing, weed pulling, trimming, edging, or yard cleanup.",
-category: "Lawn",
-budget: "65"
-},
-"Welding": {
-title: "Need welding help",
-description: "Need help with metal repair, fabrication, welding touch-up, or gate and frame work.",
-category: "Welding",
-budget: "150"
-},
-"Car Detail": {
-title: "Need car detailing",
-description: "Need a vehicle cleaned and detailed including wash, vacuum, wipe-down, interior care, and shine.",
-category: "Car Detail",
-budget: "85"
-},
-"Barber": {
-title: "Need barber service",
-description: "Need a haircut, lineup, beard trim, or grooming service.",
-category: "Barber",
-budget: "40"
+function escapeHtml(value) {
+return String(value ?? "")
+.replaceAll("&", "&amp;")
+.replaceAll("<", "&lt;")
+.replaceAll(">", "&gt;")
+.replaceAll('"', "&quot;")
+.replaceAll("'", "&#039;");
 }
-};
 
-const synonymMap = {
-plumbing: ["plumber", "pipe", "drain", "faucet", "toilet", "water heater", "leak", "sink"],
-hvac: ["air conditioning", "ac", "heater", "heating", "cooling", "vent", "thermostat"],
-electrical: ["electrician", "wiring", "outlet", "breaker", "panel", "light", "switch"],
-moving: ["move", "movers", "furniture", "haul", "lifting", "delivery"],
-lawn: ["grass", "yard", "weed", "trim", "mow", "cleanup", "landscape"],
-welding: ["welder", "metal", "gate", "frame", "fabrication", "repair"],
-"car detail": ["detailing", "wash", "wax", "interior", "vacuum", "car wash"],
-barber: ["haircut", "fade", "lineup", "beard", "cut", "trim"]
-};
-
-function showSection(sectionId) {
-const sections = document.querySelectorAll(".section");
-sections.forEach(section => section.classList.remove("active"));
-
-const navItems = document.querySelectorAll(".nav-item");
-navItems.forEach(nav => nav.classList.remove("active"));
-
-document.getElementById(sectionId).classList.add("active");
-document.getElementById("nav-" + sectionId).classList.add("active");
-
-if (sectionId === "track") {
-setTimeout(initMapIfNeeded, 100);
-}
+function capitalize(value) {
+const s = String(value || "");
+return s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 }
 
 function setRequestMode(mode) {
@@ -778,76 +344,204 @@ document.getElementById("mode-credit").classList.toggle("active", mode === "cred
 document.getElementById("mode-both").classList.toggle("active", mode === "both");
 }
 
-function setAreaFilter(mode) {
-areaMode = mode;
-document.getElementById("area-all").classList.toggle("active", mode === "all");
-document.getElementById("area-urban").classList.toggle("active", mode === "urban");
-document.getElementById("area-rural").classList.toggle("active", mode === "rural");
-
-const help = document.getElementById("areaHelp");
-if (mode === "urban") help.textContent = "Urban: prioritize dense city jobs and fast local turnaround.";
-else if (mode === "rural") help.textContent = "Rural: prioritize spread-out jobs, equipment help, and travel-friendly matches.";
-else help.textContent = "All Areas: balanced ranking for both cities and rural regions.";
-
-renderJobs();
-}
-
 function setPaymentFilter(mode) {
 paymentFilter = mode;
-["all", "cash", "credits", "both", "emergency"].forEach(id => {
-const el = document.getElementById("pay-" + id);
-if (el) el.classList.toggle("active", mode === id);
+["all", "cash", "credit", "both", "emergency"].forEach(id => {
+const el = document.getElementById("paymentFilter-" + id);
+if (el) el.classList.toggle("active", id === mode);
 });
 renderJobs();
 }
 
-function quickFillService(service) {
-const data = serviceTemplates[service];
-if (!data) return;
-showSection("market");
-document.getElementById("title").value = data.title;
-document.getElementById("description").value = data.description;
-document.getElementById("category").value = data.category;
-document.getElementById("budget").value = data.budget;
-window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+function showSection(sectionId) {
+document.querySelectorAll(".section").forEach(section => {
+section.classList.remove("active");
+});
+
+const selected = document.getElementById(sectionId);
+if (selected) selected.classList.add("active");
+
+document.querySelectorAll(".nav-item").forEach(item => {
+item.classList.remove("active");
+});
+
+const activeNav = document.getElementById("nav-" + sectionId);
+if (activeNav) activeNav.classList.add("active");
+
+if (sectionId === "track") {
+initMapIfNeeded();
+}
+}
+
+function updateChatLockNotice() {
+const notice = document.getElementById("chatLockNotice");
+if (notice) {
+notice.textContent = "Login is enabled. Messaging rules and premium gates can be added next.";
+}
+}
+
+function quickFillService(normalized) {
+const titleEl = document.getElementById("title");
+const categoryEl = document.getElementById("category");
+
+if (!titleEl || !categoryEl) return;
+
+if (normalized.includes("plumb")) {
+titleEl.value = "Need plumbing help";
+categoryEl.value = "Plumbing";
+} else if (normalized.includes("hvac")) {
+titleEl.value = "Need HVAC help";
+categoryEl.value = "HVAC";
+} else if (normalized.includes("barber")) {
+titleEl.value = "Need barber service";
+categoryEl.value = "Barber";
+} else if (normalized.includes("weld")) {
+titleEl.value = "Need welding help";
+categoryEl.value = "Welding";
+} else {
+titleEl.value = "Need help";
+categoryEl.value = "General";
+}
 }
 
 function findBestMatch() {
-const raw = document.getElementById("searchInput").value.trim().toLowerCase();
-if (!raw) {
-document.getElementById("matchResult").textContent = "Try a service phrase like 'rural hvac repair' or 'cash plumbing'.";
+const raw = document.getElementById("smartSearch").value.trim();
+const normalized = raw.toLowerCase();
+
+if (!normalized) {
+document.getElementById("matchResult").textContent = "Type a service keyword first.";
 return;
 }
-
-let bestCategory = "General Labor";
-let bestScore = 0;
-
-Object.entries(synonymMap).forEach(([category, words]) => {
-let score = 0;
-words.forEach(word => {
-if (raw.includes(word)) score += 2;
-});
-if (raw.includes(category)) score += 3;
-if (score > bestScore) {
-bestScore = score;
-bestCategory = category;
-}
-});
-
-const normalized = Object.keys(serviceTemplates).find(
-item => item.toLowerCase() === bestCategory
-) || "Plumbing";
 
 quickFillService(normalized);
 document.getElementById("matchResult").textContent =
 `Best match: ${normalized}. Market form was auto-filled to help you post faster.`;
 }
 
-async function loadJobs() {
+async function signUp() {
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value.trim();
 
+const { error } = await app.auth.signUp({
+email: email,
+password: password
+});
+
+if (error) {
+alert(error.message);
+} else {
+alert("Account created. Check your email if confirmation is enabled.");
+await refreshAuthStatus();
+}
+}
+
+async function login() {
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value.trim();
+
+const { error } = await app.auth.signInWithPassword({
+email: email,
+password: password
+});
+
+if (error) {
+alert(error.message);
+} else {
+alert("Logged in!");
+await refreshAuthStatus();
+}
+}
+
+async function logout() {
+const { error } = await app.auth.signOut();
+if (error) {
+alert(error.message);
+} else {
+alert("Logged out");
+await refreshAuthStatus();
+}
+}
+
+async function refreshAuthStatus() {
+const authStatus = document.getElementById("authStatus");
+const { data: { user } } = await app.auth.getUser();
+
+if (user) {
+authStatus.textContent = `Logged in as: ${user.email}`;
+} else {
+authStatus.textContent = "Not logged in";
+}
+}
+
+function parseArea(description) {
+const text = String(description || "");
+const match = text.match(/\[AREA:(.*?)\]/i);
+return match ? match[1].toLowerCase() : "general";
+}
+
+function cleanDescription(description) {
+return String(description || "").replace(/\s*\[AREA:.*?\]/i, "").trim();
+}
+
+function passesPaymentFilter(job) {
+if (paymentFilter === "all") return true;
+
+const budget = String(job.budget || "").toLowerCase();
+const title = String(job.title || "").toLowerCase();
+const description = String(job.description || "").toLowerCase();
+
+if (paymentFilter === "cash") return budget.includes("$") || /^\d+$/.test(budget);
+if (paymentFilter === "credit") return budget.includes("credit");
+if (paymentFilter === "both") return budget.includes("cash or credits");
+if (paymentFilter === "emergency") {
+return title.includes("emergency") || description.includes("emergency");
+}
+
+return true;
+}
+
+function renderJobs() {
+const listEl = document.getElementById("jobsList");
+const statusEl = document.getElementById("jobsStatus");
+
+const jobs = cachedJobs.filter(passesPaymentFilter);
+
+if (!jobs.length) {
+listEl.innerHTML = "";
+statusEl.textContent = "No jobs posted yet.";
+return;
+}
+
+statusEl.textContent = "";
+
+listEl.innerHTML = jobs.map(job => {
+const area = parseArea(job.description);
+const descClean = cleanDescription(job.description);
+
+return `
+<div class="job-card">
+<div class="job-head">
+<div>
+<div class="job-title">${escapeHtml(job.title || "Untitled Job")}</div>
+<div class="job-meta">${escapeHtml(descClean || "No description")}</div>
+</div>
+<div class="job-badge">${escapeHtml(job.budget || "$0")}</div>
+</div>
+
+<div class="job-meta" style="margin-top:10px;">
+Category: <strong>${escapeHtml(job.category || "General")}</strong><br>
+Area: <strong>${escapeHtml(capitalize(area))}</strong><br>
+Posted by: <strong>${escapeHtml(job.user_email || "Unknown")}</strong>
+</div>
+</div>
+`;
+}).join("");
+}
+
+async function loadJobs() {
 const statusEl = document.getElementById("jobsStatus");
 const listEl = document.getElementById("jobsList");
-  
+
 statusEl.textContent = "Loading jobs...";
 listEl.innerHTML = "";
 
@@ -864,11 +558,6 @@ return;
 }
 
 cachedJobs = Array.isArray(data) ? data : [];
-if (!cachedJobs.length) {
-statusEl.textContent = "No jobs posted yet.";
-} else {
-statusEl.textContent = "";
-}
 renderJobs();
 } catch (err) {
 statusEl.textContent = "Could not load jobs.";
@@ -876,81 +565,20 @@ console.error("loadJobs catch:", err);
 }
 }
 
-function parseAreaFromDescription(description) {
-const match = String(description || "").match(/\[AREA:(.*?)\]/i);
-return match ? match[1].trim().toLowerCase() : "urban";
-}
-
-function detectPaymentType(budgetValue) {
-const val = String(budgetValue || "").toLowerCase();
-if (val.includes("credit") && val.includes("cash")) return "both";
-if (val.includes("cash or credits")) return "both";
-if (val.includes("credit")) return "credits";
-return "cash";
-}
-
-function renderJobs() {
-const listEl = document.getElementById("jobsList");
-const statusEl = document.getElementById("jobsStatus");
-
-let jobs = [...cachedJobs];
-
-if (paymentFilter !== "all") {
-jobs = jobs.filter(job => {
-const paymentType = detectPaymentType(job.budget);
-if (paymentFilter === "emergency") {
-return /emergency/i.test(job.title || "") || /emergency/i.test(job.description || "");
-}
-return paymentType === paymentFilter;
-});
-}
-
-if (areaMode !== "all") {
-jobs = jobs.filter(job => parseAreaFromDescription(job.description) === areaMode);
-}
-
-if (!jobs.length) {
-listEl.innerHTML = "";
-statusEl.textContent = cachedJobs.length ? "No jobs match your current filters." : "No jobs posted yet.";
-return;
-}
-
-statusEl.textContent = "";
-
-listEl.innerHTML = jobs.map(job => {
-const area = parseAreaFromDescription(job.description);
-const descClean = String(job.description || "").replace(/\[AREA:.*?\]/i, "").trim();
-return `
-<div class="job-card">
-<div class="job-head">
-<div>
-<div class="job-title">${escapeHtml(job.title || "Untitled Job")}</div>
-<div class="job-meta">${escapeHtml(descClean || "No description")}</div>
-</div>
-<div class="job-badge">${escapeHtml(job.budget || "$0")}</div>
-</div>
-<div class="job-meta" style="margin-top:10px;">
-Category: <strong>${escapeHtml(job.category || "General")}</strong><br>
-Area: <strong>${escapeHtml(capitalize(area))}</strong>
-</div>
-</div>
-`;
-}).join("");
-}
-
 async function postSkill() {
-
 const { data: { user } } = await app.auth.getUser();
 
 if (!user) {
 alert("Please login before posting a job.");
 return;
-}  
+}
+
 const title = document.getElementById("title").value.trim();
 const descriptionRaw = document.getElementById("description").value.trim();
 const category = document.getElementById("category").value;
 const budget = document.getElementById("budget").value.trim();
 const areaType = document.getElementById("listingArea").value;
+const postStatus = document.getElementById("postStatus");
 
 if (!title) {
 alert("Please enter a job title");
@@ -965,11 +593,13 @@ const payload = {
 title,
 description: `${descriptionRaw} [AREA:${areaType}]`,
 category,
-budget: finalBudget
-user_email: user email,
+budget: finalBudget,
+user_email: user.email
 };
 
 try {
+postStatus.textContent = "Posting job...";
+
 const { error } = await app
 .from("jobs")
 .insert([payload]);
@@ -977,23 +607,30 @@ const { error } = await app
 if (error) {
 console.error("postSkill error:", error);
 alert(error.message || "Could not post job");
+postStatus.textContent = "";
 return;
 }
 
 document.getElementById("title").value = "";
 document.getElementById("description").value = "";
 document.getElementById("budget").value = "";
+
 await loadJobs();
+postStatus.textContent = "";
 alert("Job posted successfully");
 } catch (err) {
 console.error("postSkill catch:", err);
 alert("Could not post job: " + (err?.message || JSON.stringify(err)));
+postStatus.textContent = "";
 }
 }
-
-
 
 function initMapIfNeeded() {
+const mapEl = document.getElementById("map");
+if (!mapEl) return;
+
+mapEl.style.display = "block";
+
 if (map) {
 setTimeout(() => map.invalidateSize(), 150);
 return;
@@ -1008,217 +645,16 @@ attribution: "&copy; OpenStreetMap"
 setTimeout(() => map.invalidateSize(), 150);
 }
 
-function setDestination() {
-initMapIfNeeded();
-const destination = document.getElementById("destinationInput").value.trim();
-if (!destination) {
-updateTrackStatus("Enter a destination first.");
-return;
-}
-
-destinationLatLng = [36.1147, -115.1728];
-
-if (destinationMarker) {
-map.removeLayer(destinationMarker);
-}
-
-destinationMarker = L.marker(destinationLatLng).addTo(map).bindPopup(destination).openPopup();
-map.setView(destinationLatLng, 12);
-updateTrackStatus(`Destination set: ${destination}. Start tracking when ready.`);
-}
-
-function startTracking() {
-initMapIfNeeded();
-
-if (!destinationLatLng) {
-updateTrackStatus("Set a destination before starting tracking.");
-return;
-}
-
-if (!navigator.geolocation) {
-updateTrackStatus("Geolocation is not supported on this device.");
-return;
-}
-
-if (watchId) {
-navigator.geolocation.clearWatch(watchId);
-}
-
-arrivalTriggered = false;
-onTheWayTriggered = false;
-
-watchId = navigator.geolocation.watchPosition(
-position => {
-const userLatLng = [position.coords.latitude, position.coords.longitude];
-
-if (userMarker) map.removeLayer(userMarker);
-userMarker = L.marker(userLatLng).addTo(map).bindPopup("You").openPopup();
-
-if (routeLine) map.removeLayer(routeLine);
-routeLine = L.polyline([userLatLng, destinationLatLng], { weight: 4 }).addTo(map);
-
-const distanceMiles = haversineMiles(
-userLatLng[0],
-userLatLng[1],
-destinationLatLng[0],
-destinationLatLng[1]
-);
-
-updateTrackStatus(`Distance: ${distanceMiles.toFixed(2)} miles`);
-
-if (!onTheWayTriggered && distanceMiles <= 3) {
-onTheWayTriggered = true;
-updateTrackStatus("You are on the way and getting close to the destination.");
-notifyUser("You are on the way and getting close to the destination.");
-}
-
-if (!arrivalTriggered && distanceMiles <= 0.3) {
-arrivalTriggered = true;
-updateTrackStatus("Arrived at destination.");
-notifyUser("Arrived at destination.");
-alert("Arrived at destination.");
-}
-},
-error => {
-console.error("track error:", error);
-updateTrackStatus("Could not get current location.");
-},
-{
-enableHighAccuracy: true,
-maximumAge: 5000,
-timeout: 15000
-}
-);
-}
-
-function stopTracking() {
-if (watchId) {
-navigator.geolocation.clearWatch(watchId);
-watchId = null;
-}
-updateTrackStatus("Tracking stopped.");
-}
-
-function updateTrackStatus(message) {
-document.getElementById("trackStatus").textContent = message;
-}
-
-function notifyUser(message) {
-console.log("notify:", message);
-}
-
-function haversineMiles(lat1, lon1, lat2, lon2) {
-const toRad = deg => deg * (Math.PI / 180);
-const R = 3958.8;
-const dLat = toRad(lat2 - lat1);
-const dLon = toRad(lon2 - lon1);
-const a =
-Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-Math.cos(toRad(lat1)) *
-Math.cos(toRad(lat2)) *
-Math.sin(dLon / 2) *
-Math.sin(dLon / 2);
-const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-return R * c;
-}
-
-function sendChatMessage() {
-const message = document.getElementById("chatMessage").value.trim();
-if (!message) return;
-
-if (!isPremium && freeMessagesUsed >= 2) {
-alert("Upgrade required after 2 free chat messages.");
-return;
-}
-
-freeMessagesUsed += 1;
-document.getElementById("chatMessage").value = "";
-
-const feed = document.getElementById("chatFeed");
-const div = document.createElement("div");
-div.className = "job-card";
-div.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
-feed.prepend(div);
-
-updateChatLockNotice();
-}
-
-function uploadImageDemo() {
-const fileInput = document.getElementById("imageUpload");
-if (!fileInput.files.length) {
-alert("Choose an image first.");
-return;
-}
-
-if (!isPremium && freeImagesUsed >= 1) {
-alert("Upgrade required after 1 free image upload.");
-return;
-}
-
-freeImagesUsed += 1;
-alert("Image upload counted for demo. Connect Supabase Storage later for real uploads.");
-fileInput.value = "";
-updateChatLockNotice();
-}
-
-function updateChatLockNotice() {
-const notice = document.getElementById("chatLockNotice");
-notice.innerHTML = `Chat is free for 2 messages and 1 image upload. Used: ${freeMessagesUsed}/2 messages, ${freeImagesUsed}/1 image. Upgrade to continue.`;
-}
-
-function earnCreditsDemo() {
-skillCredits += 2;
-document.getElementById("creditsValue").textContent = skillCredits;
-}
-
-function escapeHtml(value) {
-return String(value)
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;")
-.replaceAll("'", "&#039;");
-}
-
-function capitalize(value) {
-const s = String(value || "");
-return s.charAt(0).toUpperCase() + s.slice(1);
-}
+app.auth.onAuthStateChange(async () => {
+await refreshAuthStatus();
+});
 
 loadJobs();
-updateChatLockNotice(); async function signUp() {
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
-
-const { error } = await app.auth.signUp({
-email: email,
-password: password
-});
-
-if (error) alert(error.message);
-else alert("Account created!");
-}
-
-async function login() {
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
-
-const { error } = await app.auth.signInWithPassword({
-email: email,
-password: password
-});
-
-if (error) alert(error.message);
-else alert("Logged in!");
-}
-  
-  
-  
-  
-  
-  
- 
+refreshAuthStatus();
+updateChatLockNotice();
 </script>
 </body>
 </html>
+
+
 
