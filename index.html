@@ -4,91 +4,552 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillsSwapNow</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+crossorigin=""
+/>
+
 <style>
-body {
-font-family: Arial, Helvetica, sans-serif;
-background: #f3f4f6;
+* {
+box-sizing: border-box;
+}
+
+html, body {
 margin: 0;
+padding: 0;
+min-height: 100%;
+font-family: Arial, Helvetica, sans-serif;
+background: #edf2f7;
+color: #0f172a;
+overflow-x: hidden;
+}
+
+body {
 display: flex;
 justify-content: center;
 }
 
-.container {
-width: 420px;
-padding: 20px;
+.app-shell {
+width: 100%;
+max-width: 440px;
+min-height: 100vh;
+background: #edf2f7;
+padding-bottom: 90px;
 }
 
 .header {
-background: #111827;
+background: linear-gradient(180deg, #08142f 0%, #10244f 100%);
 color: white;
-padding: 25px;
-border-radius: 12px;
+padding: 26px 18px 24px;
+border-bottom-left-radius: 22px;
+border-bottom-right-radius: 22px;
+box-shadow: 0 10px 24px rgba(2, 6, 23, 0.22);
+}
+
+.brand {
+margin: 0;
+font-size: 2rem;
+font-weight: 800;
 text-align: center;
-margin-bottom: 20px;
+letter-spacing: -0.5px;
+}
+
+.tagline {
+margin: 8px 0 0;
+text-align: center;
+color: rgba(255,255,255,0.92);
+font-size: 1rem;
+}
+
+.hero-card {
+margin-top: 18px;
+background: rgba(255,255,255,0.08);
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 18px;
+padding: 16px;
+}
+
+.hero-title {
+font-size: 1.35rem;
+font-weight: 800;
+margin-bottom: 8px;
+}
+
+.hero-text {
+font-size: 0.97rem;
+line-height: 1.45;
+color: rgba(255,255,255,0.92);
+margin-bottom: 12px;
+}
+
+.hero-badges {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+}
+
+.hero-badge {
+background: rgba(255,255,255,0.12);
+border: 1px solid rgba(255,255,255,0.08);
+color: white;
+font-size: 0.84rem;
+font-weight: 700;
+padding: 8px 12px;
+border-radius: 999px;
+}
+
+.content {
+padding: 16px;
 }
 
 .card {
 background: white;
+border-radius: 22px;
 padding: 16px;
-border-radius: 10px;
-margin-bottom: 16px;
-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+margin-bottom: 14px;
+border: 1px solid #e2e8f0;
+box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.section-title {
+font-size: 1.35rem;
+font-weight: 800;
+margin: 0 0 10px;
+letter-spacing: -0.2px;
+}
+
+.sub-title {
+font-size: 1.02rem;
+font-weight: 800;
+margin: 0 0 10px;
+}
+
+.muted {
+color: #64748b;
+font-size: 0.93rem;
+line-height: 1.4;
+}
+
+.row {
+display: flex;
+gap: 10px;
+}
+
+.space-between {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 12px;
+}
+
+.avatar {
+width: 56px;
+height: 56px;
+border-radius: 18px;
+background: #08142f;
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 800;
+font-size: 1.2rem;
+flex-shrink: 0;
+}
+
+.profile-name {
+margin: 0 0 4px;
+font-size: 1.5rem;
+font-weight: 800;
+}
+
+.chips {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-top: 12px;
+}
+
+.chip {
+padding: 8px 12px;
+border-radius: 999px;
+background: #e8f5e9;
+color: #166534;
+font-size: 0.82rem;
+font-weight: 700;
+}
+
+.trust-wrap {
+display: flex;
+gap: 14px;
+align-items: center;
+margin-top: 14px;
+}
+
+.trust-score {
+font-size: 2.6rem;
+font-weight: 800;
+line-height: 1;
+color: #15803d;
+}
+
+.progress {
+margin-top: 10px;
+width: 100%;
+height: 10px;
+border-radius: 999px;
+background: #e2e8f0;
+overflow: hidden;
+}
+
+.progress-fill {
+width: 76%;
+height: 100%;
+background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%);
+}
+
+.credit-value {
+font-size: 2.6rem;
+font-weight: 800;
+line-height: 1;
+margin-bottom: 5px;
+}
+
+input, textarea, select {
+width: 100%;
+border: 2px solid #dbe2ea;
+background: #fafbfd;
+border-radius: 16px;
+padding: 14px 14px;
+font-size: 1rem;
+margin-bottom: 12px;
+outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+border-color: #1d4ed8;
+background: white;
+}
+
+textarea {
+min-height: 92px;
+resize: vertical;
 }
 
 button {
-padding: 10px 14px;
 border: none;
-border-radius: 8px;
+border-radius: 14px;
+padding: 13px 14px;
+font-size: 0.98rem;
+font-weight: 800;
 cursor: pointer;
-margin-right: 8px;
+transition: 0.15s ease;
 }
 
-.primary {
-background: #111827;
+button:hover {
+transform: translateY(-1px);
+opacity: 0.96;
+}
+
+.btn-primary {
+background: #08142f;
 color: white;
 width: 100%;
-margin-top: 10px;
-margin-right: 0;
 }
 
-input,
-textarea,
-select {
+.btn-secondary {
+background: #f1f5f9;
+color: #0f172a;
+border: 1px solid #dbe2ea;
 width: 100%;
-padding: 10px;
-margin-top: 10px;
-border-radius: 8px;
-border: 1px solid #ccc;
-box-sizing: border-box;
 }
 
-.job {
-border: 1px solid #eee;
-padding: 10px;
-border-radius: 8px;
+.btn-green {
+background: #166534;
+color: white;
+width: 100%;
+}
+
+.btn-blue {
+background: #1d4ed8;
+color: white;
+width: 100%;
+}
+
+.action-row {
+display: flex;
+gap: 10px;
 margin-top: 10px;
+}
+
+.toggle-row {
+display: flex;
+gap: 10px;
+margin-bottom: 12px;
+}
+
+.toggle-btn {
+flex: 1;
+background: #f1f5f9;
+color: #0f172a;
+border: 1px solid #dbe2ea;
+}
+
+.toggle-btn.active {
+background: #08142f;
+color: white;
+border-color: #08142f;
+}
+
+.quick-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+margin-top: 12px;
+}
+
+.quick-item {
+background: white;
+border: 1px solid #e2e8f0;
+border-radius: 18px;
+padding: 16px 12px;
+text-align: center;
+font-weight: 800;
+box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+}
+
+.quick-item span {
+display: block;
+margin-top: 4px;
+color: #64748b;
+font-size: 0.86rem;
+font-weight: 500;
+}
+
+.algorithm-box {
+border-radius: 16px;
+background: #eff6ff;
+border: 1px solid #dbeafe;
+color: #1e3a8a;
+padding: 13px 14px;
+margin-top: 10px;
+line-height: 1.45;
+font-weight: 600;
+display: none;
+}
+
+.job-list {
+margin-top: 8px;
+}
+
+.job-card {
+border-radius: 20px;
+border: 1px solid #e2e8f0;
+background: white;
+padding: 16px;
+margin-bottom: 12px;
+box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.job-title {
+margin: 0 0 8px;
+font-size: 1.3rem;
+font-weight: 800;
+}
+
+.job-desc {
+margin: 0 0 12px;
+line-height: 1.45;
+color: #1e293b;
+}
+
+.job-meta {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin-bottom: 12px;
+}
+
+.meta-pill {
+border-radius: 999px;
+padding: 8px 11px;
+background: #f1f5f9;
+color: #0f172a;
+font-size: 0.82rem;
+font-weight: 700;
+}
+
+.job-actions {
+display: flex;
+gap: 10px;
+}
+
+#map {
+width: 100%;
+height: 260px;
+border-radius: 18px;
+overflow: hidden;
+border: 1px solid #dbe2ea;
+margin-top: 10px;
+}
+
+.status-banner {
+margin-top: 10px;
+padding: 12px 14px;
+border-radius: 16px;
+background: #ecfeff;
+border: 1px solid #bae6fd;
+color: #0f172a;
+font-weight: 700;
+line-height: 1.45;
+}
+
+.distance-pill {
+display: inline-block;
+margin-top: 8px;
+padding: 8px 12px;
+border-radius: 999px;
+background: #dbeafe;
+color: #1e3a8a;
+font-size: 0.85rem;
+font-weight: 800;
+}
+
+.bottom-nav {
+position: fixed;
+bottom: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 100%;
+max-width: 440px;
+background: #0b0d12;
+color: white;
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+padding: 10px 6px 14px;
+border-top-left-radius: 18px;
+border-top-right-radius: 18px;
+box-shadow: 0 -8px 18px rgba(0,0,0,0.18);
+}
+
+.nav-item {
+text-align: center;
+color: #cbd5e1;
+font-size: 0.78rem;
+line-height: 1.25;
+}
+
+.nav-item.active {
+color: white;
+font-weight: 800;
+}
+
+.nav-icon {
+display: block;
+font-size: 1.15rem;
+margin-bottom: 4px;
 }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="app-shell">
 <div class="header">
-<h2>MySkillsSwapNow</h2>
-<p>Trade skills. Get help. Make money.</p>
+<h1 class="brand">MySkillsSwapNow</h1>
+<p class="tagline">Trade skills. Get help. Make money.</p>
+
+<div class="hero-card">
+<div class="hero-title">Nationwide App. Local Trust.</div>
+<div class="hero-text">
+Hire with cash, trade with credits, match local skills, and track arrival in real time.
+</div>
+<div class="hero-badges">
+<div class="hero-badge">Cash Jobs</div>
+<div class="hero-badge">Skill Credits</div>
+<div class="hero-badge">Live Tracking</div>
+<div class="hero-badge">Smart Matching</div>
+</div>
+</div>
+</div>
+
+<div class="content">
+<div class="card">
+<div class="space-between">
+<div>
+<h2 class="profile-name">Local Member</h2>
+<div class="muted">Las Vegas, NV • Trusted community helper</div>
+</div>
+<div class="avatar">MS</div>
+</div>
+
+<div class="chips">
+<div class="chip">Verified Member</div>
+<div class="chip">On-Time Arrival</div>
+<div class="chip">Top Rated</div>
+</div>
+
+<div class="trust-wrap">
+<div class="trust-score">94</div>
+<div>
+<div style="font-weight:800;">Trust Score</div>
+<div class="muted">Profile completion 76%</div>
+</div>
+</div>
+
+<div class="progress">
+<div class="progress-fill"></div>
+</div>
 </div>
 
 <div class="card">
-<button onclick="signUp()">Sign Up</button>
-<button onclick="login()">Login</button>
-<button onclick="logout()">Logout</button>
+<div class="sub-title">Your Skill Credits</div>
+<div class="credit-value" id="creditCount">10</div>
+<div class="muted">Earn by helping others. Spend on help later.</div>
+
+<div class="action-row">
+<button class="btn-green" onclick="earnCredit()">Earn +1</button>
+<button class="btn-blue" onclick="spendCredit()">Spend -1</button>
+</div>
 </div>
 
 <div class="card">
-<h3>Create Request</h3>
+<div class="sub-title">Account</div>
+<div class="action-row">
+<button class="btn-secondary" onclick="signUp()">Sign Up</button>
+<button class="btn-secondary" onclick="login()">Login</button>
+<button class="btn-secondary" onclick="logout()">Logout</button>
+</div>
+</div>
+
+<div class="card">
+<div class="sub-title">Smart Search & Match</div>
+<input id="smartSearch" placeholder="Try: barber haircut trade for pool cleaning, drywall demo, electrical help, concrete work" />
+<button class="btn-primary" onclick="findBestMatch()">Find Best Match</button>
+<div id="matchResult" class="algorithm-box"></div>
+</div>
+
+<div class="card">
+<div class="sub-title">Popular Categories</div>
+<div class="quick-grid">
+<div class="quick-item">Barber / Haircut<span>Grooming</span></div>
+<div class="quick-item">Pool Cleaning<span>Pool Service</span></div>
+<div class="quick-item">Drywall Demo<span>Construction</span></div>
+<div class="quick-item">Concrete Work<span>Construction</span></div>
+<div class="quick-item">Electrical Help<span>Electrical</span></div>
+<div class="quick-item">Jump My Car<span>Emergency</span></div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Create Request</h2>
+
+<div class="toggle-row">
+<button id="cashModeBtn" class="toggle-btn active" onclick="setRequestMode('cash')">Cash Job</button>
+<button id="creditModeBtn" class="toggle-btn" onclick="setRequestMode('credit')">Credit Trade</button>
+</div>
 
 <input id="title" placeholder="What do you need help with?" />
-
-<textarea id="description" placeholder="Describe the job"></textarea>
+<textarea id="description" placeholder="Describe the request in plain words"></textarea>
 
 <select id="category">
 <option>Home Help</option>
@@ -96,25 +557,332 @@ margin-top: 10px;
 <option>Moving Help</option>
 <option>Cleaning</option>
 <option>Tutoring</option>
+<option>Childcare</option>
+<option>Emergency Help</option>
+<option>Construction</option>
+<option>Electrical</option>
+<option>Plumbing</option>
+<option>Pool Service</option>
+<option>Grooming</option>
+<option>Automotive</option>
+<option>Handyman</option>
 </select>
 
-<input id="budget" placeholder="Budget $" />
-
-<button class="primary" onclick="postSkill()">Post Job</button>
+<input id="budget" placeholder="Budget or credits (ex: 80 or 3 credits)" />
+<button class="btn-primary" onclick="postSkill()">Post Job</button>
 </div>
 
 <div class="card">
-<h3>Available Jobs</h3>
-<div id="jobs"></div>
+<h2 class="section-title">Live Arrival Tracker</h2>
+<div class="muted">Track your route to a customer, business, or job destination and notify when you're on the way or have arrived.</div>
+
+<input id="destinationInput" placeholder="Enter destination address or business name" />
+<div class="action-row">
+<button class="btn-primary" onclick="setDestination()">Set Destination</button>
+<button class="btn-secondary" onclick="startTracking()">Start Tracking</button>
+</div>
+
+<div id="map"></div>
+
+<div id="trackingStatus" class="status-banner">
+Tracking idle. Set a destination, then start tracking.
+</div>
+<div id="distanceStatus" class="distance-pill" style="display:none;">Distance: --</div>
+</div>
+
+<div class="card">
+<h2 class="section-title">Available Jobs</h2>
+<div id="job-list" class="job-list">
+<div class="muted">Loading jobs...</div>
+</div>
+</div>
+</div>
+
+<div class="bottom-nav">
+<div class="nav-item active"><span class="nav-icon">⌂</span>Home</div>
+<div class="nav-item"><span class="nav-icon">▣</span>Market</div>
+<div class="nav-item"><span class="nav-icon">◎</span>Credits</div>
+<div class="nav-item"><span class="nav-icon">◉</span>Track</div>
+<div class="nav-item"><span class="nav-icon">◔</span>Chat</div>
 </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const supabaseUrl = "https://szkbplrqutkedxylhruh.supabase.co";
-const supabaseKey = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
+<script>
+const supabaseUrl = "https://szkbplrqutkedxyhruh.supabase.co";
+const supabaseKey = "sb_publishable_RUITc0pMsVY3_QLEWM6vPA_dcRVCILg";
 const appSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let requestMode = "cash";
+let skillCredits = 10;
+let cachedJobs = [];
+
+let map;
+let userMarker = null;
+let destinationMarker = null;
+let routeLine = null;
+let watchId = null;
+let destinationLatLng = null;
+let arrivalTriggered = false;
+let onTheWayTriggered = false;
+
+const synonymMap = {
+barber: ["haircut", "fade", "lineup", "shapeup", "beard", "trim", "cut", "hair"],
+haircut: ["barber", "fade", "trim", "lineup", "hair"],
+pool: ["pool cleaning", "chlorine", "vacuum", "skimmer", "backwash"],
+cleaning: ["clean", "house cleaning", "maid", "deep clean", "sanitize"],
+lawn: ["yard", "grass", "mow", "mowing", "weeds", "weed", "yard work"],
+weeds: ["yard", "lawn", "weed pulling", "yard work"],
+tv: ["mount", "mounting", "hang tv", "television"],
+mount: ["tv", "mounting", "hang", "installation"],
+moving: ["move", "movers", "furniture", "haul", "lifting"],
+tutor: ["teaching", "homework", "study", "math", "english", "science"],
+babysit: ["childcare", "kids", "nanny", "watch kids", "baby"],
+childcare: ["babysit", "nanny", "kids"],
+emergency: ["urgent", "asap", "right now", "jump start", "lockout", "flat tire"],
+car: ["jump", "jump start", "battery", "roadside", "flat tire"],
+mechanic: ["car", "repair", "battery", "jump start"],
+paint: ["painting", "wall", "touch up", "interior paint"],
+handyman: ["repair", "fix", "install", "mount", "assembly"],
+delivery: ["pickup", "dropoff", "errand", "grocery run"],
+concrete: ["cement", "slab", "foundation", "form", "pour", "finish"],
+drywall: ["sheetrock", "patch", "demo", "mud", "texture"],
+electrical: ["wiring", "outlet", "breaker", "electrician", "panel"],
+plumbing: ["pipe", "drain", "water heater", "faucet", "toilet"],
+roofing: ["roof", "shingle", "leak"],
+framing: ["frame", "stud", "construction"],
+demolition: ["demo", "tear out", "remove", "breakdown"]
+};
+
+const serviceGroups = {
+construction: ["concrete","cement","foundation","slab","form","framing","demo","drywall","sheetrock","electrical","wiring","plumbing","pipe","tile","flooring","roof","roofing","insulation","paint","painting","demolition"],
+handyman: ["repair","install","mount","hang","assembly","fix","patch","handyman"],
+cleaning: ["clean","cleaning","deep clean","sanitize","maid"],
+yard: ["lawn","yard","grass","weeds","mowing","landscape","tree","weed pulling"],
+mechanical: ["car","engine","battery","jump","mechanic","oil","brake","automotive","roadside"],
+childcare: ["babysit","childcare","kids","nanny","watch kids"],
+tutoring: ["tutor","teaching","math","english","science","homework"],
+grooming: ["haircut","barber","fade","beard","trim","lineup"],
+pool: ["pool","chlorine","vacuum","skimmer","pool cleaning"],
+moving: ["move","moving","haul","furniture","lifting","movers"],
+emergency: ["urgent","asap","emergency","jump","lockout","right now","flat tire"]
+};
+
+const categoryKeywords = {
+"Home Help": ["tv","mount","repair","assembly","handyman","paint"],
+"Yard Work": ["yard","lawn","grass","weeds","mowing","landscape"],
+"Moving Help": ["move","moving","furniture","haul"],
+"Cleaning": ["clean","cleaning","maid","deep clean"],
+"Tutoring": ["tutor","teaching","math","science","homework"],
+"Childcare": ["babysit","childcare","nanny","kids"],
+"Emergency Help": ["urgent","asap","jump","battery","lockout","flat tire"],
+"Construction": ["concrete","drywall","demo","framing","construction","roofing","paint"],
+"Electrical": ["electrical","electrician","wiring","breaker","outlet","panel"],
+"Plumbing": ["plumbing","pipe","drain","water","faucet","toilet"],
+"Pool Service": ["pool","chlorine","vacuum","skimmer"],
+"Grooming": ["barber","haircut","fade","trim"],
+"Automotive": ["car","jump","battery","mechanic","roadside"],
+"Handyman": ["repair","install","mount","assembly","patch"]
+};
+
+function normalize(text) {
+return String(text || "")
+.toLowerCase()
+.replace(/[^a-z0-9\s]/g, " ")
+.replace(/\s+/g, " ")
+.trim();
+}
+
+function tokenize(text) {
+const base = normalize(text).split(" ").filter(Boolean);
+const expanded = new Set(base);
+
+base.forEach(word => {
+if (synonymMap[word]) {
+synonymMap[word].forEach(s => expanded.add(normalize(s)));
+}
+});
+
+return Array.from(expanded);
+}
+
+function detectGroups(tokens) {
+const groups = new Set();
+
+Object.entries(serviceGroups).forEach(([group, words]) => {
+for (const word of words) {
+const normalizedWord = normalize(word);
+if (tokens.includes(normalizedWord) || tokens.some(t => normalizedWord.includes(t) || t.includes(normalizedWord))) {
+groups.add(group);
+}
+}
+});
+
+return Array.from(groups);
+}
+
+function getIntentFlags(query) {
+const q = normalize(query);
+return {
+wantsCredit: q.includes("credit") || q.includes("swap") || q.includes("trade") || q.includes("barter"),
+wantsCash: q.includes("cash") || q.includes("$") || q.includes("paid") || q.includes("pay"),
+emergency: q.includes("urgent") || q.includes("asap") || q.includes("emergency") || q.includes("jump start") || q.includes("right now")
+};
+}
+
+function categoryBoost(category, tokens) {
+const words = categoryKeywords[category] || [];
+let boost = 0;
+
+words.forEach(word => {
+const normalizedWord = normalize(word);
+if (tokens.includes(normalizedWord)) boost += 6;
+if (tokens.some(t => normalizedWord.includes(t) || t.includes(normalizedWord))) boost += 2;
+});
+
+return boost;
+}
+
+function scoreJob(job, query) {
+const queryText = normalize(query);
+const queryTokens = tokenize(query);
+const queryGroups = detectGroups(queryTokens);
+const flags = getIntentFlags(query);
+
+const title = job.title || "";
+const desc = job.description || "";
+const category = job.category || "General";
+const budget = String(job.budget || "");
+
+const haystack = normalize(`${title} ${desc} ${category} ${budget}`);
+const jobTokens = tokenize(`${title} ${desc} ${category}`);
+const jobGroups = detectGroups(jobTokens);
+
+let score = 0;
+
+queryTokens.forEach(token => {
+if (haystack.includes(token)) score += 10;
+if (jobTokens.includes(token)) score += 16;
+});
+
+queryGroups.forEach(group => {
+if (jobGroups.includes(group)) score += 18;
+});
+
+score += categoryBoost(category, queryTokens);
+
+if (normalize(title).includes(queryText)) score += 30;
+if (normalize(desc).includes(queryText)) score += 20;
+
+if (flags.wantsCredit && /credit|swap|trade|barter/i.test(budget)) score += 20;
+if (flags.wantsCash && !/credit|swap|trade|barter/i.test(budget)) score += 8;
+if (flags.emergency && /urgent|emergency|jump|battery|asap|roadside/i.test(`${title} ${desc} ${category}`)) score += 22;
+
+return score;
+}
+
+function buildSmartSuggestion(query, topMatches) {
+if (!topMatches.length) {
+return "No close matches yet. Try another phrase like: barber haircut trade, concrete work, drywall demo, electrical help, pool cleaning, jump my car.";
+}
+
+const top = topMatches[0];
+const mode = /credit|swap|trade|barter/i.test(String(top.budget || "")) ? "Credit Trade" : "Cash Job";
+
+return `Top algorithm match: "${top.title}" — best fit based on keywords, skill groups, category, and payment type. Mode: ${mode}.`;
+}
+
+function renderJobs(jobs) {
+const list = document.getElementById("job-list");
+
+if (!jobs || jobs.length === 0) {
+list.innerHTML = "<div class='muted'>No jobs posted yet.</div>";
+return;
+}
+
+list.innerHTML = "";
+
+jobs.forEach((job) => {
+const div = document.createElement("div");
+div.className = "job-card";
+
+const budgetText = String(job.budget || "$0");
+const modeText = /credit|swap|trade|barter/i.test(budgetText) ? "Credit Trade" : "Cash Job";
+
+div.innerHTML = `
+<h3 class="job-title">${job.title || ""}</h3>
+<p class="job-desc">${job.description || ""}</p>
+<div class="job-meta">
+<span class="meta-pill">${job.category || "General"}</span>
+<span class="meta-pill">${budgetText}</span>
+<span class="meta-pill">${modeText}</span>
+</div>
+<div class="job-actions">
+<button class="btn-secondary" onclick="alert('View details feature coming next')">View</button>
+<button class="btn-primary" onclick="alert('Messaging feature coming next')">Message</button>
+</div>
+`;
+
+list.appendChild(div);
+});
+}
+
+function setRequestMode(mode) {
+requestMode = mode;
+
+const cashBtn = document.getElementById("cashModeBtn");
+const creditBtn = document.getElementById("creditModeBtn");
+const budgetInput = document.getElementById("budget");
+
+if (mode === "cash") {
+cashBtn.classList.add("active");
+creditBtn.classList.remove("active");
+budgetInput.placeholder = "Budget in dollars (ex: 80)";
+} else {
+creditBtn.classList.add("active");
+cashBtn.classList.remove("active");
+budgetInput.placeholder = "Credits offered (ex: 3 credits)";
+}
+}
+
+function earnCredit() {
+skillCredits += 1;
+document.getElementById("creditCount").textContent = skillCredits;
+}
+
+function spendCredit() {
+if (skillCredits > 0) {
+skillCredits -= 1;
+document.getElementById("creditCount").textContent = skillCredits;
+} else {
+alert("No skill credits left");
+}
+}
+
+async function findBestMatch() {
+const query = document.getElementById("smartSearch").value.trim();
+const result = document.getElementById("matchResult");
+
+if (!query) {
+result.style.display = "block";
+result.textContent = "Type what you need help with, like: barber haircut trade for pool cleaning, drywall demo, electrical help, concrete work.";
+renderJobs(cachedJobs);
+return;
+}
+
+const scored = [...cachedJobs]
+.map(job => ({ ...job, _score: scoreJob(job, query) }))
+.sort((a, b) => b._score - a._score);
+
+const topMatches = scored.filter(j => j._score > 0).slice(0, 10);
+
+result.style.display = "block";
+result.textContent = buildSmartSuggestion(query, topMatches);
+
+renderJobs(topMatches.length ? topMatches : cachedJobs);
+}
 
 async function signUp() {
 const email = prompt("Enter email");
@@ -125,10 +893,7 @@ alert("Email and password required");
 return;
 }
 
-const { error } = await appSupabase.auth.signUp({
-email,
-password
-});
+const { error } = await appSupabase.auth.signUp({ email, password });
 
 if (error) {
 alert(error.message);
@@ -146,10 +911,7 @@ alert("Email and password required");
 return;
 }
 
-const { error } = await appSupabase.auth.signInWithPassword({
-email,
-password
-});
+const { error } = await appSupabase.auth.signInWithPassword({ email, password });
 
 if (error) {
 alert(error.message);
@@ -170,57 +932,226 @@ const category = document.getElementById("category").value;
 const budget = document.getElementById("budget").value.trim();
 
 if (!title) {
-alert("Enter a job title");
+alert("Please enter a job title");
 return;
 }
 
+const finalBudget =
+requestMode === "credit"
+? `${budget || "1"} credit trade`
+: budget || "$0";
+
 const { error } = await appSupabase
 .from("jobs")
-.insert([{ title, description, category, budget }]);
+.insert([{
+title,
+description,
+category,
+budget: finalBudget
+}]);
 
 if (error) {
 alert(error.message);
-} else {
+return;
+}
+
 document.getElementById("title").value = "";
 document.getElementById("description").value = "";
 document.getElementById("budget").value = "";
-loadJobs();
-}
+await loadJobs();
 }
 
 async function loadJobs() {
+const list = document.getElementById("job-list");
+list.innerHTML = "<div class='muted'>Loading jobs...</div>";
+
 const { data, error } = await appSupabase
 .from("jobs")
 .select("*")
 .order("created_at", { ascending: false });
 
-const list = document.getElementById("jobs");
-list.innerHTML = "";
-
 if (error) {
-list.innerHTML = "Could not load jobs";
+list.innerHTML = "<div class='muted'>Could not load jobs.</div>";
 return;
 }
 
-if (!data || data.length === 0) {
-list.innerHTML = "No jobs posted yet";
-return;
+cachedJobs = data || [];
+renderJobs(cachedJobs);
 }
 
-data.forEach((job) => {
-const div = document.createElement("div");
-div.className = "job";
-div.innerHTML = `
-<b>${job.title}</b>
-<p>${job.description || ""}</p>
-<p>${job.category || ""}</p>
-<p>$${job.budget || ""}</p>
-`;
-list.appendChild(div);
+function initMap() {
+map = L.map("map").setView([36.1699, -115.1398], 12);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+maxZoom: 19,
+attribution: "&copy; OpenStreetMap"
+}).addTo(map);
+}
+
+function notifyUser(message) {
+if ("Notification" in window) {
+if (Notification.permission === "granted") {
+new Notification("MySkillsSwapNow", { body: message });
+} else if (Notification.permission !== "denied") {
+Notification.requestPermission().then(permission => {
+if (permission === "granted") {
+new Notification("MySkillsSwapNow", { body: message });
+}
 });
 }
+}
+}
 
+function updateTrackingStatus(text) {
+document.getElementById("trackingStatus").textContent = text;
+}
+
+function updateDistanceStatus(text) {
+const el = document.getElementById("distanceStatus");
+el.style.display = "inline-block";
+el.textContent = text;
+}
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+const toRad = x => x * Math.PI / 180;
+const R = 3958.8;
+
+const dLat = toRad(lat2 - lat1);
+const dLon = toRad(lon2 - lon1);
+
+const a =
+Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+return R * c;
+}
+
+async function setDestination() {
+const input = document.getElementById("destinationInput").value.trim();
+
+if (!input) {
+alert("Enter a destination first.");
+return;
+}
+
+try {
+const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(input)}`;
+const response = await fetch(url, {
+headers: {
+"Accept": "application/json"
+}
+});
+const data = await response.json();
+
+if (!data.length) {
+alert("Destination not found. Try a more specific address.");
+return;
+}
+
+const lat = parseFloat(data[0].lat);
+const lon = parseFloat(data[0].lon);
+destinationLatLng = [lat, lon];
+arrivalTriggered = false;
+onTheWayTriggered = false;
+
+if (destinationMarker) {
+destinationMarker.setLatLng(destinationLatLng);
+} else {
+destinationMarker = L.marker(destinationLatLng).addTo(map).bindPopup("Destination");
+}
+
+map.setView(destinationLatLng, 13);
+updateTrackingStatus(`Destination set: ${input}`);
+} catch (err) {
+alert("Could not set destination.");
+}
+}
+
+function drawRoute(userLatLng, destinationLatLng) {
+if (routeLine) {
+map.removeLayer(routeLine);
+}
+
+routeLine = L.polyline([userLatLng, destinationLatLng], {
+color: "#2563eb",
+weight: 4,
+opacity: 0.85
+}).addTo(map);
+
+map.fitBounds(routeLine.getBounds(), { padding: [30, 30] });
+}
+
+function startTracking() {
+if (!destinationLatLng) {
+alert("Set a destination first.");
+return;
+}
+
+if (!navigator.geolocation) {
+alert("Geolocation is not supported on this device.");
+return;
+}
+
+updateTrackingStatus("Tracking started. Sharing live location progress.");
+notifyUser("Tracking started. You're on the way.");
+
+if (watchId) {
+navigator.geolocation.clearWatch(watchId);
+}
+
+watchId = navigator.geolocation.watchPosition(
+(position) => {
+const userLatLng = [
+position.coords.latitude,
+position.coords.longitude
+];
+
+if (userMarker) {
+userMarker.setLatLng(userLatLng);
+} else {
+userMarker = L.marker(userLatLng).addTo(map).bindPopup("You");
+}
+
+drawRoute(userLatLng, destinationLatLng);
+
+const distanceMiles = haversineDistance(
+userLatLng[0],
+userLatLng[1],
+destinationLatLng[0],
+destinationLatLng[1]
+);
+
+updateDistanceStatus(`Distance: ${distanceMiles.toFixed(2)} miles`);
+
+if (!onTheWayTriggered && distanceMiles <= 2) {
+onTheWayTriggered = true;
+updateTrackingStatus("You are on the way and getting close to the destination.");
+notifyUser("You are on the way and getting close to the destination.");
+}
+
+if (!arrivalTriggered && distanceMiles <= 0.1) {
+arrivalTriggered = true;
+updateTrackingStatus("Arrived at destination. Notify the other user or business.");
+notifyUser("Arrived at destination.");
+alert("Arrived at destination.");
+}
+},
+() => {
+alert("Could not get current location.");
+},
+{
+enableHighAccuracy: true,
+maximumAge: 5000,
+timeout: 15000
+}
+);
+}
+
+initMap();
 loadJobs();
 </script>
 </body>
 </html>
+
