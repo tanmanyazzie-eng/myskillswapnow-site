@@ -837,7 +837,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
   <script>
-    const supabaseUrl = "https://szkbplrqutkedxyhruh.supabase.co"
+    const supabaseUrl = "https://szkbplrqutkedxylhruh.supabase.co";
     const supabaseKey = "sb_publishable_RUITc0pMsVY3_QLEWM6vPA_dcRVCILg";
     const appSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -1402,7 +1402,7 @@
 
       const payload = { title, description, category, budget: finalBudget };
 
-      const { error } = await appSupabase
+      const { error } = await app
         .from("jobs")
         .insert([payload]);
 
@@ -1422,7 +1422,7 @@
       const list = document.getElementById("job-list");
       list.innerHTML = "<div class='muted'>Loading jobs...</div>";
 
-      const { data, error } = await appSupabase
+      const { data, error } = await app
         .from("jobs")
         .select("*")
         .order("created_at", { ascending: false });
