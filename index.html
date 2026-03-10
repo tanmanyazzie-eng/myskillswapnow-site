@@ -5,25 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillsSwapNow</title>
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-crossorigin=""
-/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 
 <style>
-* {
-box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
 margin: 0;
 padding: 0;
 min-height: 100%;
 font-family: Arial, Helvetica, sans-serif;
-background: #edf2f7;
+background: #eef2f7;
 color: #0f172a;
-overflow-x: hidden;
 }
 
 body {
@@ -35,17 +28,17 @@ justify-content: center;
 width: 100%;
 max-width: 440px;
 min-height: 100vh;
-background: #edf2f7;
-padding-bottom: 90px;
+background: #eef2f7;
+padding-bottom: 92px;
 }
 
 .header {
-background: linear-gradient(180deg, #08142f 0%, #10244f 100%);
+background: linear-gradient(180deg, #07142d 0%, #10244f 100%);
 color: white;
 padding: 26px 18px 24px;
-border-bottom-left-radius: 22px;
-border-bottom-right-radius: 22px;
-box-shadow: 0 10px 24px rgba(2, 6, 23, 0.22);
+border-bottom-left-radius: 24px;
+border-bottom-right-radius: 24px;
+box-shadow: 0 10px 22px rgba(2, 6, 23, 0.18);
 }
 
 .brand {
@@ -72,13 +65,13 @@ padding: 16px;
 }
 
 .hero-title {
-font-size: 1.35rem;
+font-size: 1.3rem;
 font-weight: 800;
 margin-bottom: 8px;
 }
 
 .hero-text {
-font-size: 0.97rem;
+font-size: 0.96rem;
 line-height: 1.45;
 color: rgba(255,255,255,0.92);
 margin-bottom: 12px;
@@ -92,17 +85,18 @@ gap: 8px;
 
 .hero-badge {
 background: rgba(255,255,255,0.12);
-border: 1px solid rgba(255,255,255,0.08);
 color: white;
-font-size: 0.84rem;
+border: 1px solid rgba(255,255,255,0.08);
+font-size: 0.82rem;
 font-weight: 700;
 padding: 8px 12px;
 border-radius: 999px;
 }
 
-.content {
-padding: 16px;
-}
+.content { padding: 16px; }
+
+.section { display: none; }
+.section.active { display: block; }
 
 .card {
 background: white;
@@ -114,14 +108,14 @@ box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
 }
 
 .section-title {
-font-size: 1.35rem;
+font-size: 1.45rem;
 font-weight: 800;
 margin: 0 0 10px;
-letter-spacing: -0.2px;
+letter-spacing: -0.25px;
 }
 
 .sub-title {
-font-size: 1.02rem;
+font-size: 1.04rem;
 font-weight: 800;
 margin: 0 0 10px;
 }
@@ -129,12 +123,7 @@ margin: 0 0 10px;
 .muted {
 color: #64748b;
 font-size: 0.93rem;
-line-height: 1.4;
-}
-
-.row {
-display: flex;
-gap: 10px;
+line-height: 1.45;
 }
 
 .space-between {
@@ -142,26 +131,6 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 gap: 12px;
-}
-
-.avatar {
-width: 56px;
-height: 56px;
-border-radius: 18px;
-background: #08142f;
-color: white;
-display: flex;
-align-items: center;
-justify-content: center;
-font-weight: 800;
-font-size: 1.2rem;
-flex-shrink: 0;
-}
-
-.profile-name {
-margin: 0 0 4px;
-font-size: 1.5rem;
-font-weight: 800;
 }
 
 .chips {
@@ -178,6 +147,26 @@ background: #e8f5e9;
 color: #166534;
 font-size: 0.82rem;
 font-weight: 700;
+}
+
+.avatar {
+width: 56px;
+height: 56px;
+border-radius: 18px;
+background: #08142f;
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 800;
+font-size: 1.15rem;
+flex-shrink: 0;
+}
+
+.profile-name {
+margin: 0 0 4px;
+font-size: 1.5rem;
+font-weight: 800;
 }
 
 .trust-wrap {
@@ -277,6 +266,12 @@ color: white;
 width: 100%;
 }
 
+.btn-premium {
+background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%);
+color: white;
+width: 100%;
+}
+
 .action-row {
 display: flex;
 gap: 10px;
@@ -339,9 +334,7 @@ font-weight: 600;
 display: none;
 }
 
-.job-list {
-margin-top: 8px;
-}
+.job-list { margin-top: 8px; }
 
 .job-card {
 border-radius: 20px;
@@ -383,6 +376,61 @@ font-weight: 700;
 .job-actions {
 display: flex;
 gap: 10px;
+}
+
+.premium-box {
+border-radius: 18px;
+background: linear-gradient(180deg, #0f172a 0%, #1d4ed8 100%);
+color: white;
+padding: 16px;
+margin-top: 10px;
+}
+
+.premium-price {
+font-size: 2rem;
+font-weight: 800;
+line-height: 1;
+margin: 8px 0 4px;
+}
+
+.chat-box {
+border: 1px solid #dbe2ea;
+border-radius: 18px;
+padding: 12px;
+background: #f8fafc;
+min-height: 180px;
+margin-bottom: 12px;
+}
+
+.chat-message {
+padding: 10px 12px;
+border-radius: 14px;
+background: white;
+border: 1px solid #e2e8f0;
+margin-bottom: 8px;
+font-size: 0.95rem;
+}
+
+.counter-pill {
+display: inline-block;
+margin-top: 8px;
+padding: 8px 12px;
+border-radius: 999px;
+background: #dbeafe;
+color: #1e3a8a;
+font-size: 0.84rem;
+font-weight: 800;
+}
+
+.warning-box {
+border-radius: 16px;
+background: #fff7ed;
+border: 1px solid #fed7aa;
+color: #9a3412;
+padding: 12px 14px;
+line-height: 1.45;
+font-weight: 700;
+margin-top: 10px;
 }
 
 #map {
@@ -438,6 +486,7 @@ text-align: center;
 color: #cbd5e1;
 font-size: 0.78rem;
 line-height: 1.25;
+cursor: pointer;
 }
 
 .nav-item.active {
@@ -461,18 +510,19 @@ margin-bottom: 4px;
 <div class="hero-card">
 <div class="hero-title">Nationwide App. Local Trust.</div>
 <div class="hero-text">
-Hire with cash, trade with credits, match local skills, and track arrival in real time.
+Hire with cash, trade with credits, unlock premium chat, and use emergency help for non-medical, non-police, non-fire needs.
 </div>
 <div class="hero-badges">
 <div class="hero-badge">Cash Jobs</div>
 <div class="hero-badge">Skill Credits</div>
-<div class="hero-badge">Live Tracking</div>
-<div class="hero-badge">Smart Matching</div>
+<div class="hero-badge">Premium Chat</div>
+<div class="hero-badge">Emergency Help</div>
 </div>
 </div>
 </div>
 
 <div class="content">
+<div id="homeSection" class="section active">
 <div class="card">
 <div class="space-between">
 <div>
@@ -502,6 +552,20 @@ Hire with cash, trade with credits, match local skills, and track arrival in rea
 </div>
 
 <div class="card">
+<div class="sub-title">Most Popular Services</div>
+<div class="quick-grid">
+<div class="quick-item">Plumbing<span>Pipes, drains, toilets</span></div>
+<div class="quick-item">HVAC<span>AC, heater, vents</span></div>
+<div class="quick-item">Electrical<span>Wiring, outlets, lights</span></div>
+<div class="quick-item">Moving<span>Furniture, hauling, lifting</span></div>
+<div class="quick-item">Lawn<span>Grass, weeds, yard care</span></div>
+<div class="quick-item">Welding<span>Metal repair, fabrication</span></div>
+<div class="quick-item">Car Detail<span>Wash, vacuum, polish</span></div>
+<div class="quick-item">Barber<span>Haircuts, fades, trims</span></div>
+</div>
+</div>
+
+<div class="card">
 <div class="sub-title">Your Skill Credits</div>
 <div class="credit-value" id="creditCount">10</div>
 <div class="muted">Earn by helping others. Spend on help later.</div>
@@ -522,22 +586,31 @@ Hire with cash, trade with credits, match local skills, and track arrival in rea
 </div>
 
 <div class="card">
-<div class="sub-title">Smart Search & Match</div>
-<input id="smartSearch" placeholder="Try: barber haircut trade for pool cleaning, drywall demo, electrical help, concrete work" />
-<button class="btn-primary" onclick="findBestMatch()">Find Best Match</button>
-<div id="matchResult" class="algorithm-box"></div>
+<div class="sub-title">Premium Membership</div>
+<div class="premium-box">
+<div style="font-weight:800;">Unlock Chat + Emergency Access</div>
+<div class="premium-price">$1.99<span style="font-size:1rem;font-weight:600;">/month</span></div>
+<div style="line-height:1.45;">
+Includes:
+<br>• Chat after 2 free messages
+<br>• More than 1 picture upload
+<br>• Emergency request access
+<br>• Priority match visibility
+</div>
+<div class="action-row">
+<button class="btn-secondary" onclick="upgradePremium()">Upgrade to Premium</button>
+</div>
+</div>
+<div id="premiumStatus" class="counter-pill">Premium: Off</div>
+</div>
 </div>
 
+<div id="marketSection" class="section">
 <div class="card">
-<div class="sub-title">Popular Categories</div>
-<div class="quick-grid">
-<div class="quick-item">Barber / Haircut<span>Grooming</span></div>
-<div class="quick-item">Pool Cleaning<span>Pool Service</span></div>
-<div class="quick-item">Drywall Demo<span>Construction</span></div>
-<div class="quick-item">Concrete Work<span>Construction</span></div>
-<div class="quick-item">Electrical Help<span>Electrical</span></div>
-<div class="quick-item">Jump My Car<span>Emergency</span></div>
-</div>
+<div class="sub-title">Smart Search & Match</div>
+<input id="smartSearch" placeholder="Try: plumbing trade, hvac repair, electrical help, barber haircut swap, welding, car detail" />
+<button class="btn-primary" onclick="findBestMatch()">Find Best Match</button>
+<div id="matchResult" class="algorithm-box"></div>
 </div>
 
 <div class="card">
@@ -552,26 +625,50 @@ Hire with cash, trade with credits, match local skills, and track arrival in rea
 <textarea id="description" placeholder="Describe the request in plain words"></textarea>
 
 <select id="category">
-<option>Home Help</option>
-<option>Yard Work</option>
-<option>Moving Help</option>
-<option>Cleaning</option>
-<option>Tutoring</option>
-<option>Childcare</option>
-<option>Emergency Help</option>
-<option>Construction</option>
-<option>Electrical</option>
 <option>Plumbing</option>
-<option>Pool Service</option>
-<option>Grooming</option>
-<option>Automotive</option>
+<option>HVAC</option>
+<option>Electrical</option>
+<option>Moving</option>
+<option>Lawn</option>
+<option>Welding</option>
+<option>Car Detail</option>
+<option>Barber</option>
+<option>Cleaning</option>
 <option>Handyman</option>
+<option>Pool Service</option>
+<option>Emergency Help</option>
 </select>
 
 <input id="budget" placeholder="Budget or credits (ex: 80 or 3 credits)" />
 <button class="btn-primary" onclick="postSkill()">Post Job</button>
 </div>
 
+<div class="card">
+<h2 class="section-title">Available Jobs</h2>
+<div id="job-list" class="job-list">
+<div class="muted">Loading jobs...</div>
+</div>
+</div>
+</div>
+
+<div id="creditsSection" class="section">
+<div class="card">
+<h2 class="section-title">Credits Center</h2>
+<div class="credit-value" id="creditCountMirror">10</div>
+<div class="muted">Use credits for swaps like barber for lawn care, car detail for moving help, or welding for plumbing repairs.</div>
+
+<div class="action-row">
+<button class="btn-green" onclick="earnCredit()">Earn +1</button>
+<button class="btn-blue" onclick="spendCredit()">Spend -1</button>
+</div>
+
+<div class="warning-box" style="margin-top:14px;">
+Credit swaps are community-based exchanges. Premium is not required for viewing credits, but chat to finalize swaps is locked after 2 free messages.
+</div>
+</div>
+</div>
+
+<div id="trackSection" class="section">
 <div class="card">
 <h2 class="section-title">Live Arrival Tracker</h2>
 <div class="muted">Track your route to a customer, business, or job destination and notify when you're on the way or have arrived.</div>
@@ -591,19 +688,59 @@ Tracking idle. Set a destination, then start tracking.
 </div>
 
 <div class="card">
-<h2 class="section-title">Available Jobs</h2>
-<div id="job-list" class="job-list">
-<div class="muted">Loading jobs...</div>
+<div class="sub-title">Emergency Requests</div>
+<div class="warning-box">
+Emergency requests are for non-medical, non-police, non-fire situations only.
+Examples:
+<br>• jump start
+<br>• lockout
+<br>• urgent plumbing leak
+<br>• urgent AC issue
+<br>• roadside help
+</div>
+<div class="action-row">
+<button class="btn-primary" onclick="openEmergencyRequest()">Request Emergency Help</button>
+</div>
+</div>
+</div>
+
+<div id="chatSection" class="section">
+<div class="card">
+<h2 class="section-title">Chat</h2>
+<div class="muted">You get 2 free messages. After that, Premium is required. One free picture upload is included.</div>
+<div class="counter-pill" id="chatCounter">Messages used: 0 / 2 free</div>
+<div class="counter-pill" id="imageCounter">Picture uploads: 0 / 1 free</div>
+
+<div class="chat-box" id="chatBox">
+<div class="chat-message">Welcome to MySkillsSwapNow chat.</div>
+</div>
+
+<textarea id="chatInput" placeholder="Type your message"></textarea>
+<div class="action-row">
+<button class="btn-primary" onclick="sendChatMessage()">Send Message</button>
+<button class="btn-secondary" onclick="uploadPicture()">Upload Picture</button>
+</div>
+
+<div class="premium-box" style="margin-top:14px;">
+<div style="font-weight:800;">Need more than 2 messages?</div>
+<div class="premium-price">$1.99<span style="font-size:1rem;font-weight:600;">/month</span></div>
+<div style="line-height:1.45;">
+Upgrade for unlimited chat, more picture uploads, and emergency request access.
+</div>
+<div class="action-row">
+<button class="btn-secondary" onclick="upgradePremium()">Upgrade to Premium</button>
+</div>
+</div>
 </div>
 </div>
 </div>
 
 <div class="bottom-nav">
-<div class="nav-item active"><span class="nav-icon">⌂</span>Home</div>
-<div class="nav-item"><span class="nav-icon">▣</span>Market</div>
-<div class="nav-item"><span class="nav-icon">◎</span>Credits</div>
-<div class="nav-item"><span class="nav-icon">◉</span>Track</div>
-<div class="nav-item"><span class="nav-icon">◔</span>Chat</div>
+<div class="nav-item active" onclick="showSection('home')" id="nav-home"><span class="nav-icon">⌂</span>Home</div>
+<div class="nav-item" onclick="showSection('market')" id="nav-market"><span class="nav-icon">▣</span>Market</div>
+<div class="nav-item" onclick="showSection('credits')" id="nav-credits"><span class="nav-icon">◎</span>Credits</div>
+<div class="nav-item" onclick="showSection('track')" id="nav-track"><span class="nav-icon">◉</span>Track</div>
+<div class="nav-item" onclick="showSection('chat')" id="nav-chat"><span class="nav-icon">◔</span>Chat</div>
 </div>
 </div>
 
@@ -618,6 +755,9 @@ const appSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 let requestMode = "cash";
 let skillCredits = 10;
 let cachedJobs = [];
+let isPremium = false;
+let freeMessagesUsed = 0;
+let freeImagesUsed = 0;
 
 let map;
 let userMarker = null;
@@ -629,62 +769,49 @@ let arrivalTriggered = false;
 let onTheWayTriggered = false;
 
 const synonymMap = {
+plumbing: ["plumber", "pipe", "drain", "faucet", "toilet", "water heater", "leak"],
+hvac: ["air conditioning", "ac", "heater", "heating", "cooling", "vent", "thermostat"],
+electrical: ["electrician", "wiring", "outlet", "breaker", "panel", "light", "switch"],
+moving: ["move", "movers", "furniture", "haul", "lifting"],
+lawn: ["yard", "grass", "mow", "mowing", "weeds", "weed", "yard work", "landscape"],
+welding: ["welder", "metal", "fabrication", "repair steel", "iron work"],
 barber: ["haircut", "fade", "lineup", "shapeup", "beard", "trim", "cut", "hair"],
-haircut: ["barber", "fade", "trim", "lineup", "hair"],
+cardetail: ["car detail", "detail", "wash", "vacuum", "polish", "interior clean"],
 pool: ["pool cleaning", "chlorine", "vacuum", "skimmer", "backwash"],
 cleaning: ["clean", "house cleaning", "maid", "deep clean", "sanitize"],
-lawn: ["yard", "grass", "mow", "mowing", "weeds", "weed", "yard work"],
-weeds: ["yard", "lawn", "weed pulling", "yard work"],
-tv: ["mount", "mounting", "hang tv", "television"],
-mount: ["tv", "mounting", "hang", "installation"],
-moving: ["move", "movers", "furniture", "haul", "lifting"],
-tutor: ["teaching", "homework", "study", "math", "english", "science"],
-babysit: ["childcare", "kids", "nanny", "watch kids", "baby"],
-childcare: ["babysit", "nanny", "kids"],
+handyman: ["repair", "install", "mount", "hang", "assembly", "fix", "patch"],
 emergency: ["urgent", "asap", "right now", "jump start", "lockout", "flat tire"],
-car: ["jump", "jump start", "battery", "roadside", "flat tire"],
-mechanic: ["car", "repair", "battery", "jump start"],
-paint: ["painting", "wall", "touch up", "interior paint"],
-handyman: ["repair", "fix", "install", "mount", "assembly"],
-delivery: ["pickup", "dropoff", "errand", "grocery run"],
-concrete: ["cement", "slab", "foundation", "form", "pour", "finish"],
-drywall: ["sheetrock", "patch", "demo", "mud", "texture"],
-electrical: ["wiring", "outlet", "breaker", "electrician", "panel"],
-plumbing: ["pipe", "drain", "water heater", "faucet", "toilet"],
-roofing: ["roof", "shingle", "leak"],
-framing: ["frame", "stud", "construction"],
-demolition: ["demo", "tear out", "remove", "breakdown"]
+car: ["jump", "jump start", "battery", "roadside", "flat tire", "detail", "car detail"]
 };
 
 const serviceGroups = {
-construction: ["concrete","cement","foundation","slab","form","framing","demo","drywall","sheetrock","electrical","wiring","plumbing","pipe","tile","flooring","roof","roofing","insulation","paint","painting","demolition"],
-handyman: ["repair","install","mount","hang","assembly","fix","patch","handyman"],
+plumbing: ["plumbing","plumber","pipe","drain","faucet","toilet","water heater","leak"],
+hvac: ["hvac","ac","heater","heating","cooling","vent","thermostat","air conditioning"],
+electrical: ["electrical","electrician","wiring","outlet","breaker","panel","switch","light"],
+moving: ["moving","move","movers","furniture","haul","lifting"],
+lawn: ["lawn","yard","grass","weeds","mowing","landscape","tree","yard work"],
+welding: ["welding","welder","metal","fabrication","iron","steel"],
+grooming: ["barber","haircut","fade","trim","lineup","beard"],
+auto: ["car","detail","car detail","wash","vacuum","polish","roadside","battery","jump"],
 cleaning: ["clean","cleaning","deep clean","sanitize","maid"],
-yard: ["lawn","yard","grass","weeds","mowing","landscape","tree","weed pulling"],
-mechanical: ["car","engine","battery","jump","mechanic","oil","brake","automotive","roadside"],
-childcare: ["babysit","childcare","kids","nanny","watch kids"],
-tutoring: ["tutor","teaching","math","english","science","homework"],
-grooming: ["haircut","barber","fade","beard","trim","lineup"],
-pool: ["pool","chlorine","vacuum","skimmer","pool cleaning"],
-moving: ["move","moving","haul","furniture","lifting","movers"],
+handyman: ["repair","install","mount","hang","assembly","fix","patch"],
+pool: ["pool","pool cleaning","chlorine","vacuum","skimmer"],
 emergency: ["urgent","asap","emergency","jump","lockout","right now","flat tire"]
 };
 
 const categoryKeywords = {
-"Home Help": ["tv","mount","repair","assembly","handyman","paint"],
-"Yard Work": ["yard","lawn","grass","weeds","mowing","landscape"],
-"Moving Help": ["move","moving","furniture","haul"],
+"Plumbing": ["plumbing","plumber","pipe","drain","faucet","toilet","leak"],
+"HVAC": ["hvac","ac","heater","cooling","heating","vent","thermostat"],
+"Electrical": ["electrical","electrician","wiring","outlet","breaker","panel"],
+"Moving": ["moving","move","furniture","haul","lifting"],
+"Lawn": ["lawn","yard","grass","weeds","mowing","landscape"],
+"Welding": ["welding","welder","metal","fabrication","iron","steel"],
+"Car Detail": ["car detail","detail","wash","vacuum","polish","interior"],
+"Barber": ["barber","haircut","fade","trim","lineup"],
 "Cleaning": ["clean","cleaning","maid","deep clean"],
-"Tutoring": ["tutor","teaching","math","science","homework"],
-"Childcare": ["babysit","childcare","nanny","kids"],
-"Emergency Help": ["urgent","asap","jump","battery","lockout","flat tire"],
-"Construction": ["concrete","drywall","demo","framing","construction","roofing","paint"],
-"Electrical": ["electrical","electrician","wiring","breaker","outlet","panel"],
-"Plumbing": ["plumbing","pipe","drain","water","faucet","toilet"],
+"Handyman": ["repair","install","mount","assembly","patch"],
 "Pool Service": ["pool","chlorine","vacuum","skimmer"],
-"Grooming": ["barber","haircut","fade","trim"],
-"Automotive": ["car","jump","battery","mechanic","roadside"],
-"Handyman": ["repair","install","mount","assembly","patch"]
+"Emergency Help": ["urgent","asap","jump","battery","lockout","flat tire"]
 };
 
 function normalize(text) {
@@ -785,13 +912,13 @@ return score;
 
 function buildSmartSuggestion(query, topMatches) {
 if (!topMatches.length) {
-return "No close matches yet. Try another phrase like: barber haircut trade, concrete work, drywall demo, electrical help, pool cleaning, jump my car.";
+return "No close matches yet. Try phrases like: plumbing leak, hvac repair, electrical outlet help, moving furniture, lawn cleanup, welding repair, car detail, barber haircut trade.";
 }
 
 const top = topMatches[0];
 const mode = /credit|swap|trade|barter/i.test(String(top.budget || "")) ? "Credit Trade" : "Cash Job";
 
-return `Top algorithm match: "${top.title}" — best fit based on keywords, skill groups, category, and payment type. Mode: ${mode}.`;
+return `Top algorithm match: "${top.title}" — best fit based on keywords, service group, category, and payment type. Mode: ${mode}.`;
 }
 
 function renderJobs(jobs) {
@@ -821,12 +948,38 @@ div.innerHTML = `
 </div>
 <div class="job-actions">
 <button class="btn-secondary" onclick="alert('View details feature coming next')">View</button>
-<button class="btn-primary" onclick="alert('Messaging feature coming next')">Message</button>
+<button class="btn-primary" onclick="openChatGate()">Message</button>
 </div>
 `;
 
 list.appendChild(div);
 });
+}
+
+function showSection(name) {
+document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+
+document.getElementById(name + "Section").classList.add("active");
+document.getElementById("nav-" + name).classList.add("active");
+
+if (name === "track" && map) {
+setTimeout(() => map.invalidateSize(), 200);
+}
+}
+
+function updatePremiumUI() {
+document.getElementById("premiumStatus").textContent = `Premium: ${isPremium ? "On" : "Off"}`;
+document.getElementById("chatCounter").textContent = `Messages used: ${freeMessagesUsed} / 2 free`;
+document.getElementById("imageCounter").textContent = `Picture uploads: ${freeImagesUsed} / 1 free`;
+document.getElementById("creditCount").textContent = skillCredits;
+document.getElementById("creditCountMirror").textContent = skillCredits;
+}
+
+function upgradePremium() {
+isPremium = true;
+updatePremiumUI();
+alert("Premium activated at $1.99/month for demo mode.");
 }
 
 function setRequestMode(mode) {
@@ -849,13 +1002,13 @@ budgetInput.placeholder = "Credits offered (ex: 3 credits)";
 
 function earnCredit() {
 skillCredits += 1;
-document.getElementById("creditCount").textContent = skillCredits;
+updatePremiumUI();
 }
 
 function spendCredit() {
 if (skillCredits > 0) {
 skillCredits -= 1;
-document.getElementById("creditCount").textContent = skillCredits;
+updatePremiumUI();
 } else {
 alert("No skill credits left");
 }
@@ -867,7 +1020,7 @@ const result = document.getElementById("matchResult");
 
 if (!query) {
 result.style.display = "block";
-result.textContent = "Type what you need help with, like: barber haircut trade for pool cleaning, drywall demo, electrical help, concrete work.";
+result.textContent = "Type what you need help with, like: plumbing leak, hvac repair, moving help, lawn cleanup, welding repair, barber haircut trade.";
 renderJobs(cachedJobs);
 return;
 }
@@ -979,6 +1132,68 @@ cachedJobs = data || [];
 renderJobs(cachedJobs);
 }
 
+function openChatGate() {
+showSection("chat");
+}
+
+function sendChatMessage() {
+const input = document.getElementById("chatInput");
+const text = input.value.trim();
+
+if (!text) {
+alert("Type a message first.");
+return;
+}
+
+if (!isPremium && freeMessagesUsed >= 2) {
+alert("Chat requires Premium after 2 free messages. Upgrade for $1.99/month.");
+return;
+}
+
+if (!isPremium) {
+freeMessagesUsed += 1;
+}
+
+const box = document.getElementById("chatBox");
+const msg = document.createElement("div");
+msg.className = "chat-message";
+msg.textContent = text;
+box.appendChild(msg);
+input.value = "";
+updatePremiumUI();
+}
+
+function uploadPicture() {
+if (!isPremium && freeImagesUsed >= 1) {
+alert("You used your 1 free picture upload. Upgrade to Premium for $1.99/month.");
+return;
+}
+
+if (!isPremium) {
+freeImagesUsed += 1;
+}
+
+const box = document.getElementById("chatBox");
+const msg = document.createElement("div");
+msg.className = "chat-message";
+msg.textContent = "Picture uploaded successfully.";
+box.appendChild(msg);
+updatePremiumUI();
+}
+
+function openEmergencyRequest() {
+if (!isPremium) {
+alert("Emergency requests require Premium for $1.99/month.");
+return;
+}
+
+const request = prompt("Describe your non-medical / non-police / non-fire emergency request.");
+
+if (!request) return;
+
+alert("Emergency request submitted: " + request);
+}
+
 function initMap() {
 map = L.map("map").setView([36.1699, -115.1398], 12);
 
@@ -1039,9 +1254,7 @@ return;
 try {
 const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(input)}`;
 const response = await fetch(url, {
-headers: {
-"Accept": "application/json"
-}
+headers: { "Accept": "application/json" }
 });
 const data = await response.json();
 
@@ -1103,10 +1316,7 @@ navigator.geolocation.clearWatch(watchId);
 
 watchId = navigator.geolocation.watchPosition(
 (position) => {
-const userLatLng = [
-position.coords.latitude,
-position.coords.longitude
-];
+const userLatLng = [position.coords.latitude, position.coords.longitude];
 
 if (userMarker) {
 userMarker.setLatLng(userLatLng);
@@ -1133,7 +1343,7 @@ notifyUser("You are on the way and getting close to the destination.");
 
 if (!arrivalTriggered && distanceMiles <= 0.1) {
 arrivalTriggered = true;
-updateTrackingStatus("Arrived at destination. Notify the other user or business.");
+updateTrackingStatus("Arrived at destination.");
 notifyUser("Arrived at destination.");
 alert("Arrived at destination.");
 }
@@ -1151,6 +1361,7 @@ timeout: 15000
 
 initMap();
 loadJobs();
+updatePremiumUI();
 </script>
 </body>
 </html>
