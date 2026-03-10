@@ -1,1658 +1,1163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MySkillsSwapNow</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-  <style>
-    * { box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #eef2f7;
-      color: #0f172a;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-    }
-
-    .app-shell {
-      width: 100%;
-      max-width: 440px;
-      min-height: 100vh;
-      background: #eef2f7;
-      padding-bottom: 96px;
-    }
-
-    .header {
-      background: linear-gradient(180deg, #07142d 0%, #10244f 100%);
-      color: white;
-      padding: 26px 18px 24px;
-      border-bottom-left-radius: 24px;
-      border-bottom-right-radius: 24px;
-      box-shadow: 0 10px 22px rgba(2, 6, 23, 0.18);
-    }
-
-    .brand-wrap {
-      text-align: center;
-      perspective: 900px;
-    }
-
-    .brand {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: -0.6px;
-      color: #ffffff;
-      text-shadow:
-        0 1px 0 #cbd5e1,
-        0 2px 0 #94a3b8,
-        0 3px 0 #64748b,
-        0 4px 0 #475569,
-        0 10px 18px rgba(0,0,0,0.35);
-      transform: rotateX(8deg);
-      display: inline-block;
-    }
-
-    .tagline {
-      margin: 10px 0 0;
-      text-align: center;
-      color: rgba(255,255,255,0.92);
-      font-size: 1rem;
-    }
-
-    .hero-card {
-      margin-top: 18px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 16px;
-    }
-
-    .hero-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .hero-text {
-      font-size: 0.96rem;
-      line-height: 1.45;
-      color: rgba(255,255,255,0.92);
-      margin-bottom: 12px;
-    }
-
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .hero-badge {
-      background: rgba(255,255,255,0.12);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.08);
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 8px 12px;
-      border-radius: 999px;
-    }
-
-    .content { padding: 16px; }
-
-    .section { display: none; }
-    .section.active { display: block; }
-
-    .card {
-      background: white;
-      border-radius: 22px;
-      padding: 16px;
-      margin-bottom: 14px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
-    }
-
-    .section-title {
-      font-size: 1.45rem;
-      font-weight: 800;
-      margin: 0 0 10px;
-      letter-spacing: -0.25px;
-    }
-
-    .sub-title {
-      font-size: 1.04rem;
-      font-weight: 800;
-      margin: 0 0 10px;
-    }
-
-    .muted {
-      color: #64748b;
-      font-size: 0.93rem;
-      line-height: 1.45;
-    }
-
-    .space-between {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .chip {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #e8f5e9;
-      color: #166534;
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .avatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      background: #08142f;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.15rem;
-      flex-shrink: 0;
-    }
-
-    .profile-name {
-      margin: 0 0 4px;
-      font-size: 1.5rem;
-      font-weight: 800;
-    }
-
-    .trust-wrap {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      margin-top: 14px;
-    }
-
-    .trust-score {
-      font-size: 2.6rem;
-      font-weight: 800;
-      line-height: 1;
-      color: #15803d;
-    }
-
-    .progress {
-      margin-top: 10px;
-      width: 100%;
-      height: 10px;
-      border-radius: 999px;
-      background: #e2e8f0;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      width: 76%;
-      height: 100%;
-      background: linear-gradient(90deg, #0f172a 0%, #2563eb 100%);
-    }
-
-    .credit-value {
-      font-size: 2.6rem;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 5px;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      border: 2px solid #dbe2ea;
-      background: #fafbfd;
-      border-radius: 16px;
-      padding: 14px 14px;
-      font-size: 1rem;
-      margin-bottom: 12px;
-      outline: none;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: #1d4ed8;
-      background: white;
-    }
-
-    textarea {
-      min-height: 92px;
-      resize: vertical;
-    }
-
-    button {
-      border: none;
-      border-radius: 14px;
-      padding: 13px 14px;
-      font-size: 0.98rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.15s ease;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-      opacity: 0.96;
-    }
-
-    .btn-primary {
-      background: #08142f;
-      color: white;
-      width: 100%;
-    }
-
-    .btn-secondary {
-      background: #f1f5f9;
-      color: #0f172a;
-      border: 1px solid #dbe2ea;
-      width: 100%;
-    }
-
-    .btn-green {
-      background: #166534;
-      color: white;
-      width: 100%;
-    }
-
-    .btn-blue {
-      background: #1d4ed8;
-      color: white;
-      width: 100%;
-    }
-
-    .btn-danger {
-      background: #b91c1c;
-      color: white;
-      width: 100%;
-    }
-
-    .action-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .toggle-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .toggle-btn {
-      flex: 1;
-      background: #f1f5f9;
-      color: #0f172a;
-      border: 1px solid #dbe2ea;
-    }
-
-    .toggle-btn.active {
-      background: #08142f;
-      color: white;
-      border-color: #08142f;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .quick-item {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 18px;
-      padding: 16px 12px;
-      text-align: center;
-      font-weight: 800;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
-      cursor: pointer;
-    }
-
-    .quick-item span {
-      display: block;
-      margin-top: 4px;
-      color: #64748b;
-      font-size: 0.86rem;
-      font-weight: 500;
-    }
-
-    .quick-item:hover {
-      border-color: #1d4ed8;
-      transform: translateY(-1px);
-    }
-
-    .algorithm-box {
-      border-radius: 16px;
-      background: #eff6ff;
-      border: 1px solid #dbeafe;
-      color: #1e3a8a;
-      padding: 13px 14px;
-      margin-top: 10px;
-      line-height: 1.45;
-      font-weight: 600;
-      display: none;
-    }
-
-    .filter-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    .filter-pill {
-      border-radius: 999px;
-      padding: 9px 12px;
-      background: #f1f5f9;
-      border: 1px solid #dbe2ea;
-      color: #0f172a;
-      font-size: 0.82rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .filter-pill.active {
-      background: #08142f;
-      border-color: #08142f;
-      color: #fff;
-    }
-
-    .job-list { margin-top: 8px; }
-
-    .job-card {
-      border-radius: 20px;
-      border: 1px solid #e2e8f0;
-      background: white;
-      padding: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
-    }
-
-    .job-title {
-      margin: 0 0 8px;
-      font-size: 1.3rem;
-      font-weight: 800;
-    }
-
-    .job-desc {
-      margin: 0 0 12px;
-      line-height: 1.45;
-      color: #1e293b;
-    }
-
-    .job-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .meta-pill {
-      border-radius: 999px;
-      padding: 8px 11px;
-      background: #f1f5f9;
-      color: #0f172a;
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .job-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .premium-box {
-      border-radius: 18px;
-      background: linear-gradient(180deg, #0f172a 0%, #1d4ed8 100%);
-      color: white;
-      padding: 16px;
-      margin-top: 10px;
-    }
-
-    .premium-price {
-      font-size: 2rem;
-      font-weight: 800;
-      line-height: 1;
-      margin: 8px 0 4px;
-    }
-
-    .chat-box {
-      border: 1px solid #dbe2ea;
-      border-radius: 18px;
-      padding: 12px;
-      background: #f8fafc;
-      min-height: 180px;
-      margin-bottom: 12px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    .chat-message {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: white;
-      border: 1px solid #e2e8f0;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-
-    .counter-pill {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #dbeafe;
-      color: #1e3a8a;
-      font-size: 0.84rem;
-      font-weight: 800;
-    }
-
-    .warning-box {
-      border-radius: 16px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      color: #9a3412;
-      padding: 12px 14px;
-      line-height: 1.45;
-      font-weight: 700;
-      margin-top: 10px;
-    }
-
-    .pulse-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .pulse-item {
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid #dbe2ea;
-      background: #f8fafc;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .pulse-left {
-      font-weight: 800;
-    }
-
-    .pulse-right {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #1d4ed8;
-    }
-
-    #map {
-      width: 100%;
-      height: 260px;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid #dbe2ea;
-      margin-top: 10px;
-    }
-
-    .status-banner {
-      margin-top: 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: #ecfeff;
-      border: 1px solid #bae6fd;
-      color: #0f172a;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .distance-pill {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #dbeafe;
-      color: #1e3a8a;
-      font-size: 0.85rem;
-      font-weight: 800;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 440px;
-      background: #0b0d12;
-      color: white;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      padding: 10px 6px 14px;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
-      box-shadow: 0 -8px 18px rgba(0,0,0,0.18);
-    }
-
-    .nav-item {
-      text-align: center;
-      color: #cbd5e1;
-      font-size: 0.78rem;
-      line-height: 1.25;
-      cursor: pointer;
-    }
-
-    .nav-item.active {
-      color: white;
-      font-weight: 800;
-    }
-
-    .nav-icon {
-      display: block;
-      font-size: 1.15rem;
-      margin-bottom: 4px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+/>
+<title>MySkillSwapNow</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+crossorigin=""
+/>
+
+<style>
+:root {
+--bg: #eef2f7;
+--card: #ffffff;
+--navy: #071b55;
+--navy-2: #102967;
+--text: #0f172a;
+--muted: #64748b;
+--line: #dbe3ef;
+--success: #16a34a;
+--shadow: 0 10px 30px rgba(7, 27, 85, 0.10);
+--radius: 24px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+margin: 0;
+padding: 0;
+background: var(--bg);
+color: var(--text);
+font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+max-width: 540px;
+margin: 0 auto;
+min-height: 100vh;
+padding-bottom: 96px;
+}
+
+.section {
+display: none;
+padding: 0 18px 20px;
+}
+
+.section.active {
+display: block;
+}
+
+.hero {
+background: linear-gradient(180deg, var(--navy), var(--navy-2));
+color: white;
+border-bottom-left-radius: 36px;
+border-bottom-right-radius: 36px;
+padding: 24px 18px 26px;
+box-shadow: var(--shadow);
+}
+
+.hero-title {
+margin: 8px 0 8px;
+font-size: 44px;
+font-weight: 900;
+letter-spacing: -1px;
+text-align: center;
+color: #fff;
+text-shadow:
+0 2px 0 rgba(255,255,255,0.35),
+0 6px 14px rgba(0,0,0,0.35);
+}
+
+.hero-sub {
+text-align: center;
+font-size: 18px;
+margin: 0 0 20px;
+color: rgba(255,255,255,0.9);
+}
+
+.hero-card {
+background: rgba(255,255,255,0.10);
+border: 1px solid rgba(255,255,255,0.12);
+border-radius: 24px;
+padding: 18px;
+}
+
+.hero-card h2 {
+margin: 0 0 10px;
+font-size: 28px;
+line-height: 1.1;
+}
+
+.hero-card p {
+margin: 0;
+color: rgba(255,255,255,0.92);
+line-height: 1.45;
+font-size: 16px;
+}
+
+.chip-row {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+margin-top: 16px;
+}
+
+.chip {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+border-radius: 999px;
+border: 1px solid rgba(255,255,255,0.12);
+padding: 11px 16px;
+background: rgba(255,255,255,0.10);
+color: white;
+font-weight: 700;
+font-size: 14px;
+}
+
+.card {
+background: var(--card);
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+padding: 18px;
+margin-top: 18px;
+}
+
+.card h3 {
+margin: 0 0 12px;
+font-size: 22px;
+}
+
+.muted {
+color: var(--muted);
+}
+
+.profile-card {
+display: flex;
+gap: 16px;
+align-items: flex-start;
+}
+
+.avatar {
+margin-left: auto;
+width: 84px;
+height: 84px;
+border-radius: 28px;
+background: var(--navy);
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 28px;
+font-weight: 800;
+flex-shrink: 0;
+}
+
+.pill-row {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+margin: 16px 0;
+}
+
+.pill {
+padding: 12px 16px;
+border-radius: 999px;
+background: #e9f5eb;
+color: #166534;
+font-weight: 700;
+}
+
+.trust-wrap {
+margin-top: 12px;
+display: flex;
+gap: 16px;
+align-items: flex-end;
+}
+
+.trust-score {
+font-size: 74px;
+line-height: 0.9;
+color: var(--success);
+font-weight: 900;
+}
+
+.progress {
+width: 100%;
+height: 20px;
+border-radius: 999px;
+overflow: hidden;
+background: #dbe3ef;
+margin-top: 14px;
+}
+
+.progress > div {
+height: 100%;
+width: 76%;
+background: linear-gradient(90deg, var(--navy), #2563eb);
+}
+
+.service-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+margin-top: 12px;
+}
+
+.service-btn {
+border: 1px solid var(--line);
+background: #f8fafc;
+color: var(--text);
+border-radius: 20px;
+padding: 16px 12px;
+text-align: left;
+cursor: pointer;
+font-size: 16px;
+font-weight: 800;
+}
+
+.service-btn small {
+display: block;
+margin-top: 4px;
+color: var(--muted);
+font-weight: 600;
+}
+
+.toggle-row {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+}
+
+.toggle-btn {
+border: 2px solid var(--line);
+background: #f8fafc;
+color: var(--text);
+border-radius: 22px;
+padding: 16px 12px;
+font-size: 16px;
+font-weight: 900;
+cursor: pointer;
+min-height: 72px;
+}
+
+.toggle-btn.active {
+background: var(--navy);
+color: white;
+border-color: var(--navy);
+}
+
+.toggle-btn.small {
+min-height: auto;
+border-radius: 999px;
+padding: 10px 14px;
+font-size: 14px;
+font-weight: 800;
+}
+
+input, textarea, select {
+width: 100%;
+border: 2px solid #d6dee8;
+border-radius: 18px;
+padding: 18px 16px;
+font-size: 16px;
+outline: none;
+background: white;
+color: var(--text);
+margin-top: 12px;
+}
+
+textarea {
+min-height: 120px;
+resize: vertical;
+}
+
+.primary-btn {
+width: 100%;
+border: none;
+border-radius: 18px;
+background: var(--navy);
+color: white;
+padding: 18px 16px;
+margin-top: 16px;
+font-size: 18px;
+font-weight: 900;
+cursor: pointer;
+}
+
+.secondary-btn {
+width: 100%;
+border: 2px solid var(--line);
+border-radius: 18px;
+background: #f8fafc;
+color: var(--text);
+padding: 16px;
+margin-top: 12px;
+font-size: 16px;
+font-weight: 800;
+cursor: pointer;
+}
+
+.job-list {
+display: grid;
+gap: 14px;
+margin-top: 14px;
+}
+
+.job-card {
+border: 1px solid var(--line);
+border-radius: 18px;
+padding: 14px;
+background: #f9fbfd;
+}
+
+.job-head {
+display: flex;
+justify-content: space-between;
+gap: 12px;
+align-items: flex-start;
+}
+
+.job-title {
+font-size: 18px;
+font-weight: 900;
+margin: 0;
+}
+
+.job-badge {
+background: #e7eefb;
+color: var(--navy);
+border-radius: 999px;
+padding: 8px 12px;
+font-size: 12px;
+font-weight: 800;
+white-space: nowrap;
+}
+
+.job-meta {
+margin-top: 8px;
+color: var(--muted);
+font-size: 14px;
+line-height: 1.45;
+}
+
+.bottom-nav {
+position: fixed;
+left: 50%;
+transform: translateX(-50%);
+bottom: 0;
+width: 100%;
+max-width: 540px;
+background: rgba(4, 9, 21, 0.98);
+border-top-left-radius: 26px;
+border-top-right-radius: 26px;
+padding: 12px 8px 14px;
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 6px;
+z-index: 999;
+}
+
+.nav-item {
+color: rgba(255,255,255,0.78);
+text-align: center;
+cursor: pointer;
+padding: 8px 4px;
+border-radius: 14px;
+font-size: 13px;
+font-weight: 700;
+}
+
+.nav-item.active {
+color: white;
+}
+
+.nav-icon {
+display: block;
+font-size: 20px;
+margin-bottom: 4px;
+}
+
+.mini-note {
+font-size: 13px;
+color: var(--muted);
+margin-top: 10px;
+}
+
+.locked {
+border: 1px dashed #f59e0b;
+background: #fff7ed;
+color: #92400e;
+border-radius: 18px;
+padding: 14px;
+font-weight: 700;
+margin-top: 12px;
+}
+
+.hidden {
+display: none !important;
+}
+
+#map {
+width: 100%;
+height: 260px;
+border-radius: 20px;
+margin-top: 14px;
+overflow: hidden;
+border: 1px solid var(--line);
+}
+
+.track-note {
+background: #ecfeff;
+color: #164e63;
+border: 1px solid #bae6fd;
+border-radius: 18px;
+padding: 14px;
+margin-top: 12px;
+font-weight: 700;
+line-height: 1.4;
+}
+</style>
 </head>
 <body>
-  <div class="app-shell">
-    <div class="header">
-      <div class="brand-wrap">
-        <h1 class="brand">MySkillsSwapNow</h1>
-      </div>
-      <p class="tagline">Trade skills. Get help. Make money.</p>
-
-      <div class="hero-card">
-        <div class="hero-title">Demand Pulse + Hybrid Filters</div>
-        <div class="hero-text">
-          The app surfaces what’s hot locally, lets users quick-post from top services, and ranks matches by payment type plus urban/rural logic.
-        </div>
-        <div class="hero-badges">
-          <div class="hero-badge">Demand Pulse</div>
-          <div class="hero-badge">Cash Jobs</div>
-          <div class="hero-badge">Credit Swaps</div>
-          <div class="hero-badge">Urban + Rural</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="content">
-      <div id="homeSection" class="section active">
-        <div class="card">
-          <div class="space-between">
-            <div>
-              <h2 class="profile-name">Local Member</h2>
-              <div class="muted">Hybrid model ready for city and rural communities</div>
-            </div>
-            <div class="avatar">MS</div>
-          </div>
-
-          <div class="chips">
-            <div class="chip">Verified Member</div>
-            <div class="chip">On-Time Arrival</div>
-            <div class="chip">Top Rated</div>
-          </div>
-
-          <div class="trust-wrap">
-            <div class="trust-score">94</div>
-            <div>
-              <div style="font-weight:800;">Trust Score</div>
-              <div class="muted">Profile completion 76%</div>
-            </div>
-          </div>
-
-          <div class="progress">
-            <div class="progress-fill"></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="sub-title">Demand Pulse</div>
-          <div class="muted">This is the growth feature: show the hottest local demand and let users jump straight into a pre-filled request.</div>
-          <div id="pulseGrid" class="pulse-grid">
-            <div class="muted">Loading pulse...</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="sub-title">Most Popular Services</div>
-          <div class="quick-grid">
-            <div class="quick-item" onclick="quickFillJob('Plumbing')">Plumbing<span>Pipes, drains, toilets</span></div>
-            <div class="quick-item" onclick="quickFillJob('HVAC')">HVAC<span>AC, heater, vents</span></div>
-            <div class="quick-item" onclick="quickFillJob('Electrical')">Electrical<span>Wiring, outlets, lights</span></div>
-            <div class="quick-item" onclick="quickFillJob('Moving')">Moving<span>Furniture, hauling, lifting</span></div>
-            <div class="quick-item" onclick="quickFillJob('Lawn')">Lawn<span>Grass, weeds, yard care</span></div>
-            <div class="quick-item" onclick="quickFillJob('Welding')">Welding<span>Metal repair, fabrication</span></div>
-            <div class="quick-item" onclick="quickFillJob('Car Detail')">Car Detail<span>Wash, vacuum, polish</span></div>
-            <div class="quick-item" onclick="quickFillJob('Barber')">Barber<span>Haircuts, fades, trims</span></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="sub-title">Your Skill Credits</div>
-          <div class="credit-value" id="creditCount">10</div>
-          <div class="muted">Earn by helping others. Spend on help later.</div>
-          <div class="action-row">
-            <button class="btn-green" onclick="earnCredit()">Earn +1</button>
-            <button class="btn-blue" onclick="spendCredit()">Spend -1</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="sub-title">Premium Membership</div>
-          <div class="premium-box">
-            <div style="font-weight:800;">Unlock Chat + Emergency Access</div>
-            <div class="premium-price">$1.99<span style="font-size:1rem;font-weight:600;">/month</span></div>
-            <div style="line-height:1.45;">
-              Includes:
-              <br>• Chat after 2 free messages
-              <br>• More than 1 picture upload
-              <br>• Emergency request access
-              <br>• Priority visibility
-            </div>
-            <div class="action-row">
-              <button class="btn-secondary" onclick="upgradePremium()">Upgrade to Premium</button>
-            </div>
-          </div>
-          <div id="premiumStatus" class="counter-pill">Premium: Off</div>
-        </div>
-      </div>
-
-      <div id="marketSection" class="section">
-        <div class="card">
-          <div class="sub-title">Area Mode</div>
-          <div class="filter-row">
-            <div class="filter-pill active" id="areaFilterAll" onclick="setAreaMode('all')">All Areas</div>
-            <div class="filter-pill" id="areaFilterUrban" onclick="setAreaMode('urban')">Urban</div>
-            <div class="filter-pill" id="areaFilterRural" onclick="setAreaMode('rural')">Rural</div>
-          </div>
-          <div class="muted" id="areaModeText">All Areas: balanced ranking for both cities and rural regions.</div>
-        </div>
-
-        <div class="card">
-          <div class="sub-title">Payment Filters</div>
-          <div class="filter-row">
-            <div class="filter-pill active" id="payFilterAll" onclick="setPaymentFilter('all')">All</div>
-            <div class="filter-pill" id="payFilterCash" onclick="setPaymentFilter('cash')">Cash</div>
-            <div class="filter-pill" id="payFilterCredits" onclick="setPaymentFilter('credits')">Credits</div>
-            <div class="filter-pill" id="payFilterBoth" onclick="setPaymentFilter('both')">Cash or Credits</div>
-            <div class="filter-pill" id="payFilterEmergency" onclick="setPaymentFilter('emergency')">Emergency</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="sub-title">Smart Search & Match</div>
-          <input id="smartSearch" placeholder="Try: rural hvac repair, cash or credits plumbing, urban moving help, lawn cleanup, welding repair" />
-          <button class="btn-primary" onclick="findBestMatch()">Find Best Match</button>
-          <div id="matchResult" class="algorithm-box"></div>
-        </div>
-
-        <div class="card">
-          <h2 class="section-title">Create Request</h2>
-
-          <div class="toggle-row">
-            <button id="cashModeBtn" class="toggle-btn active" onclick="setRequestMode('cash')">Cash Only</button>
-            <button id="creditModeBtn" class="toggle-btn" onclick="setRequestMode('credit')">Credits Only</button>
-            <button id="bothModeBtn" class="toggle-btn" onclick="setRequestMode('both')">Cash or Credits</button>
-          </div>
-
-          <input id="title" placeholder="What do you need help with?" />
-          <textarea id="description" placeholder="Describe the request in plain words"></textarea>
-
-          <select id="category">
-            <option>Plumbing</option>
-            <option>HVAC</option>
-            <option>Electrical</option>
-            <option>Moving</option>
-            <option>Lawn</option>
-            <option>Welding</option>
-            <option>Car Detail</option>
-            <option>Barber</option>
-            <option>Cleaning</option>
-            <option>Handyman</option>
-            <option>Emergency Help</option>
-          </select>
-
-          <select id="listingArea">
-            <option value="urban">Urban</option>
-            <option value="rural">Rural</option>
-          </select>
-
-          <input id="budget" placeholder="Budget or credits (ex: 80, 3 credits, or cash or credits)" />
-          <button class="btn-primary" onclick="postSkill()">Post Job</button>
-        </div>
-
-        <div class="card">
-          <h2 class="section-title">Available Jobs</h2>
-          <div id="job-list" class="job-list">
-            <div class="muted">Loading jobs...</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="creditsSection" class="section">
-        <div class="card">
-          <h2 class="section-title">Credits Center</h2>
-          <div class="credit-value" id="creditCountMirror">10</div>
-          <div class="muted">Credits help rural and urban users trade value even when cash isn’t the first choice.</div>
-          <div class="action-row">
-            <button class="btn-green" onclick="earnCredit()">Earn +1</button>
-            <button class="btn-blue" onclick="spendCredit()">Spend -1</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="trackSection" class="section">
-        <div class="card">
-          <h2 class="section-title">Live Arrival Tracker</h2>
-          <div class="muted">Track your route to a customer, business, or job destination and notify when you're on the way or have arrived.</div>
-          <input id="destinationInput" placeholder="Enter destination address or business name" />
-          <div class="action-row">
-            <button class="btn-primary" onclick="setDestination()">Set Destination</button>
-            <button class="btn-secondary" onclick="startTracking()">Start Tracking</button>
-          </div>
-          <div id="map"></div>
-          <div id="trackingStatus" class="status-banner">
-            Tracking idle. Set a destination, then start tracking.
-          </div>
-          <div id="distanceStatus" class="distance-pill" style="display:none;">Distance: --</div>
-        </div>
-
-        <div class="card">
-          <div class="sub-title">Emergency Requests</div>
-          <div class="warning-box">
-            Emergency requests are for non-medical, non-police, non-fire situations only.
-            Examples:
-            <br>• jump start
-            <br>• lockout
-            <br>• urgent plumbing leak
-            <br>• urgent AC issue
-            <br>• roadside help
-          </div>
-          <div class="action-row">
-            <button class="btn-danger" onclick="openEmergencyRequest()">Request Emergency Help</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="chatSection" class="section">
-        <div class="card">
-          <h2 class="section-title">Chat</h2>
-          <div class="muted">You get 2 free messages and 1 free picture upload. Then Premium is required.</div>
-          <div class="counter-pill" id="chatCounter">Messages used: 0 / 2 free</div>
-          <div class="counter-pill" id="imageCounter">Picture uploads: 0 / 1 free</div>
-
-          <div class="chat-box" id="chatBox">
-            <div class="chat-message">Welcome to MySkillsSwapNow chat.</div>
-          </div>
-
-          <textarea id="chatInput" placeholder="Type your message"></textarea>
-          <div class="action-row">
-            <button class="btn-primary" onclick="sendChatMessage()">Send Message</button>
-            <button class="btn-secondary" onclick="uploadPicture()">Upload Picture</button>
-          </div>
-
-          <div class="premium-box" style="margin-top:14px;">
-            <div style="font-weight:800;">Need more than 2 messages?</div>
-            <div class="premium-price">$1.99<span style="font-size:1rem;font-weight:600;">/month</span></div>
-            <div style="line-height:1.45;">
-              Upgrade for unlimited chat, more picture uploads, and emergency request access.
-            </div>
-            <div class="action-row">
-              <button class="btn-secondary" onclick="upgradePremium()">Upgrade to Premium</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="bottom-nav">
-      <div class="nav-item active" onclick="showSection('home')" id="nav-home"><span class="nav-icon">⌂</span>Home</div>
-      <div class="nav-item" onclick="showSection('market')" id="nav-market"><span class="nav-icon">▣</span>Market</div>
-      <div class="nav-item" onclick="showSection('credits')" id="nav-credits"><span class="nav-icon">◎</span>Credits</div>
-      <div class="nav-item" onclick="showSection('track')" id="nav-track"><span class="nav-icon">◉</span>Track</div>
-      <div class="nav-item" onclick="showSection('chat')" id="nav-chat"><span class="nav-icon">◔</span>Chat</div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
-  <script>
-    const supabaseUrl = "https://szkbplrqutkedxylhruh.supabase.co";
-    const supabaseKey = "sb_publishable_RUITc0pMsVY3_QLEWM6vPA_dcRVCILg";
-    const appSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-    let requestMode = "cash";
-    let paymentFilter = "all";
-    let areaMode = "all";
-    let skillCredits = 10;
-    let cachedJobs = [];
-    let isPremium = false;
-    let freeMessagesUsed = 0;
-    let freeImagesUsed = 0;
-
-    let map;
-    let userMarker = null;
-    let destinationMarker = null;
-    let routeLine = null;
-    let watchId = null;
-    let destinationLatLng = null;
-    let arrivalTriggered = false;
-    let onTheWayTriggered = false;
-
-    const synonymMap = {
-      plumbing: ["plumber", "pipe", "drain", "faucet", "toilet", "water heater", "leak"],
-      hvac: ["air conditioning", "ac", "heater", "heating", "cooling", "vent", "thermostat"],
-      electrical: ["electrician", "wiring", "outlet", "breaker", "panel", "light", "switch"],
-      moving: ["move", "movers", "furniture", "haul", "lifting"],
-      lawn: ["yard", "grass", "mow", "mowing", "weeds", "weed", "yard work", "landscape"],
-      welding: ["welder", "metal", "fabrication", "repair steel", "iron work"],
-      barber: ["haircut", "fade", "lineup", "shapeup", "beard", "trim", "cut", "hair"],
-      cardetail: ["car detail", "detail", "wash", "vacuum", "polish", "interior clean"],
-      cleaning: ["clean", "house cleaning", "maid", "deep clean", "sanitize"],
-      handyman: ["repair", "install", "mount", "hang", "assembly", "fix", "patch"],
-      emergency: ["urgent", "asap", "right now", "jump start", "lockout", "flat tire"],
-      rural: ["farm", "acreage", "property", "outside town", "country"],
-      urban: ["city", "local", "downtown", "nearby", "fast"]
-    };
-
-    const serviceGroups = {
-      plumbing: ["plumbing","plumber","pipe","drain","faucet","toilet","water heater","leak"],
-      hvac: ["hvac","ac","heater","heating","cooling","vent","thermostat","air conditioning"],
-      electrical: ["electrical","electrician","wiring","outlet","breaker","panel","switch","light"],
-      moving: ["moving","move","movers","furniture","haul","lifting"],
-      lawn: ["lawn","yard","grass","weeds","mowing","landscape","tree","yard work"],
-      welding: ["welding","welder","metal","fabrication","iron","steel"],
-      grooming: ["barber","haircut","fade","trim","lineup","beard"],
-      auto: ["car","detail","car detail","wash","vacuum","polish","roadside","battery","jump"],
-      cleaning: ["clean","cleaning","deep clean","sanitize","maid"],
-      handyman: ["repair","install","mount","hang","assembly","fix","patch"],
-      emergency: ["urgent","asap","emergency","jump","lockout","right now","flat tire"]
-    };
-
-    const categoryKeywords = {
-      "Plumbing": ["plumbing","plumber","pipe","drain","faucet","toilet","leak"],
-      "HVAC": ["hvac","ac","heater","cooling","heating","vent","thermostat"],
-      "Electrical": ["electrical","electrician","wiring","outlet","breaker","panel"],
-      "Moving": ["moving","move","furniture","haul","lifting"],
-      "Lawn": ["lawn","yard","grass","weeds","mowing","landscape"],
-      "Welding": ["welding","welder","metal","fabrication","iron","steel"],
-      "Car Detail": ["car detail","detail","wash","vacuum","polish","interior"],
-      "Barber": ["barber","haircut","fade","trim","lineup"],
-      "Cleaning": ["clean","cleaning","maid","deep clean"],
-      "Handyman": ["repair","install","mount","assembly","patch"],
-      "Emergency Help": ["urgent","asap","jump","battery","lockout","flat tire"]
-    };
-
-    const quickFillTemplates = {
-      "Plumbing": {
-        title: "Need plumbing help",
-        description: "Need help with a plumbing issue such as leak repair, clogged drain, faucet replacement, toilet repair, or pipe work.",
-        category: "Plumbing"
-      },
-      "HVAC": {
-        title: "Need HVAC repair or service",
-        description: "Need help with AC, heater, thermostat, airflow, or cooling / heating issues.",
-        category: "HVAC"
-      },
-      "Electrical": {
-        title: "Need electrical help",
-        description: "Need help with wiring, outlets, breakers, switches, lighting, or electrical troubleshooting.",
-        category: "Electrical"
-      },
-      "Moving": {
-        title: "Need moving help",
-        description: "Need help moving furniture, lifting heavy items, loading, unloading, or hauling.",
-        category: "Moving"
-      },
-      "Lawn": {
-        title: "Need lawn / yard work",
-        description: "Need help with mowing, weeds, trimming, cleanup, landscaping, or general yard work.",
-        category: "Lawn"
-      },
-      "Welding": {
-        title: "Need welding work",
-        description: "Need help with welding, metal fabrication, repair, or custom metal work.",
-        category: "Welding"
-      },
-      "Car Detail": {
-        title: "Need car detailing",
-        description: "Need help with interior cleaning, exterior wash, vacuuming, polish, or full car detail.",
-        category: "Car Detail"
-      },
-      "Barber": {
-        title: "Need barber / haircut service",
-        description: "Looking for haircut, fade, lineup, beard trim, or barber service. Can pay cash or trade credits.",
-        category: "Barber"
-      }
-    };
-
-    function normalize(text) {
-      return String(text || "")
-        .toLowerCase()
-        .replace(/[^a-z0-9\s]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-    }
-
-    function tokenize(text) {
-      const base = normalize(text).split(" ").filter(Boolean);
-      const expanded = new Set(base);
-      base.forEach(word => {
-        if (synonymMap[word]) {
-          synonymMap[word].forEach(s => expanded.add(normalize(s)));
-        }
-      });
-      return Array.from(expanded);
-    }
-
-    function detectGroups(tokens) {
-      const groups = new Set();
-      Object.entries(serviceGroups).forEach(([group, words]) => {
-        for (const word of words) {
-          const normalizedWord = normalize(word);
-          if (tokens.includes(normalizedWord) || tokens.some(t => normalizedWord.includes(t) || t.includes(normalizedWord))) {
-            groups.add(group);
-          }
-        }
-      });
-      return Array.from(groups);
-    }
-
-    function getIntentFlags(query) {
-      const q = normalize(query);
-      return {
-        wantsCredit: q.includes("credit") || q.includes("swap") || q.includes("trade") || q.includes("barter"),
-        wantsCash: q.includes("cash") || q.includes("$") || q.includes("paid") || q.includes("pay"),
-        emergency: q.includes("urgent") || q.includes("asap") || q.includes("emergency") || q.includes("jump start") || q.includes("right now"),
-        rural: q.includes("rural") || q.includes("farm") || q.includes("acreage") || q.includes("country"),
-        urban: q.includes("urban") || q.includes("city") || q.includes("downtown") || q.includes("local")
-      };
-    }
-
-    function categoryBoost(category, tokens) {
-      const words = categoryKeywords[category] || [];
-      let boost = 0;
-      words.forEach(word => {
-        const normalizedWord = normalize(word);
-        if (tokens.includes(normalizedWord)) boost += 6;
-        if (tokens.some(t => normalizedWord.includes(t) || t.includes(normalizedWord))) boost += 2;
-      });
-      return boost;
-    }
-
-    function derivePaymentType(job) {
-      const budget = normalize(job.budget || "");
-      if (budget.includes("cash or credits")) return "both";
-      if (budget.includes("credit")) return "credits";
-      return "cash";
-    }
-
-    function deriveAreaType(job) {
-      const desc = job.description || "";
-      const match = desc.match(/\[AREA:(urban|rural)\]/i);
-      return match ? match[1].toLowerCase() : "urban";
-    }
-
-    function stripAreaTag(desc) {
-      return String(desc || "").replace(/\s*\[AREA:(urban|rural)\]\s*/ig, "").trim();
-    }
-
-    function scoreAreaWeight(area) {
-      if (areaMode === "all") return 0;
-      if (area === areaMode) return 20;
-      return -8;
-    }
-
-    function scoreUrbanRuralBehavior(job) {
-      const pay = derivePaymentType(job);
-      const area = deriveAreaType(job);
-      let score = 0;
-
-      if (areaMode === "urban") {
-        if (pay === "cash") score += 10;
-        if (normalize(job.category || "").includes("emergency")) score += 8;
-      }
-
-      if (areaMode === "rural") {
-        if (pay === "both") score += 14;
-        if (pay === "credits") score += 6;
-        if (area === "rural") score += 10;
-      }
-
-      return score;
-    }
-
-    function scoreJob(job, query) {
-      const queryText = normalize(query);
-      const queryTokens = tokenize(query);
-      const queryGroups = detectGroups(queryTokens);
-      const flags = getIntentFlags(query);
-
-      const title = job.title || "";
-      const desc = stripAreaTag(job.description || "");
-      const category = job.category || "General";
-      const budget = String(job.budget || "");
-      const area = deriveAreaType(job);
-
-      const haystack = normalize(`${title} ${desc} ${category} ${budget} ${area}`);
-      const jobTokens = tokenize(`${title} ${desc} ${category} ${area}`);
-      const jobGroups = detectGroups(jobTokens);
-
-      let score = 0;
-
-      queryTokens.forEach(token => {
-        if (haystack.includes(token)) score += 10;
-        if (jobTokens.includes(token)) score += 16;
-      });
-
-      queryGroups.forEach(group => {
-        if (jobGroups.includes(group)) score += 18;
-      });
-
-      score += categoryBoost(category, queryTokens);
-
-      if (normalize(title).includes(queryText)) score += 30;
-      if (normalize(desc).includes(queryText)) score += 20;
-
-      const paymentType = derivePaymentType(job);
-      if (flags.wantsCredit && paymentType !== "cash") score += 20;
-      if (flags.wantsCash && paymentType !== "credits") score += 10;
-      if (flags.emergency && /urgent|emergency|jump|battery|asap|roadside/i.test(`${title} ${desc} ${category}`)) score += 22;
-      if (flags.rural && area === "rural") score += 20;
-      if (flags.urban && area === "urban") score += 20;
-
-      score += scoreAreaWeight(area);
-      score += scoreUrbanRuralBehavior(job);
-
-      return score;
-    }
-
-    function buildSmartSuggestion(query, topMatches) {
-      if (!topMatches.length) {
-        return "No close matches yet. Try phrases like: rural hvac repair, cash or credits plumbing, urban moving help, lawn cleanup, welding repair, barber haircut trade.";
-      }
-
-      const top = topMatches[0];
-      const paymentType = derivePaymentType(top);
-      const area = deriveAreaType(top);
-
-      let modeText = "Cash Job";
-      if (paymentType === "credits") modeText = "Credit Swap";
-      if (paymentType === "both") modeText = "Cash or Credits";
-
-      return `Top algorithm match: "${top.title}" — best fit based on skill keywords, payment compatibility, and ${area} ranking. Mode: ${modeText}.`;
-    }
-
-    function filterJobsByPayment(jobs) {
-      if (paymentFilter === "all") return jobs;
-      if (paymentFilter === "cash") return jobs.filter(j => derivePaymentType(j) === "cash");
-      if (paymentFilter === "credits") return jobs.filter(j => derivePaymentType(j) === "credits");
-      if (paymentFilter === "both") return jobs.filter(j => derivePaymentType(j) === "both");
-      if (paymentFilter === "emergency") {
-        return jobs.filter(j =>
-          normalize(j.category || "").includes("emergency") ||
-          /urgent|emergency|jump|lockout|battery|roadside/i.test(`${j.title} ${stripAreaTag(j.description || "")}`)
-        );
-      }
-      return jobs;
-    }
-
-    function filterJobsByArea(jobs) {
-      if (areaMode === "all") return jobs;
-      return jobs.filter(j => deriveAreaType(j) === areaMode);
-    }
-
-    function renderJobs(jobs) {
-      const list = document.getElementById("job-list");
-      if (!jobs || jobs.length === 0) {
-        list.innerHTML = "<div class='muted'>No jobs posted yet.</div>";
-        return;
-      }
-
-      list.innerHTML = "";
-
-      jobs.forEach((job) => {
-        const div = document.createElement("div");
-        div.className = "job-card";
-
-        const budgetText = String(job.budget || "$0");
-        const pay = derivePaymentType(job);
-        const areaText = deriveAreaType(job);
-
-        let modeText = "Cash Job";
-        if (pay === "credits") modeText = "Credit Swap";
-        if (pay === "both") modeText = "Cash or Credits";
-
-        div.innerHTML = `
-          <h3 class="job-title">${job.title || ""}</h3>
-          <p class="job-desc">${stripAreaTag(job.description || "")}</p>
-          <div class="job-meta">
-            <span class="meta-pill">${job.category || "General"}</span>
-            <span class="meta-pill">${budgetText}</span>
-            <span class="meta-pill">${modeText}</span>
-            <span class="meta-pill">${areaText}</span>
-          </div>
-          <div class="job-actions">
-            <button class="btn-secondary" onclick="alert('View details feature coming next')">View</button>
-            <button class="btn-primary" onclick="openChatGate()">Message</button>
-          </div>
-        `;
-
-        list.appendChild(div);
-      });
-    }
-
-    function applyCurrentFiltersAndRender() {
-      let jobs = [...cachedJobs];
-      jobs = filterJobsByPayment(jobs);
-      jobs = filterJobsByArea(jobs);
-      renderJobs(jobs);
-    }
-
-    function updatePulse() {
-      const pulseGrid = document.getElementById("pulseGrid");
-      const jobs = filterJobsByArea(filterJobsByPayment([...cachedJobs]));
-
-      if (!jobs.length) {
-        pulseGrid.innerHTML = "<div class='muted'>No demand pulse yet. Post the first local request.</div>";
-        return;
-      }
-
-      const counts = {};
-      jobs.forEach(job => {
-        const cat = job.category || "General";
-        counts[cat] = (counts[cat] || 0) + 1;
-      });
-
-      const topCats = Object.entries(counts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3);
-
-      pulseGrid.innerHTML = "";
-      topCats.forEach(([cat, count]) => {
-        const div = document.createElement("div");
-        div.className = "pulse-item";
-        div.innerHTML = `
-          <div class="pulse-left">${cat}</div>
-          <div class="pulse-right">${count} hot requests</div>
-        `;
-        div.onclick = () => quickFillJob(cat);
-        pulseGrid.appendChild(div);
-      });
-    }
-
-    function showSection(name) {
-      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-
-      document.getElementById(name + "Section").classList.add("active");
-      document.getElementById("nav-" + name).classList.add("active");
-
-      if (name === "track" && map) {
-        setTimeout(() => map.invalidateSize(), 200);
-      }
-    }
-
-    function quickFillJob(serviceName) {
-      const item = quickFillTemplates[serviceName];
-      if (!item) return;
-
-      showSection("market");
-      document.getElementById("title").value = item.title;
-      document.getElementById("description").value = item.description;
-      document.getElementById("category").value = item.category;
-      document.getElementById("budget").focus();
-    }
-
-    function setPaymentFilter(mode) {
-      paymentFilter = mode;
-      ["All", "Cash", "Credits", "Both", "Emergency"].forEach(label => {
-        const el = document.getElementById("payFilter" + label);
-        if (el) el.classList.remove("active");
-      });
-
-      const ids = {
-        all: "payFilterAll",
-        cash: "payFilterCash",
-        credits: "payFilterCredits",
-        both: "payFilterBoth",
-        emergency: "payFilterEmergency"
-      };
-
-      document.getElementById(ids[mode]).classList.add("active");
-      applyCurrentFiltersAndRender();
-      updatePulse();
-    }
-
-    function setAreaMode(mode) {
-      areaMode = mode;
-      ["All", "Urban", "Rural"].forEach(label => {
-        const el = document.getElementById("areaFilter" + label);
-        if (el) el.classList.remove("active");
-      });
-
-      const ids = {
-        all: "areaFilterAll",
-        urban: "areaFilterUrban",
-        rural: "areaFilterRural"
-      };
-
-      document.getElementById(ids[mode]).classList.add("active");
-
-      const txt = document.getElementById("areaModeText");
-      if (mode === "all") txt.textContent = "All Areas: balanced ranking for both cities and rural regions.";
-      if (mode === "urban") txt.textContent = "Urban: prioritizes speed, specialty, and fast arrival.";
-      if (mode === "rural") txt.textContent = "Rural: expands flexibility, broader radius logic, and cash-or-credit compatibility.";
-
-      applyCurrentFiltersAndRender();
-      updatePulse();
-    }
-
-    function updatePremiumUI() {
-      document.getElementById("premiumStatus").textContent = `Premium: ${isPremium ? "On" : "Off"}`;
-      document.getElementById("chatCounter").textContent = `Messages used: ${freeMessagesUsed} / 2 free`;
-      document.getElementById("imageCounter").textContent = `Picture uploads: ${freeImagesUsed} / 1 free`;
-      document.getElementById("creditCount").textContent = skillCredits;
-      document.getElementById("creditCountMirror").textContent = skillCredits;
-    }
-
-    function upgradePremium() {
-      isPremium = true;
-      updatePremiumUI();
-      alert("Premium activated at $1.99/month for demo mode.");
-    }
-
-    function setRequestMode(mode) {
-      requestMode = mode;
-      document.getElementById("cashModeBtn").classList.remove("active");
-      document.getElementById("creditModeBtn").classList.remove("active");
-      document.getElementById("bothModeBtn").classList.remove("active");
-
-      if (mode === "cash") {
-        document.getElementById("cashModeBtn").classList.add("active");
-        document.getElementById("budget").placeholder = "Budget in dollars (ex: 80)";
-      }
-      if (mode === "credit") {
-        document.getElementById("creditModeBtn").classList.add("active");
-        document.getElementById("budget").placeholder = "Credits offered (ex: 3 credits)";
-      }
-      if (mode === "both") {
-        document.getElementById("bothModeBtn").classList.add("active");
-        document.getElementById("budget").placeholder = "Example: cash or credits";
-      }
-    }
-
-    function earnCredit() {
-      skillCredits += 1;
-      updatePremiumUI();
-    }
-
-    function spendCredit() {
-      if (skillCredits > 0) {
-        skillCredits -= 1;
-        updatePremiumUI();
-      } else {
-        alert("No skill credits left");
-      }
-    }
-
-    async function findBestMatch() {
-      const query = document.getElementById("smartSearch").value.trim();
-      const result = document.getElementById("matchResult");
-
-      let jobs = [...cachedJobs];
-      jobs = filterJobsByPayment(jobs);
-      jobs = filterJobsByArea(jobs);
-
-      if (!query) {
-        result.style.display = "block";
-        result.textContent = "Type what you need help with, like: rural hvac repair, cash or credits plumbing, urban moving help, lawn cleanup, welding repair, barber haircut trade.";
-        renderJobs(jobs);
-        return;
-      }
-
-      const scored = jobs
-        .map(job => ({ ...job, _score: scoreJob(job, query) }))
-        .sort((a, b) => b._score - a._score);
-
-      const topMatches = scored.filter(j => j._score > 0).slice(0, 10);
-
-      result.style.display = "block";
-      result.textContent = buildSmartSuggestion(query, topMatches);
-
-      renderJobs(topMatches.length ? topMatches : jobs);
-    }
-
-    async function signUp() {
-      const email = prompt("Enter email");
-      const password = prompt("Enter password");
-
-      if (!email || !password) {
-        alert("Email and password required");
-        return;
-      }
-
-      const { error } = await appSupabase.auth.signUp({ email, password });
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("Account created");
-      }
-    }
-
-    async function login() {
-      const email = prompt("Email");
-      const password = prompt("Password");
-
-      if (!email || !password) {
-        alert("Email and password required");
-        return;
-      }
-
-      const { error } = await appSupabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("Logged in");
-      }
-    }
-
-    async function logout() {
-      await appSupabase.auth.signOut();
-      alert("Logged out");
-    }
-
-    async function postSkill() {
-      const title = document.getElementById("title").value.trim();
-      const descriptionRaw = document.getElementById("description").value.trim();
-      const category = document.getElementById("category").value;
-      const budget = document.getElementById("budget").value.trim();
-      const areaType = document.getElementById("listingArea").value;
-
-      if (!title) {
-        alert("Please enter a job title");
-        return;
-      }
-
-      let finalBudget = budget || "$0";
-      if (requestMode === "credit") finalBudget = `${budget || "1"} credit trade`;
-      if (requestMode === "both") finalBudget = budget || "cash or credits";
-
-      const description = `${descriptionRaw} [AREA:${areaType}]`;
-
-      const payload = { title, description, category, budget: finalBudget };
-
-      const { error } = await app
-        .from("jobs")
-        .insert([payload]);
-
-      if (error) {
-        alert(error.message);
-        return;
-      }
-
-      document.getElementById("title").value = "";
-      document.getElementById("description").value = "";
-      document.getElementById("budget").value = "";
-      await loadJobs();
-      showSection("market");
-    }
-
-    async function loadJobs() {
-      const list = document.getElementById("job-list");
-      list.innerHTML = "<div class='muted'>Loading jobs...</div>";
-
-      const { data, error } = await app
-        .from("jobs")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        list.innerHTML = "<div class='muted'>Could not load jobs.</div>";
-        return;
-      }
-
-      cachedJobs = data || [];
-      applyCurrentFiltersAndRender();
-      updatePulse();
-    }
-
-    function openChatGate() {
-      showSection("chat");
-    }
-
-    function sendChatMessage() {
-      const input = document.getElementById("chatInput");
-      const text = input.value.trim();
-
-      if (!text) {
-        alert("Type a message first.");
-        return;
-      }
-
-      if (!isPremium && freeMessagesUsed >= 2) {
-        alert("Chat requires Premium after 2 free messages. Upgrade for $1.99/month.");
-        return;
-      }
-
-      if (!isPremium) freeMessagesUsed += 1;
-
-      const box = document.getElementById("chatBox");
-      const msg = document.createElement("div");
-      msg.className = "chat-message";
-      msg.textContent = text;
-      box.appendChild(msg);
-      input.value = "";
-      updatePremiumUI();
-    }
-
-    function uploadPicture() {
-      if (!isPremium && freeImagesUsed >= 1) {
-        alert("You used your 1 free picture upload. Upgrade to Premium for $1.99/month.");
-        return;
-      }
-
-      if (!isPremium) freeImagesUsed += 1;
-
-      const box = document.getElementById("chatBox");
-      const msg = document.createElement("div");
-      msg.className = "chat-message";
-      msg.textContent = "Picture uploaded successfully.";
-      box.appendChild(msg);
-      updatePremiumUI();
-    }
-
-    function openEmergencyRequest() {
-      if (!isPremium) {
-        alert("Emergency requests require Premium for $1.99/month.");
-        return;
-      }
-
-      const request = prompt("Describe your non-medical / non-police / non-fire emergency request.");
-      if (!request) return;
-
-      alert("Emergency request submitted: " + request);
-    }
-
-    function initMap() {
-      map = L.map("map").setView([36.1699, -115.1398], 12);
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap"
-      }).addTo(map);
-    }
-
-    function notifyUser(message) {
-      if ("Notification" in window) {
-        if (Notification.permission === "granted") {
-          new Notification("MySkillsSwapNow", { body: message });
-        } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
-            if (permission === "granted") {
-              new Notification("MySkillsSwapNow", { body: message });
-            }
-          });
-        }
-      }
-    }
-
-    function updateTrackingStatus(text) {
-      document.getElementById("trackingStatus").textContent = text;
-    }
-
-    function updateDistanceStatus(text) {
-      const el = document.getElementById("distanceStatus");
-      el.style.display = "inline-block";
-      el.textContent = text;
-    }
-
-    function haversineDistance(lat1, lon1, lat2, lon2) {
-      const toRad = x => x * Math.PI / 180;
-      const R = 3958.8;
-      const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c;
-    }
-
-    async function setDestination() {
-      const input = document.getElementById("destinationInput").value.trim();
-
-      if (!input) {
-        alert("Enter a destination first.");
-        return;
-      }
-
-      try {
-        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(input)}`;
-        const response = await fetch(url, { headers: { "Accept": "application/json" } });
-        const data = await response.json();
-
-        if (!data.length) {
-          alert("Destination not found. Try a more specific address.");
-          return;
-        }
-
-        const lat = parseFloat(data[0].lat);
-        const lon = parseFloat(data[0].lon);
-        destinationLatLng = [lat, lon];
-        arrivalTriggered = false;
-        onTheWayTriggered = false;
-
-        if (destinationMarker) {
-          destinationMarker.setLatLng(destinationLatLng);
-        } else {
-          destinationMarker = L.marker(destinationLatLng).addTo(map).bindPopup("Destination");
-        }
-
-        map.setView(destinationLatLng, 13);
-        updateTrackingStatus(`Destination set: ${input}`);
-      } catch (err) {
-        alert("Could not set destination.");
-      }
-    }
-
-    function drawRoute(userLatLng, destinationLatLng) {
-      if (routeLine) map.removeLayer(routeLine);
-
-      routeLine = L.polyline([userLatLng, destinationLatLng], {
-        color: "#2563eb",
-        weight: 4,
-        opacity: 0.85
-      }).addTo(map);
-
-      map.fitBounds(routeLine.getBounds(), { padding: [30, 30] });
-    }
-
-    function startTracking() {
-      if (!destinationLatLng) {
-        alert("Set a destination first.");
-        return;
-      }
-
-      if (!navigator.geolocation) {
-        alert("Geolocation is not supported on this device.");
-        return;
-      }
-
-      updateTrackingStatus("Tracking started. Sharing live location progress.");
-      notifyUser("Tracking started. You're on the way.");
-
-      if (watchId) navigator.geolocation.clearWatch(watchId);
-
-      watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          const userLatLng = [position.coords.latitude, position.coords.longitude];
-
-          if (userMarker) {
-            userMarker.setLatLng(userLatLng);
-          } else {
-            userMarker = L.marker(userLatLng).addTo(map).bindPopup("You");
-          }
-
-          drawRoute(userLatLng, destinationLatLng);
-
-          const distanceMiles = haversineDistance(
-            userLatLng[0],
-            userLatLng[1],
-            destinationLatLng[0],
-            destinationLatLng[1]
-          );
-
-          updateDistanceStatus(`Distance: ${distanceMiles.toFixed(2)} miles`);
-
-          if (!onTheWayTriggered && distanceMiles <= 2) {
-            onTheWayTriggered = true;
-            updateTrackingStatus("You are on the way and getting close to the destination.");
-            notifyUser("You are on the way and getting close to the destination.");
-          }
-
-          if (!arrivalTriggered && distanceMiles <= 0.1) {
-            arrivalTriggered = true;
-            updateTrackingStatus("Arrived at destination.");
-            notifyUser("Arrived at destination.");
-            alert("Arrived at destination.");
-          }
-        },
-        () => {
-          alert("Could not get current location.");
-        },
-        {
-          enableHighAccuracy: true,
-          maximumAge: 5000,
-          timeout: 15000
-        }
-      );
-    }
-
-    initMap();
-    loadJobs();
-    updatePremiumUI();
-  </script>
+<section id="home" class="section active">
+<div class="hero">
+<div class="hero-title">MySkillSwapNow</div>
+<p class="hero-sub">Trade skills. Get help. Make money.</p>
+
+<div class="hero-card">
+<h2>Demand Pulse + Hybrid Filters</h2>
+<p>
+The app surfaces what’s hot locally, lets users quick-post from top services,
+and ranks matches by payment type plus urban/rural logic.
+</p>
+
+<div class="chip-row">
+<div class="chip">Demand Pulse</div>
+<div class="chip">Cash Jobs</div>
+<div class="chip">Credit Swaps</div>
+<div class="chip">Urban + Rural</div>
+</div>
+</div>
+</div>
+
+<div class="section active" style="display:block; padding:18px 18px 0;">
+<div class="card profile-card">
+<div style="flex:1;">
+<h3 style="font-size:28px; margin-bottom:8px;">Local Member</h3>
+<div class="muted" style="font-size:18px; line-height:1.45;">
+Hybrid model ready for city and rural communities
+</div>
+
+<div class="pill-row">
+<div class="pill">Verified Member</div>
+<div class="pill">On-Time Arrival</div>
+<div class="pill">Top Rated</div>
+</div>
+
+<div class="trust-wrap">
+<div class="trust-score">94</div>
+<div>
+<div style="font-size:26px; font-weight:900;">Trust Score</div>
+<div class="muted" style="font-size:16px;">Profile completion 76%</div>
+</div>
+</div>
+
+<div class="progress"><div></div></div>
+</div>
+<div class="avatar">MS</div>
+</div>
+
+<div class="card">
+<h3>Most Popular Services</h3>
+<div class="service-grid">
+<button class="service-btn" onclick="quickFillService('Plumbing')">
+Plumbing
+<small>Leaks, drains, toilets</small>
+</button>
+<button class="service-btn" onclick="quickFillService('HVAC')">
+HVAC
+<small>AC, heater, thermostat</small>
+</button>
+<button class="service-btn" onclick="quickFillService('Electrical')">
+Electrical
+<small>Outlets, lights, breakers</small>
+</button>
+<button class="service-btn" onclick="quickFillService('Moving')">
+Moving
+<small>Lift, haul, transport</small>
+</button>
+<button class="service-btn" onclick="quickFillService('Lawn')">
+Lawn
+<small>Mowing, weeds, cleanup</small>
+</button>
+<button class="service-btn" onclick="quickFillService('Welding')">
+Welding
+<small>Repair, fabrication</small>
+</button>
+<button class="service-btn" onclick="quickFillService('Car Detail')">
+Car Detail
+<small>Interior, wash, wax</small>
+</button>
+<button class="service-btn" onclick="quickFillService('Barber')">
+Barber
+<small>Haircut, beard, lineup</small>
+</button>
+</div>
+</div>
+</div>
+</section>
+
+<section id="market" class="section">
+<div class="card">
+<h3>Area Mode</h3>
+<div class="chip-row">
+<button class="toggle-btn small active" id="area-all" onclick="setAreaFilter('all')">All Areas</button>
+<button class="toggle-btn small" id="area-urban" onclick="setAreaFilter('urban')">Urban</button>
+<button class="toggle-btn small" id="area-rural" onclick="setAreaFilter('rural')">Rural</button>
+</div>
+<div class="mini-note" id="areaHelp">All Areas: balanced ranking for both cities and rural regions.</div>
+</div>
+
+<div class="card">
+<h3>Payment Filters</h3>
+<div class="chip-row">
+<button class="toggle-btn small active" id="pay-all" onclick="setPaymentFilter('all')">All</button>
+<button class="toggle-btn small" id="pay-cash" onclick="setPaymentFilter('cash')">Cash</button>
+<button class="toggle-btn small" id="pay-credits" onclick="setPaymentFilter('credits')">Credits</button>
+<button class="toggle-btn small" id="pay-both" onclick="setPaymentFilter('both')">Cash or Credits</button>
+<button class="toggle-btn small" id="pay-emergency" onclick="setPaymentFilter('emergency')">Emergency</button>
+</div>
+</div>
+
+<div class="card">
+<h3>Smart Search & Match</h3>
+<input
+id="searchInput"
+type="text"
+placeholder="Try: rural hvac repair, cash or credits plumbing, barber, welding"
+/>
+<button class="primary-btn" onclick="findBestMatch()">Find Best Match</button>
+<div class="mini-note" id="matchResult">Use keywords to rank jobs and suggest compatible services.</div>
+</div>
+
+<div class="card">
+<h3>Create Request</h3>
+
+<div class="toggle-row">
+<button id="mode-cash" class="toggle-btn active" onclick="setRequestMode('cash')">Cash Only</button>
+<button id="mode-credit" class="toggle-btn" onclick="setRequestMode('credit')">Credits Only</button>
+<button id="mode-both" class="toggle-btn" onclick="setRequestMode('both')">Cash or Credits</button>
+</div>
+
+<input id="title" type="text" placeholder="Need plumbing help" />
+<textarea id="description" placeholder="Need help with a plumbing issue such as leak repair, clogged drain, faucet replacement, toilet repair, or pipe work."></textarea>
+
+<select id="category">
+<option>Plumbing</option>
+<option>HVAC</option>
+<option>Electrical</option>
+<option>Moving</option>
+<option>Lawn</option>
+<option>Welding</option>
+<option>Car Detail</option>
+<option>Barber</option>
+<option>General Labor</option>
+</select>
+
+<select id="listingArea">
+<option value="Urban">Urban</option>
+<option value="Rural">Rural</option>
+</select>
+
+<input id="budget" type="text" placeholder="80" />
+
+<button class="primary-btn" onclick="postSkill()">Post Job</button>
+</div>
+
+<div class="card">
+<h3>Available Jobs</h3>
+<div class="muted" id="jobsStatus">Loading jobs...</div>
+<div id="jobsList" class="job-list"></div>
+</div>
+</section>
+
+<section id="credits" class="section">
+<div class="card">
+<h3>Credits</h3>
+<div style="font-size:42px; font-weight:900; color:var(--navy);" id="creditsValue">10</div>
+<div class="muted">Use credits to trade services instead of cash.</div>
+<button class="secondary-btn" onclick="earnCreditsDemo()">Demo: Earn 2 Credits</button>
+</div>
+</section>
+
+<section id="track" class="section">
+<div class="card">
+<h3>Track</h3>
+<div class="muted">
+Track your route to a customer, business, or job destination and notify when you’re on the way or arrived.
+</div>
+<input id="destinationInput" type="text" placeholder="Enter destination address or business name" />
+<div class="toggle-row" style="margin-top:12px;">
+<button class="toggle-btn active" onclick="setDestination()">Set Destination</button>
+<button class="toggle-btn" onclick="startTracking()">Start Tracking</button>
+<button class="toggle-btn" onclick="stopTracking()">Stop</button>
+</div>
+<div id="map"></div>
+<div id="trackStatus" class="track-note">Tracking idle. Set a destination, then start tracking.</div>
+</div>
+</section>
+
+<section id="chat" class="section">
+<div class="card">
+<h3>Chat</h3>
+<div id="chatLockNotice" class="locked">
+Chat is free for 2 messages and 1 image upload. Upgrade to continue.
+</div>
+
+<textarea id="chatMessage" placeholder="Send a message"></textarea>
+<button class="primary-btn" onclick="sendChatMessage()">Send Message</button>
+
+<input id="imageUpload" type="file" accept="image/*" />
+<button class="secondary-btn" onclick="uploadImageDemo()">Upload Image</button>
+
+<div id="chatFeed" class="job-list" style="margin-top:16px;"></div>
+</div>
+</section>
+
+<div class="bottom-nav">
+<div class="nav-item active" onclick="showSection('home')" id="nav-home">
+<span class="nav-icon">⌂</span>Home
+</div>
+<div class="nav-item" onclick="showSection('market')" id="nav-market">
+<span class="nav-icon">▣</span>Market
+</div>
+<div class="nav-item" onclick="showSection('credits')" id="nav-credits">
+<span class="nav-icon">◎</span>Credits
+</div>
+<div class="nav-item" onclick="showSection('track')" id="nav-track">
+<span class="nav-icon">◉</span>Track
+</div>
+<div class="nav-item" onclick="showSection('chat')" id="nav-chat">
+<span class="nav-icon">◔</span>Chat
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+<script>
+const supabaseUrl = "https://szkbplrqutkedxylhruh.supabase.co";
+const supabaseKey = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
+const appSupabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let requestMode = "cash";
+let paymentFilter = "all";
+let areaMode = "all";
+let skillCredits = 10;
+let cachedJobs = [];
+let isPremium = false;
+let freeMessagesUsed = 0;
+let freeImagesUsed = 0;
+
+let map;
+let userMarker = null;
+let destinationMarker = null;
+let routeLine = null;
+let watchId = null;
+let destinationLatLng = null;
+let arrivalTriggered = false;
+let onTheWayTriggered = false;
+
+const serviceTemplates = {
+"Plumbing": {
+title: "Need plumbing help",
+description: "Need help with a plumbing issue such as leak repair, clogged drain, faucet replacement, toilet repair, or pipe work.",
+category: "Plumbing",
+budget: "80"
+},
+"HVAC": {
+title: "Need HVAC help",
+description: "Need help with an AC or heater issue such as no cooling, thermostat problems, airflow trouble, or unit service.",
+category: "HVAC",
+budget: "120"
+},
+"Electrical": {
+title: "Need electrical help",
+description: "Need help with an electrical issue such as outlet replacement, light repair, breaker troubleshooting, or wiring.",
+category: "Electrical",
+budget: "95"
+},
+"Moving": {
+title: "Need moving help",
+description: "Need help lifting, loading, unloading, hauling, or moving furniture and boxes.",
+category: "Moving",
+budget: "100"
+},
+"Lawn": {
+title: "Need lawn help",
+description: "Need help with mowing, weed pulling, trimming, edging, or yard cleanup.",
+category: "Lawn",
+budget: "65"
+},
+"Welding": {
+title: "Need welding help",
+description: "Need help with metal repair, fabrication, welding touch-up, or gate and frame work.",
+category: "Welding",
+budget: "150"
+},
+"Car Detail": {
+title: "Need car detailing",
+description: "Need a vehicle cleaned and detailed including wash, vacuum, wipe-down, interior care, and shine.",
+category: "Car Detail",
+budget: "85"
+},
+"Barber": {
+title: "Need barber service",
+description: "Need a haircut, lineup, beard trim, or grooming service.",
+category: "Barber",
+budget: "40"
+}
+};
+
+const synonymMap = {
+plumbing: ["plumber", "pipe", "drain", "faucet", "toilet", "water heater", "leak", "sink"],
+hvac: ["air conditioning", "ac", "heater", "heating", "cooling", "vent", "thermostat"],
+electrical: ["electrician", "wiring", "outlet", "breaker", "panel", "light", "switch"],
+moving: ["move", "movers", "furniture", "haul", "lifting", "delivery"],
+lawn: ["grass", "yard", "weed", "trim", "mow", "cleanup", "landscape"],
+welding: ["welder", "metal", "gate", "frame", "fabrication", "repair"],
+"car detail": ["detailing", "wash", "wax", "interior", "vacuum", "car wash"],
+barber: ["haircut", "fade", "lineup", "beard", "cut", "trim"]
+};
+
+function showSection(sectionId) {
+const sections = document.querySelectorAll(".section");
+sections.forEach(section => section.classList.remove("active"));
+
+const navItems = document.querySelectorAll(".nav-item");
+navItems.forEach(nav => nav.classList.remove("active"));
+
+document.getElementById(sectionId).classList.add("active");
+document.getElementById("nav-" + sectionId).classList.add("active");
+
+if (sectionId === "track") {
+setTimeout(initMapIfNeeded, 100);
+}
+}
+
+function setRequestMode(mode) {
+requestMode = mode;
+document.getElementById("mode-cash").classList.toggle("active", mode === "cash");
+document.getElementById("mode-credit").classList.toggle("active", mode === "credit");
+document.getElementById("mode-both").classList.toggle("active", mode === "both");
+}
+
+function setAreaFilter(mode) {
+areaMode = mode;
+document.getElementById("area-all").classList.toggle("active", mode === "all");
+document.getElementById("area-urban").classList.toggle("active", mode === "urban");
+document.getElementById("area-rural").classList.toggle("active", mode === "rural");
+
+const help = document.getElementById("areaHelp");
+if (mode === "urban") help.textContent = "Urban: prioritize dense city jobs and fast local turnaround.";
+else if (mode === "rural") help.textContent = "Rural: prioritize spread-out jobs, equipment help, and travel-friendly matches.";
+else help.textContent = "All Areas: balanced ranking for both cities and rural regions.";
+
+renderJobs();
+}
+
+function setPaymentFilter(mode) {
+paymentFilter = mode;
+["all", "cash", "credits", "both", "emergency"].forEach(id => {
+const el = document.getElementById("pay-" + id);
+if (el) el.classList.toggle("active", mode === id);
+});
+renderJobs();
+}
+
+function quickFillService(service) {
+const data = serviceTemplates[service];
+if (!data) return;
+showSection("market");
+document.getElementById("title").value = data.title;
+document.getElementById("description").value = data.description;
+document.getElementById("category").value = data.category;
+document.getElementById("budget").value = data.budget;
+window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function findBestMatch() {
+const raw = document.getElementById("searchInput").value.trim().toLowerCase();
+if (!raw) {
+document.getElementById("matchResult").textContent = "Try a service phrase like 'rural hvac repair' or 'cash plumbing'.";
+return;
+}
+
+let bestCategory = "General Labor";
+let bestScore = 0;
+
+Object.entries(synonymMap).forEach(([category, words]) => {
+let score = 0;
+words.forEach(word => {
+if (raw.includes(word)) score += 2;
+});
+if (raw.includes(category)) score += 3;
+if (score > bestScore) {
+bestScore = score;
+bestCategory = category;
+}
+});
+
+const normalized = Object.keys(serviceTemplates).find(
+item => item.toLowerCase() === bestCategory
+) || "Plumbing";
+
+quickFillService(normalized);
+document.getElementById("matchResult").textContent =
+`Best match: ${normalized}. Market form was auto-filled to help you post faster.`;
+}
+
+async function loadJobs() {
+const statusEl = document.getElementById("jobsStatus");
+const listEl = document.getElementById("jobsList");
+statusEl.textContent = "Loading jobs...";
+listEl.innerHTML = "";
+
+try {
+const { data, error } = await appSupabase
+.from("jobs")
+.select("*")
+.order("created_at", { ascending: false });
+
+if (error) {
+statusEl.textContent = "Could not load jobs.";
+console.error("loadJobs error:", error);
+return;
+}
+
+cachedJobs = Array.isArray(data) ? data : [];
+if (!cachedJobs.length) {
+statusEl.textContent = "No jobs posted yet.";
+} else {
+statusEl.textContent = "";
+}
+renderJobs();
+} catch (err) {
+statusEl.textContent = "Could not load jobs.";
+console.error("loadJobs catch:", err);
+}
+}
+
+function parseAreaFromDescription(description) {
+const match = String(description || "").match(/\[AREA:(.*?)\]/i);
+return match ? match[1].trim().toLowerCase() : "urban";
+}
+
+function detectPaymentType(budgetValue) {
+const val = String(budgetValue || "").toLowerCase();
+if (val.includes("credit") && val.includes("cash")) return "both";
+if (val.includes("cash or credits")) return "both";
+if (val.includes("credit")) return "credits";
+return "cash";
+}
+
+function renderJobs() {
+const listEl = document.getElementById("jobsList");
+const statusEl = document.getElementById("jobsStatus");
+
+let jobs = [...cachedJobs];
+
+if (paymentFilter !== "all") {
+jobs = jobs.filter(job => {
+const paymentType = detectPaymentType(job.budget);
+if (paymentFilter === "emergency") {
+return /emergency/i.test(job.title || "") || /emergency/i.test(job.description || "");
+}
+return paymentType === paymentFilter;
+});
+}
+
+if (areaMode !== "all") {
+jobs = jobs.filter(job => parseAreaFromDescription(job.description) === areaMode);
+}
+
+if (!jobs.length) {
+listEl.innerHTML = "";
+statusEl.textContent = cachedJobs.length ? "No jobs match your current filters." : "No jobs posted yet.";
+return;
+}
+
+statusEl.textContent = "";
+
+listEl.innerHTML = jobs.map(job => {
+const area = parseAreaFromDescription(job.description);
+const descClean = String(job.description || "").replace(/\[AREA:.*?\]/i, "").trim();
+return `
+<div class="job-card">
+<div class="job-head">
+<div>
+<div class="job-title">${escapeHtml(job.title || "Untitled Job")}</div>
+<div class="job-meta">${escapeHtml(descClean || "No description")}</div>
+</div>
+<div class="job-badge">${escapeHtml(job.budget || "$0")}</div>
+</div>
+<div class="job-meta" style="margin-top:10px;">
+Category: <strong>${escapeHtml(job.category || "General")}</strong><br>
+Area: <strong>${escapeHtml(capitalize(area))}</strong>
+</div>
+</div>
+`;
+}).join("");
+}
+
+async function postSkill() {
+const title = document.getElementById("title").value.trim();
+const descriptionRaw = document.getElementById("description").value.trim();
+const category = document.getElementById("category").value;
+const budget = document.getElementById("budget").value.trim();
+const areaType = document.getElementById("listingArea").value;
+
+if (!title) {
+alert("Please enter a job title");
+return;
+}
+
+let finalBudget = budget || "$0";
+if (requestMode === "credit") finalBudget = `${budget || "1"} credit trade`;
+if (requestMode === "both") finalBudget = budget || "cash or credits";
+
+const payload = {
+title,
+description: `${descriptionRaw} [AREA:${areaType}]`,
+category,
+budget: finalBudget
+};
+
+try {
+const { error } = await appSupabase
+.from("jobs")
+.insert([payload]);
+
+if (error) {
+console.error("postSkill error:", error);
+alert(error.message || "Could not post job");
+return;
+}
+
+document.getElementById("title").value = "";
+document.getElementById("description").value = "";
+document.getElementById("budget").value = "";
+await loadJobs();
+alert("Job posted successfully");
+} catch (err) {
+console.error("postSkill catch:", err);
+alert("Could not post job");
+}
+}
+
+function initMapIfNeeded() {
+if (map) {
+setTimeout(() => map.invalidateSize(), 150);
+return;
+}
+
+map = L.map("map").setView([36.0801, -115.1522], 11);
+
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+attribution: "&copy; OpenStreetMap"
+}).addTo(map);
+
+setTimeout(() => map.invalidateSize(), 150);
+}
+
+function setDestination() {
+initMapIfNeeded();
+const destination = document.getElementById("destinationInput").value.trim();
+if (!destination) {
+updateTrackStatus("Enter a destination first.");
+return;
+}
+
+destinationLatLng = [36.1147, -115.1728];
+
+if (destinationMarker) {
+map.removeLayer(destinationMarker);
+}
+
+destinationMarker = L.marker(destinationLatLng).addTo(map).bindPopup(destination).openPopup();
+map.setView(destinationLatLng, 12);
+updateTrackStatus(`Destination set: ${destination}. Start tracking when ready.`);
+}
+
+function startTracking() {
+initMapIfNeeded();
+
+if (!destinationLatLng) {
+updateTrackStatus("Set a destination before starting tracking.");
+return;
+}
+
+if (!navigator.geolocation) {
+updateTrackStatus("Geolocation is not supported on this device.");
+return;
+}
+
+if (watchId) {
+navigator.geolocation.clearWatch(watchId);
+}
+
+arrivalTriggered = false;
+onTheWayTriggered = false;
+
+watchId = navigator.geolocation.watchPosition(
+position => {
+const userLatLng = [position.coords.latitude, position.coords.longitude];
+
+if (userMarker) map.removeLayer(userMarker);
+userMarker = L.marker(userLatLng).addTo(map).bindPopup("You").openPopup();
+
+if (routeLine) map.removeLayer(routeLine);
+routeLine = L.polyline([userLatLng, destinationLatLng], { weight: 4 }).addTo(map);
+
+const distanceMiles = haversineMiles(
+userLatLng[0],
+userLatLng[1],
+destinationLatLng[0],
+destinationLatLng[1]
+);
+
+updateTrackStatus(`Distance: ${distanceMiles.toFixed(2)} miles`);
+
+if (!onTheWayTriggered && distanceMiles <= 3) {
+onTheWayTriggered = true;
+updateTrackStatus("You are on the way and getting close to the destination.");
+notifyUser("You are on the way and getting close to the destination.");
+}
+
+if (!arrivalTriggered && distanceMiles <= 0.3) {
+arrivalTriggered = true;
+updateTrackStatus("Arrived at destination.");
+notifyUser("Arrived at destination.");
+alert("Arrived at destination.");
+}
+},
+error => {
+console.error("track error:", error);
+updateTrackStatus("Could not get current location.");
+},
+{
+enableHighAccuracy: true,
+maximumAge: 5000,
+timeout: 15000
+}
+);
+}
+
+function stopTracking() {
+if (watchId) {
+navigator.geolocation.clearWatch(watchId);
+watchId = null;
+}
+updateTrackStatus("Tracking stopped.");
+}
+
+function updateTrackStatus(message) {
+document.getElementById("trackStatus").textContent = message;
+}
+
+function notifyUser(message) {
+console.log("notify:", message);
+}
+
+function haversineMiles(lat1, lon1, lat2, lon2) {
+const toRad = deg => deg * (Math.PI / 180);
+const R = 3958.8;
+const dLat = toRad(lat2 - lat1);
+const dLon = toRad(lon2 - lon1);
+const a =
+Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+Math.cos(toRad(lat1)) *
+Math.cos(toRad(lat2)) *
+Math.sin(dLon / 2) *
+Math.sin(dLon / 2);
+const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+return R * c;
+}
+
+function sendChatMessage() {
+const message = document.getElementById("chatMessage").value.trim();
+if (!message) return;
+
+if (!isPremium && freeMessagesUsed >= 2) {
+alert("Upgrade required after 2 free chat messages.");
+return;
+}
+
+freeMessagesUsed += 1;
+document.getElementById("chatMessage").value = "";
+
+const feed = document.getElementById("chatFeed");
+const div = document.createElement("div");
+div.className = "job-card";
+div.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
+feed.prepend(div);
+
+updateChatLockNotice();
+}
+
+function uploadImageDemo() {
+const fileInput = document.getElementById("imageUpload");
+if (!fileInput.files.length) {
+alert("Choose an image first.");
+return;
+}
+
+if (!isPremium && freeImagesUsed >= 1) {
+alert("Upgrade required after 1 free image upload.");
+return;
+}
+
+freeImagesUsed += 1;
+alert("Image upload counted for demo. Connect Supabase Storage later for real uploads.");
+fileInput.value = "";
+updateChatLockNotice();
+}
+
+function updateChatLockNotice() {
+const notice = document.getElementById("chatLockNotice");
+notice.innerHTML = `Chat is free for 2 messages and 1 image upload. Used: ${freeMessagesUsed}/2 messages, ${freeImagesUsed}/1 image. Upgrade to continue.`;
+}
+
+function earnCreditsDemo() {
+skillCredits += 2;
+document.getElementById("creditsValue").textContent = skillCredits;
+}
+
+function escapeHtml(value) {
+return String(value)
+.replaceAll("&", "&amp;")
+.replaceAll("<", "&lt;")
+.replaceAll(">", "&gt;")
+.replaceAll('"', "&quot;")
+.replaceAll("'", "&#039;");
+}
+
+function capitalize(value) {
+const s = String(value || "");
+return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+loadJobs();
+updateChatLockNotice();
+</script>
 </body>
 </html>
+
