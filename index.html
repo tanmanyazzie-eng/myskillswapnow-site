@@ -832,7 +832,7 @@ statusEl.textContent = "Loading jobs...";
 listEl.innerHTML = "";
 
 try {
-const { data, error } = await appSupabase
+const { data, error } = await app
 .from("jobs")
 .select("*")
 .order("created_at", { ascending: false });
