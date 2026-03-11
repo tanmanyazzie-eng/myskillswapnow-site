@@ -418,60 +418,86 @@ document.getElementById("matchResult").textContent =
 `Best match: ${normalized}. Market form was auto-filled to help you post faster.`;
 }
 
+function updateAuthStatus(user) {
+const statusEl = document.getElementById("authStatus");
+if (!statusEl) return;
+
+if (user) {
+statusEl.textContent = `Logged in as ${user.email}`;
+} else {
+statusEl.textContent = "Not logged in";
+}
+}
+
 async function signUp() {
 const email = document.getElementById("email").value.trim();
 const password = document.getElementById("password").value.trim();
 
-const { error } = await app.auth.signUp({
-email: email,
-password: password
+if (!email || !password) {
+alert("Email and password required");
+return;
+}
+
+const { data, error } = await app.auth.signUp({
+email,
+password
 });
 
 if (error) {
 alert(error.message);
-} else {
-alert("Account created. Check your email if confirmation is enabled.");
-await refreshAuthStatus();
+return;
 }
+
+updateAuthStatus(data?.user || null);
+alert("Signed up");
 }
 
 async function login() {
 const email = document.getElementById("email").value.trim();
 const password = document.getElementById("password").value.trim();
 
-const { error } = await app.auth.signInWithPassword({
-email: email,
-password: password
+if (!email || !password) {
+alert("Email and password required");
+return;
+}
+
+const { data, error } = await app.auth.signInWithPassword({
+email,
+password
 });
 
 if (error) {
 alert(error.message);
-} else {
-alert("Logged in!");
-await refreshAuthStatus();
+return;
 }
+
+updateAuthStatus(data?.user || null);
+alert("Logged in");
 }
 
 async function logout() {
-const { error } = await app.auth.signOut();
-if (error) {
-alert(error.message);
-} else {
+await app.auth.signOut();
+updateAuthStatus(null);
 alert("Logged out");
-await refreshAuthStatus();
-}
 }
 
-async function refreshAuthStatus() {
-const authStatus = document.getElementById("authStatus");
-const { data: { user } } = await app.auth.getUser();
+async function checkSession() {
+const { data, error } = await app.auth.getSession();
+if (error) {
+console.error(error);
+updateAuthStatus(null);
+return;
+}
 
-if (user) {
-authStatus.textContent = `Logged in as: ${user.email}`;
-} else {
-authStatus.textContent = "Not logged in";
+updateAuthStatus(data?.session?.user || null);
 }
-}
+
+app.auth.onAuthStateChange((_event, session) => {
+updateAuthStatus(session?.user || null);
+});
+
+checkSession();
+
 
 function parseArea(description) {
 const text = String(description || "");
