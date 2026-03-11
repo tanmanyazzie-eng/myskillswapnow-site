@@ -672,7 +672,8 @@ setTimeout(() => map.invalidateSize(), 150);
 }
 
 app.auth.onAuthStateChange(async () => {
-await refreshAuthStatus();
+updateAuthStatus(data?.session?.user || null);
+
 });
 
 loadJobs();
