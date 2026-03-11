@@ -671,14 +671,14 @@ attribution: "&copy; OpenStreetMap"
 setTimeout(() => map.invalidateSize(), 150);
 }
 
-app.auth.onAuthStateChange(async () => {
-updateAuthStatus(data?.session?.user || null);
-
+app.auth.onAuthStateChange((_event, session) => {
+updateAuthStatus(session?.user || null);
 });
 
 loadJobs();
-refreshAuthStatus();
+checkSession();
 updateChatLockNotice();
+
 </script>
 </body>
 </html>
