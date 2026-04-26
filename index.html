@@ -1,170 +1,237 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>MySkillSwapNow</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body { margin:0; font-family:Arial,sans-serif; background:#f2f3f5; color:#111; }
-.app { max-width:430px; margin:auto; padding:16px 16px 90px; }
-h1 { text-align:center; margin-bottom:4px; }
-.tagline { text-align:center; color:#666; margin-top:0; }
-.card { background:white; padding:16px; border-radius:18px; margin:14px 0; box-shadow:0 8px 24px rgba(0,0,0,.08); }
-input, textarea, select { width:100%; box-sizing:border-box; padding:13px; margin:7px 0; border-radius:12px; border:1px solid #ccc; font-size:15px; }
-textarea { min-height:80px; }
-button { width:100%; padding:14px; margin:7px 0; border:0; border-radius:14px; font-weight:bold; font-size:15px; }
-.need { background:#d62828; color:white; font-size:20px; }
-.help { background:#16803c; color:white; font-size:20px; }
-.primary { background:#111827; color:white; }
-.danger { background:#d62828; color:white; }
-.success { background:#16803c; color:white; }
-.muted { background:#e5e7eb; color:#111; }
-.hidden { display:none; }
-.job { border:1px solid #ddd; border-radius:16px; padding:14px; margin:12px 0; background:#fff; }
-.urgent { border:2px solid #d62828; background:#fff5f5; }
-.badge { display:inline-block; background:#d62828; color:white; padding:4px 8px; border-radius:10px; font-size:12px; margin-left:6px; }
-.small { color:#666; font-size:13px; }
-.tabs { position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:center; gap:6px; padding:8px; border-top:1px solid #ddd; }
-.tabs button { width:auto; flex:1; max-width:95px; font-size:12px; padding:10px 6px; margin:0; background:#f3f4f6; }
-.message { background:#f3f4f6; padding:10px; border-radius:12px; margin:8px 0; }
-.mine { background:#dcfce7; }
+body { margin:0; font-family:Arial; background:#f2f3f5; }
+.app { max-width:430px; margin:auto; padding:16px; }
+
+h2 { text-align:center; }
+
+.tabs {
+display:flex;
+justify-content:space-between;
+margin:10px 0;
+}
+
+.tabs button {
+flex:1;
+margin:4px;
+padding:12px;
+border:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+.active { background:#333; color:white; }
+
+.card {
+background:white;
+padding:14px;
+border-radius:14px;
+margin-top:12px;
+box-shadow:0 4px 12px #0001;
+}
+
+input, textarea, select {
+width:100%;
+padding:12px;
+margin:6px 0;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+.job {
+border:1px solid #ddd;
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.chatBox {
+max-height:200px;
+overflow:auto;
+border:1px solid #ddd;
+padding:10px;
+border-radius:10px;
+}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 
 <body>
+
 <div class="app">
-<h1>MySkillSwapNow</h1>
-<p class="tagline">Fast local help. Cash or credits.</p>
-<p id="status" class="small">Loading location...</p>
 
-<div class="card">
-<h3>Login</h3>
-<input id="email" placeholder="Email" value="test@test.com">
-<input id="password" type="password" placeholder="Password" value="password123">
-<button class="primary" onclick="login()">Login</button>
-<button class="muted" onclick="signUp()">Sign Up</button>
-<button class="muted" onclick="logout()">Logout</button>
-<p id="userStatus" class="small">Not logged in</p>
-</div>
-
-<div id="homeSection">
-<button class="need" onclick="showSection('postSection')">🟥 I NEED HELP</button>
-<button class="help" onclick="showSection('jobsSection'); loadJobs();">🟩 I CAN HELP</button>
-
-<div class="card">
-<h3>How it works</h3>
-<p>Post urgent help, accept nearby jobs, chat, and track helper location.</p>
-</div>
-</div>
-
-<div id="postSection" class="hidden card">
-<h3>Post Job</h3>
-<input id="title" placeholder="What help do you need?">
-<textarea id="description" placeholder="Add job details"></textarea>
-
-<select id="urgency">
-<option value="normal">Normal</option>
-<option value="urgent">🚨 HELP NOW</option>
-</select>
-
-<select id="payment_type">
-<option>Cash Only</option>
-<option>Credits Only</option>
-<option>Cash or Credits</option>
-</select>
-
-<select id="category">
-<option>General Labor</option>
-<option>Electrical</option>
-<option>Plumbing</option>
-<option>HVAC</option>
-<option>Moving</option>
-<option>Lawn</option>
-<option>Cleaning</option>
-<option>Barber</option>
-<option>Welding</option>
-</select>
-
-<input id="budget" type="number" placeholder="Budget" value="80">
-<button class="primary" onclick="postJob()">Post Job</button>
-</div>
-
-<div id="jobsSection" class="hidden card">
-<h3>Jobs Near You</h3>
-<label>Distance: <span id="radiusText">25</span> miles</label>
-<input id="radius" type="range" min="1" max="100" value="25" oninput="updateRadius()">
-<div id="jobsList"></div>
-</div>
-
-<div id="chatSection" class="hidden card">
-<h3>Chat</h3>
-<p id="chatJobTitle" class="small">Select a job first.</p>
-<div id="messagesList"></div>
-<input id="chatInput" placeholder="Type message...">
-<button class="primary" onclick="sendMessage()">Send Message</button>
-</div>
-
-<div id="trackSection" class="hidden card">
-<h3>Tracking</h3>
-<p id="trackInfo">Accept a job first to start tracking.</p>
-<button class="success" onclick="shareTracking()">Share My Location</button>
-<button class="muted" onclick="loadTracking()">Refresh Tracking</button>
-</div>
-</div>
+<h2>MySkillSwapNow</h2>
 
 <div class="tabs">
-<button onclick="showSection('homeSection')">Home</button>
-<button onclick="showSection('jobsSection'); loadJobs();">Jobs</button>
-<button onclick="showSection('chatSection'); loadMessages();">Chat</button>
-<button onclick="showSection('trackSection'); loadTracking();">Track</button>
+<button onclick="setTab('home')" id="homeTab">Home</button>
+<button onclick="setTab('jobs')" id="jobsTab">Jobs</button>
+<button onclick="setTab('chat')" id="chatTab">Chat</button>
+<button onclick="setTab('track')" id="trackTab">Track</button>
+</div>
+
+<!-- LOGIN -->
+<div id="home" class="card">
+<h3>Login</h3>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<h3>Post Job</h3>
+<input id="title" placeholder="Job title">
+<textarea id="desc"></textarea>
+<select id="payment">
+<option>Cash</option>
+<option>Credits</option>
+</select>
+<input id="budget" placeholder="Budget">
+<button onclick="postJob()">Post</button>
+</div>
+
+<!-- JOBS -->
+<div id="jobs" class="card" style="display:none;">
+<h3>Jobs</h3>
+<div id="jobList"></div>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="card" style="display:none;">
+<h3>Chat</h3>
+<div class="chatBox" id="chatBox"></div>
+<input id="msg" placeholder="Message">
+<button onclick="sendMsg()">Send</button>
+</div>
+
+<!-- TRACK -->
+<div id="track" class="card" style="display:none;">
+<h3>Tracking</h3>
+<button onclick="updateLocation()">Update My Location</button>
+<div id="trackInfo"></div>
+</div>
+
 </div>
 
 <script>
-const SUPABASE_URL = "https://szkbplrqutkedxylhruh.supabase.co";
-const SUPABASE_KEY = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
 
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const client = supabase.createClient(
+"https://szkbplrqutkedxylhruh.supabase.co",
+"PASTE_YOUR_PUBLISHABLE_KEY_HERE"
+);
 
-let currentUser = null;
-let myLat = null;
-let myLng = null;
-let jobs = [];
-let selectedJob = null;
+let user = null;
+let currentJob = null;
 
-function showSection(id) {
-["homeSection","postSection","jobsSection","chatSection","trackSection"].forEach(sec => {
-document.getElementById(sec).classList.add("hidden");
+function setTab(tab){
+document.querySelectorAll('.card').forEach(x=>x.style.display="none");
+document.getElementById(tab).style.display="block";
+}
+
+async function login(){
+let email = email.value;
+let password = password.value;
+
+let res = await client.auth.signInWithPassword({email,password});
+user = res.data.user;
+alert("Logged in");
+}
+
+async function postJob(){
+let job = {
+title:title.value,
+description:desc.value,
+budget:budget.value,
+payment_type:payment.value,
+posted_by:user?.email
+};
+
+await client.from("jobs").insert([job]);
+loadJobs();
+}
+
+async function loadJobs(){
+let res = await client.from("jobs").select("*");
+let list = document.getElementById("jobList");
+list.innerHTML="";
+
+res.data.forEach(j=>{
+list.innerHTML+=`
+<div class="job">
+<b>${j.title}</b>
+<p>${j.description}</p>
+<p>$${j.budget}</p>
+<button onclick="openChat('${j.id}')">Chat</button>
+<button onclick="acceptJob('${j.id}')">Accept</button>
+</div>`;
 });
-document.getElementById(id).classList.remove("hidden");
 }
 
-function updateRadius() {
-document.getElementById("radiusText").innerText = document.getElementById("radius").value;
-renderJobs();
+async function acceptJob(id){
+currentJob = id;
+
+await client.from("jobs")
+.update({accepted_by:user.email})
+.eq("id",id);
+
+alert("Job accepted");
 }
 
-function distanceMiles(lat1, lon1, lat2, lon2) {
-if (!lat1 || !lon1 || !lat2 || !lon2) return null;
-const R = 3958.8;
-const dLat = (lat2-lat1) * Math.PI / 180;
-const dLon = (lon2-lon1) * Math.PI / 180;
-const a = Math.sin(dLat/2)**2 +
-Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
-Math.sin(dLon/2)**2;
-return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+function openChat(jobId){
+currentJob = jobId;
+setTab("chat");
+loadChat();
 }
 
-function getLocation() {
-if (!navigator.geolocation) {
-document.getElementById("status").innerText = "Location not supported.";
-return;
+async function sendMsg(){
+let text = msg.value;
+
+await client.from("messages").insert([{
+job_id:currentJob,
+sender:user.email,
+message:text
+}]);
+
+msg.value="";
+loadChat();
 }
 
-navigator.geolocation.getCurrentPosition(
-pos => {
-myLat = pos.coords.latitude;
-myLng = pos.coords.longitude;
-document.getElementById("status").innerText = "Location active ✅";
-renderJobs();
-},
+async function loadChat(){
+let res = await client
+.from("messages")
+.select("*")
+.eq("job_id",currentJob);
+
+let box = document.getElementById("chatBox");
+box.innerHTML="";
+
+res.data.forEach(m=>{
+box.innerHTML+=`<p><b>${m.sender}:</b> ${m.message}</p>`;
+});
+}
+
+async function updateLocation(){
+navigator.geolocation.getCurrentPosition(async pos=>{
+let lat = pos.coords.latitude;
+let lng = pos.coords.longitude;
+
+await client.from("tracking").insert([{
+job_id:currentJob,
+helper_email:user.email,
+lat,
+lng
+}]);
+
+document.getElementById("trackInfo").innerText =
+"Location updated: " + lat.toFixed(3)+", "+lng.toFixed(3);
+});
+}
+
+loadJobs();
+
+</script>
+
+</body>
+</html>
