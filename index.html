@@ -40,6 +40,9 @@ button{cursor:pointer}
 <div class="app">
 <div class="logo">MySkillSwapNow</div>
 <div class="status" id="locationStatus">Getting location...</div>
+<p class="muted" style="text-align:center;">
+For local help only. Do not use for police, fire, medical, or life-threatening emergencies.
+</p>  
 
 <div class="hero">
 <button class="big need" onclick="showTab('post')">🟥 I NEED HELP</button>
@@ -49,8 +52,8 @@ button{cursor:pointer}
 <section id="home" class="screen">
 <div class="card">
 <h3>Login / Sign Up</h3>
-<input id="emailInput" placeholder="Email" value="test@test.com">
-<input id="passwordInput" type="password" placeholder="Password" value="password123">
+<input id="emailInput" placeholder="Email">
+<input id="passwordInput" type="password" placeholder="Password">
 <div class="row">
 <button class="btn" onclick="login()">Login</button>
 <button class="btn2" onclick="signUp()">Sign Up</button>
