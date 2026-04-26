@@ -3,141 +3,280 @@
 <head>
 <title>MySkillSwapNow</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body {
-margin: 0;
-font-family: Arial;
-background: #f2f3f5;
-}
-
-.app {
-max-width: 430px;
-margin: auto;
-padding: 15px;
-}
-
-.btn {
-width: 100%;
-padding: 20px;
-border-radius: 15px;
-font-size: 20px;
-margin: 10px 0;
-border: none;
-color: white;
-}
-
-.need { background: red; }
-.help { background: green; }
-
-.card {
-background: white;
-padding: 15px;
-border-radius: 15px;
-margin-top: 10px;
-}
-
-input, textarea {
-width: 100%;
-padding: 10px;
-margin: 5px 0;
-border-radius: 10px;
-border: 1px solid #ccc;
-}
-
-.job {
-border: 1px solid #ddd;
-padding: 10px;
-margin-top: 10px;
-border-radius: 10px;
-}
+body { margin:0; font-family:Arial; background:#f2f3f5; }
+.app { max-width:430px; margin:auto; padding:15px; }
+h2 { text-align:center; }
+.btn { width:100%; padding:20px; border-radius:15px; font-size:20px; margin:10px 0; border:none; color:white; font-weight:bold; }
+.need { background:#d62828; }
+.help { background:#16803c; }
+.card { background:white; padding:15px; border-radius:15px; margin-top:12px; box-shadow:0 4px 14px #0001; }
+input, textarea, select { width:100%; box-sizing:border-box; padding:12px; margin:6px 0; border-radius:10px; border:1px solid #ccc; }
+button { padding:12px; border-radius:10px; border:1px solid #ccc; margin:4px; font-weight:bold; }
+.job { border:1px solid #ddd; padding:12px; margin-top:10px; border-radius:12px; }
+.hidden { display:none; }
+.status { font-size:13px; color:#555; text-align:center; }
 </style>
 </head>
 
 <body>
-
 <div class="app">
-
 <h2>MySkillSwapNow</h2>
+<p class="status" id="status">Loading...</p>
 
-<button class="btn need" onclick="mode='need'">🟥 I NEED HELP</button>
-<button class="btn help" onclick="mode='help'">🟩 I CAN HELP</button>
+<button class="btn need" onclick="showNeed()">🟥 I NEED HELP</button>
+<button class="btn help" onclick="showHelp()">🟩 I CAN HELP</button>
 
 <div class="card">
-<h3>Login</h3>
-<input id="email" placeholder="email">
-<input id="password" type="password" placeholder="password">
+<h3>Login / Sign Up</h3>
+<input id="email" placeholder="email" value="test@test.com">
+<input id="password" type="password" placeholder="password" value="password123">
+<button onclick="signUp()">Sign Up</button>
 <button onclick="login()">Login</button>
+<button onclick="logout()">Logout</button>
+<p id="userStatus">Not logged in</p>
 </div>
 
-<div id="post" class="card">
+<div id="needSection" class="card hidden">
 <h3>Post Job</h3>
 <input id="title" placeholder="Describe help needed">
-<textarea id="desc"></textarea>
-<input id="budget" placeholder="budget">
-<button onclick="postJob()">Post</button>
+<textarea id="description" placeholder="Details"></textarea>
+
+<select id="payment_type">
+<option>Cash Only</option>
+<option>Credits Only</option>
+<option>Cash or Credits</option>
+</select>
+
+<select id="category">
+<option>General Labor</option>
+<option>Electrical</option>
+<option>Plumbing</option>
+<option>HVAC</option>
+<option>Moving</option>
+<option>Lawn</option>
+<option>Cleaning</option>
+<option>Barber</option>
+<option>Welding</option>
+</select>
+
+<input id="budget" type="number" placeholder="Budget" value="80">
+<button onclick="postJob()">Post Job</button>
 </div>
 
-<div id="jobs" class="card">
-<h3>Jobs</h3>
-</div>
+<div id="helpSection" class="card hidden">
+<h3>Available Jobs Near You</h3>
 
+<label>Distance filter: <span id="radiusText">25</span> miles</label>
+<input id="radius" type="range" min="1" max="100" value="25" oninput="updateRadius()">
+
+<div id="jobs"></div>
+</div>
 </div>
 
 <script>
+const SUPABASE_URL = "https://szkbplrqutkedxylhruh.supabase.co";
+const SUPABASE_KEY = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
 
-const supabase = supabase.createClient(
-"https://szkbplrqutkedxylhruh.supabase.co",
-"YOUR_PUBLISHABLE_KEY"
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
+let myLat = null;
+let myLng = null;
+let allJobs = [];
+
+function showNeed() {
+document.getElementById("needSection").classList.remove("hidden");
+document.getElementById("helpSection").classList.add("hidden");
+}
+
+function showHelp() {
+document.getElementById("helpSection").classList.remove("hidden");
+document.getElementById("needSection").classList.add("hidden");
+loadJobs();
+}
+
+function updateRadius() {
+document.getElementById("radiusText").innerText = document.getElementById("radius").value;
+renderJobs();
+}
+
+function getDistanceMiles(lat1, lon1, lat2, lon2) {
+if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+const R = 3958.8;
+const dLat = (lat2 - lat1) * Math.PI / 180;
+const dLon = (lon2 - lon1) * Math.PI / 180;
+const a =
+Math.sin(dLat/2) * Math.sin(dLat/2) +
+Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+Math.sin(dLon/2) * Math.sin(dLon/2);
+return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+}
+
+function getLocation() {
+if (!navigator.geolocation) {
+document.getElementById("status").innerText = "Location not supported.";
+return;
+}
+
+navigator.geolocation.getCurrentPosition(
+pos => {
+myLat = pos.coords.latitude;
+myLng = pos.coords.longitude;
+document.getElementById("status").innerText = "Location active ✅";
+renderJobs();
+},
+() => {
+document.getElementById("status").innerText = "Location denied — jobs still work.";
+}
 );
+}
 
-let user = null;
-let mode = "home";
+async function checkUser() {
+const { data } = await client.auth.getUser();
+currentUser = data.user;
+document.getElementById("userStatus").innerText =
+currentUser ? "Logged in as " + currentUser.email : "Not logged in";
+}
+
+async function signUp() {
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+const { data, error } = await client.auth.signUp({ email, password });
+if (error) return alert(error.message);
+
+currentUser = data.user;
+await checkUser();
+alert("Signed up successfully");
+}
 
 async function login() {
 const email = document.getElementById("email").value;
 const password = document.getElementById("password").value;
 
-const { data } = await supabase.auth.signInWithPassword({ email, password });
-user = data.user;
+const { data, error } = await client.auth.signInWithPassword({ email, password });
+if (error) return alert(error.message);
 
-alert("Logged in");
+currentUser = data.user;
+await checkUser();
+alert("Logged in successfully");
+}
+
+async function logout() {
+await client.auth.signOut();
+currentUser = null;
+await checkUser();
 }
 
 async function postJob() {
+if (!currentUser) return alert("Please login first.");
+
 const title = document.getElementById("title").value;
-const desc = document.getElementById("desc").value;
-const budget = document.getElementById("budget").value;
+if (!title.trim()) return alert("Enter job title.");
 
-await supabase.from("jobs").insert([
-{ title, description: desc, budget }
-]);
+const job = {
+title,
+description: document.getElementById("description").value,
+budget: Number(document.getElementById("budget").value),
+payment_type: document.getElementById("payment_type").value,
+category: document.getElementById("category").value,
+posted_by: currentUser.email,
+lat: myLat,
+lng: myLng,
+status: "open"
+};
 
-loadJobs();
+const { error } = await client.from("jobs").insert([job]);
+if (error) return alert(error.message);
+
+document.getElementById("title").value = "";
+document.getElementById("description").value = "";
+
+showHelp();
 }
 
 async function loadJobs() {
-const { data } = await supabase.from("jobs").select("*");
+const { data, error } = await client
+.from("jobs")
+.select("*")
+.eq("status", "open")
+.order("created_at", { ascending: false });
 
+if (error) return alert(error.message);
+
+allJobs = data || [];
+renderJobs();
+}
+
+function renderJobs() {
 const container = document.getElementById("jobs");
-container.innerHTML = "<h3>Jobs</h3>";
+if (!container) return;
 
-data.forEach(job => {
+const radius = Number(document.getElementById("radius").value);
+container.innerHTML = "";
+
+const filtered = allJobs.filter(job => {
+const miles = getDistanceMiles(myLat, myLng, job.lat, job.lng);
+if (miles === null) return true;
+return miles <= radius;
+});
+
+if (filtered.length === 0) {
+container.innerHTML = "<p>No jobs found nearby.</p>";
+return;
+}
+
+filtered.forEach(job => {
+const miles = getDistanceMiles(myLat, myLng, job.lat, job.lng);
 container.innerHTML += `
 <div class="job">
-<b>${job.title}</b>
-<p>${job.description}</p>
-<p>$${job.budget}</p>
+<h3>${job.title || "Untitled Job"}</h3>
+<p>${job.description || "No details"}</p>
+<p><b>Category:</b> ${job.category || "General"}</p>
+<p><b>Pay:</b> ${job.payment_type || "Cash"} - $${job.budget || 0}</p>
+<p><b>Posted by:</b> ${job.posted_by || "Unknown"}</p>
+${miles ? `<p><b>Distance:</b> ${miles.toFixed(1)} miles away</p>` : `<p><b>Distance:</b> Location not available</p>`}
+<button onclick="acceptJob('${job.id}')">Accept Job</button>
 </div>
 `;
 });
 }
 
+async function acceptJob(jobId) {
+if (!currentUser) return alert("Please login first.");
+
+const { error } = await client
+.from("jobs")
+.update({
+status: "accepted",
+accepted_by: currentUser.email
+})
+.eq("id", jobId);
+
+if (error) return alert(error.message);
+
+alert("Job accepted.");
 loadJobs();
+}
 
+function startRealtime() {
+client
+.channel("jobs-live-feed")
+.on(
+"postgres_changes",
+{ event: "*", schema: "public", table: "jobs" },
+() => loadJobs()
+)
+.subscribe();
+}
+
+checkUser();
+getLocation();
+loadJobs();
+startRealtime();
 </script>
-
 </body>
 </html>
