@@ -1,150 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-body {
-<div class="app">  
-font-family: Arial, sans-serif;
-background: #f2f3f5;
-margin: 0;
-padding: 0;
-display: flex;
-justify-content: center;
-}
-
-.app {
-max-width: 420px;
-width: 100%;
-padding: 16px;
-}
-
-h1 {
-text-align: center;
-}
-
-button {
-width: 100%;
-padding: 14px;
-margin: 8px 0;
-border-radius: 10px;
-border: none;
-font-weight: bold;
-font-size: 16px;
-}
-
-.need {
-background: #d9534f;
-color: white;
-}
-
-.help {
-background: #28a745;
-color: white;
-}
-
-.card {
-background: white;
-padding: 14px;
-margin-top: 12px;
-border-radius: 10px;
-box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-input, select, textarea {
-width: 100%;
-padding: 10px;
-margin-top: 6px;
-margin-bottom: 10px;
-border-radius: 8px;
-border: 1px solid #ccc;
-}
-</style>
-  
 <title>MySkillSwapNow</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body { margin:0; font-family:Arial; background:#f2f3f5; }
-.app { max-width:430px; margin:auto; padding:15px; }
-h2 { text-align:center; }
-
-.btn {
-width:100%;
-padding:20px;
-border-radius:15px;
-font-size:20px;
-margin:10px 0;
-border:none;
-color:white;
-font-weight:bold;
-}
-
-.need { background:#d62828; }
-.help { background:#16803c; }
-
-.card {
-background:white;
-padding:15px;
-border-radius:15px;
-margin-top:12px;
-box-shadow:0 4px 14px #0001;
-}
-
-input, textarea, select {
-width:100%;
-padding:12px;
-margin:6px 0;
-border-radius:10px;
-border:1px solid #ccc;
-}
-
-.job {
-border:1px solid #ddd;
-padding:12px;
-margin-top:10px;
-border-radius:12px;
-}
-
-.urgent {
-border:2px solid red;
-background:#fff5f5;
-}
-
-.badge {
-background:red;
-color:white;
-padding:4px 8px;
-border-radius:8px;
-font-size:12px;
-margin-left:8px;
-}
-
+body { margin:0; font-family:Arial,sans-serif; background:#f2f3f5; color:#111; }
+.app { max-width:430px; margin:auto; padding:16px 16px 90px; }
+h1 { text-align:center; margin-bottom:4px; }
+.tagline { text-align:center; color:#666; margin-top:0; }
+.card { background:white; padding:16px; border-radius:18px; margin:14px 0; box-shadow:0 8px 24px rgba(0,0,0,.08); }
+input, textarea, select { width:100%; box-sizing:border-box; padding:13px; margin:7px 0; border-radius:12px; border:1px solid #ccc; font-size:15px; }
+textarea { min-height:80px; }
+button { width:100%; padding:14px; margin:7px 0; border:0; border-radius:14px; font-weight:bold; font-size:15px; }
+.need { background:#d62828; color:white; font-size:20px; }
+.help { background:#16803c; color:white; font-size:20px; }
+.primary { background:#111827; color:white; }
+.danger { background:#d62828; color:white; }
+.success { background:#16803c; color:white; }
+.muted { background:#e5e7eb; color:#111; }
 .hidden { display:none; }
+.job { border:1px solid #ddd; border-radius:16px; padding:14px; margin:12px 0; background:#fff; }
+.urgent { border:2px solid #d62828; background:#fff5f5; }
+.badge { display:inline-block; background:#d62828; color:white; padding:4px 8px; border-radius:10px; font-size:12px; margin-left:6px; }
+.small { color:#666; font-size:13px; }
+.tabs { position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:center; gap:6px; padding:8px; border-top:1px solid #ddd; }
+.tabs button { width:auto; flex:1; max-width:95px; font-size:12px; padding:10px 6px; margin:0; background:#f3f4f6; }
+.message { background:#f3f4f6; padding:10px; border-radius:12px; margin:8px 0; }
+.mine { background:#dcfce7; }
 </style>
 </head>
 
 <body>
 <div class="app">
-
-<h2>MySkillSwapNow</h2>
-<p id="status">Loading...</p>
-
-<button class="btn need" onclick="showNeed()">🟥 I NEED HELP</button>
-<button class="btn help" onclick="showHelp()">🟩 I CAN HELP</button>
+<h1>MySkillSwapNow</h1>
+<p class="tagline">Fast local help. Cash or credits.</p>
+<p id="status" class="small">Loading location...</p>
 
 <div class="card">
 <h3>Login</h3>
-<input id="email" value="test@test.com">
-<input id="password" type="password" value="password123">
-<button onclick="login()">Login</button>
+<input id="email" placeholder="Email" value="test@test.com">
+<input id="password" type="password" placeholder="Password" value="password123">
+<button class="primary" onclick="login()">Login</button>
+<button class="muted" onclick="signUp()">Sign Up</button>
+<button class="muted" onclick="logout()">Logout</button>
+<p id="userStatus" class="small">Not logged in</p>
 </div>
 
-<div id="needSection" class="card hidden">
-<h3>Post Job</h3>
+<div id="homeSection">
+<button class="need" onclick="showSection('postSection')">🟥 I NEED HELP</button>
+<button class="help" onclick="showSection('jobsSection'); loadJobs();">🟩 I CAN HELP</button>
 
-<input id="title" placeholder="Describe help needed">
-<textarea id="description"></textarea>
+<div class="card">
+<h3>How it works</h3>
+<p>Post urgent help, accept nearby jobs, chat, and track helper location.</p>
+</div>
+</div>
+
+<div id="postSection" class="hidden card">
+<h3>Post Job</h3>
+<input id="title" placeholder="What help do you need?">
+<textarea id="description" placeholder="Add job details"></textarea>
 
 <select id="urgency">
 <option value="normal">Normal</option>
@@ -160,45 +77,66 @@ margin-left:8px;
 <select id="category">
 <option>General Labor</option>
 <option>Electrical</option>
+<option>Plumbing</option>
+<option>HVAC</option>
 <option>Moving</option>
+<option>Lawn</option>
+<option>Cleaning</option>
+<option>Barber</option>
+<option>Welding</option>
 </select>
 
-<input id="budget" type="number" value="80">
-
-<button onclick="postJob()">Post Job</button>
+<input id="budget" type="number" placeholder="Budget" value="80">
+<button class="primary" onclick="postJob()">Post Job</button>
 </div>
 
-<div id="helpSection" class="card hidden">
+<div id="jobsSection" class="hidden card">
 <h3>Jobs Near You</h3>
-
 <label>Distance: <span id="radiusText">25</span> miles</label>
 <input id="radius" type="range" min="1" max="100" value="25" oninput="updateRadius()">
-
-<div id="jobs"></div>
+<div id="jobsList"></div>
 </div>
 
+<div id="chatSection" class="hidden card">
+<h3>Chat</h3>
+<p id="chatJobTitle" class="small">Select a job first.</p>
+<div id="messagesList"></div>
+<input id="chatInput" placeholder="Type message...">
+<button class="primary" onclick="sendMessage()">Send Message</button>
+</div>
+
+<div id="trackSection" class="hidden card">
+<h3>Tracking</h3>
+<p id="trackInfo">Accept a job first to start tracking.</p>
+<button class="success" onclick="shareTracking()">Share My Location</button>
+<button class="muted" onclick="loadTracking()">Refresh Tracking</button>
+</div>
+</div>
+
+<div class="tabs">
+<button onclick="showSection('homeSection')">Home</button>
+<button onclick="showSection('jobsSection'); loadJobs();">Jobs</button>
+<button onclick="showSection('chatSection'); loadMessages();">Chat</button>
+<button onclick="showSection('trackSection'); loadTracking();">Track</button>
 </div>
 
 <script>
-const client = supabase.createClient(
-"https://szkbplrqutkedxylhruh.supabase.co",
-"sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg"
-);
+const SUPABASE_URL = "https://szkbplrqutkedxylhruh.supabase.co";
+const SUPABASE_KEY = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
 
-let user = null;
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null;
 let myLat = null;
 let myLng = null;
 let jobs = [];
+let selectedJob = null;
 
-function showNeed() {
-document.getElementById("needSection").classList.remove("hidden");
-document.getElementById("helpSection").classList.add("hidden");
-}
-
-function showHelp() {
-document.getElementById("helpSection").classList.remove("hidden");
-document.getElementById("needSection").classList.add("hidden");
-loadJobs();
+function showSection(id) {
+["homeSection","postSection","jobsSection","chatSection","trackSection"].forEach(sec => {
+document.getElementById(sec).classList.add("hidden");
+});
+document.getElementById(id).classList.remove("hidden");
 }
 
 function updateRadius() {
@@ -206,96 +144,27 @@ document.getElementById("radiusText").innerText = document.getElementById("radiu
 renderJobs();
 }
 
-function getDistance(a,b,c,d){
-if(!a||!b||!c||!d)return null;
-let R=3958.8;
-let dLat=(c-a)*Math.PI/180;
-let dLon=(d-b)*Math.PI/180;
-let x=Math.sin(dLat/2)**2+
-Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*
+function distanceMiles(lat1, lon1, lat2, lon2) {
+if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+const R = 3958.8;
+const dLat = (lat2-lat1) * Math.PI / 180;
+const dLon = (lon2-lon1) * Math.PI / 180;
+const a = Math.sin(dLat/2)**2 +
+Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
 Math.sin(dLon/2)**2;
-return R*(2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)));
+return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
-navigator.geolocation.getCurrentPosition(p=>{
-myLat=p.coords.latitude;
-myLng=p.coords.longitude;
-document.getElementById("status").innerText="Location active ✅";
-});
-
-async function login(){
-let email=emailEl.value;
-let password=passwordEl.value;
-let res=await client.auth.signInWithPassword({email,password});
-user=res.data.user;
+function getLocation() {
+if (!navigator.geolocation) {
+document.getElementById("status").innerText = "Location not supported.";
+return;
 }
 
-async function postJob(){
-if(!user) return alert("login first");
-
-await client.from("jobs").insert([{
-title:title.value,
-description:description.value,
-budget:Number(budget.value),
-payment_type:payment_type.value,
-category:category.value,
-urgency:urgency.value,
-posted_by:user.email,
-lat:myLat,
-lng:myLng,
-status:"open"
-}]);
-
-showHelp();
-}
-
-async function loadJobs(){
-let res=await client.from("jobs")
-.select("*")
-.eq("status","open");
-
-jobs=res.data||[];
+navigator.geolocation.getCurrentPosition(
+pos => {
+myLat = pos.coords.latitude;
+myLng = pos.coords.longitude;
+document.getElementById("status").innerText = "Location active ✅";
 renderJobs();
-}
-
-function renderJobs(){
-let radius=Number(radiusEl.value);
-jobs.sort((a,b)=> b.urgency==="urgent" ? 1 : -1);
-
-jobsEl.innerHTML="";
-
-jobs.forEach(j=>{
-let d=getDistance(myLat,myLng,j.lat,j.lng);
-if(d && d>radius) return;
-
-jobsEl.innerHTML+=`
-<div class="job ${j.urgency==="urgent"?"urgent":""}">
-<b>${j.title}</b>
-${j.urgency==="urgent"?'<span class="badge">HELP NOW</span>':''}
-<p>${j.description}</p>
-<p>$${j.budget}</p>
-<p>${j.category}</p>
-<p>${j.payment_type}</p>
-</div>
-`;
-});
-}
-
-let emailEl=document.getElementById("email");
-let passwordEl=document.getElementById("password");
-let title=document.getElementById("title");
-let description=document.getElementById("description");
-let budget=document.getElementById("budget");
-let category=document.getElementById("category");
-let payment_type=document.getElementById("payment_type");
-let urgency=document.getElementById("urgency");
-let jobsEl=document.getElementById("jobs");
-let radiusEl=document.getElementById("radius");
-
-loadJobs();
-</script>
-
-</div>
-  
-</body>
-</html>
+},
