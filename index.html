@@ -1,913 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<link rel="icon" href="data:,">
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillSwapNow</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-crossorigin=""
-/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-crossorigin=""
-></script>
 
 <style>
-:root {
---bg: #f3f5f8;
---card: #ffffff;
---text: #111827;
---muted: #6b7280;
---line: #dbe1ea;
---primary: #081a78;
---primary-dark: #06145d;
---nav: #050505;
---success: #15803d;
---shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
---radius: 18px;
-}
-
-* {
-box-sizing: border-box;
-}
-
 body {
 margin: 0;
-font-family: Arial, sans-serif;
-background: var(--bg);
-color: var(--text);
+font-family: Arial;
+background: #f2f3f5;
 }
 
-.app-shell {
+.app {
 max-width: 430px;
-margin: 0 auto;
-padding: 14px 14px 92px;
+margin: auto;
+padding: 15px;
 }
 
-.section {
-display: none;
-}
-
-.section.active {
-display: block;
-}
-
-.hero {
-background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+.btn {
+width: 100%;
+padding: 20px;
+border-radius: 15px;
+font-size: 20px;
+margin: 10px 0;
+border: none;
 color: white;
-border-radius: 24px;
-padding: 20px 18px;
-margin-bottom: 14px;
-box-shadow: var(--shadow);
 }
 
-.hero-title {
-font-size: 28px;
-font-weight: 800;
-text-align: center;
-margin: 0 0 8px;
-}
-
-.hero-subtitle {
-font-size: 14px;
-text-align: center;
-line-height: 1.5;
-color: rgba(255, 255, 255, 0.92);
-margin: 0;
-}
+.need { background: red; }
+.help { background: green; }
 
 .card {
-background: var(--card);
-border-radius: var(--radius);
-padding: 16px;
-margin-bottom: 14px;
-box-shadow: var(--shadow);
-}
-
-h2, h3 {
-margin: 0 0 12px;
-}
-
-.mini-note,
-.subtle,
-.status-text {
-font-size: 13px;
-color: var(--muted);
-line-height: 1.45;
-}
-
-.status-text {
-margin-top: 6px;
-}
-
-input,
-textarea,
-select {
-width: 100%;
-box-sizing: border-box;
-border: 1px solid var(--line);
-border-radius: 14px;
-padding: 14px;
-font-size: 16px;
-margin-bottom: 10px;
-background: #fff;
-color: var(--text);
-}
-
-textarea {
-min-height: 92px;
-resize: vertical;
-}
-
-.primary-btn {
-width: 100%;
-border: none;
-border-radius: 16px;
+background: white;
 padding: 15px;
-font-size: 17px;
-font-weight: 700;
-background: var(--primary);
-color: #fff;
-cursor: pointer;
+border-radius: 15px;
+margin-top: 10px;
 }
 
-.secondary-btn {
+input, textarea {
 width: 100%;
-border: 1px solid var(--line);
-border-radius: 16px;
-padding: 14px;
-font-size: 15px;
-font-weight: 700;
-background: #fff;
-color: var(--text);
-cursor: pointer;
+padding: 10px;
+margin: 5px 0;
+border-radius: 10px;
+border: 1px solid #ccc;
 }
 
-.toggle-row,
-.filter-row,
-.auth-btn-row,
-.chip-row {
-display: flex;
-gap: 10px;
-flex-wrap: wrap;
-}
-
-.toggle-btn,
-.filter-btn,
-.auth-btn,
-.chip {
-border: 1px solid var(--line);
-background: #fff;
-border-radius: 18px;
-padding: 12px 16px;
-font-weight: 700;
-cursor: pointer;
-color: var(--text);
-}
-
-.toggle-btn.active,
-.filter-btn.active,
-.auth-btn.primary {
-background: var(--primary);
-color: #fff;
-border-color: var(--primary);
-}
-
-.chip {
-font-size: 12px;
-cursor: default;
-}
-
-.service-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-}
-
-.service-btn {
-border: 1px solid var(--line);
-background: #fff;
-border-radius: 16px;
-padding: 14px;
-text-align: left;
-cursor: pointer;
-font-size: 14px;
-font-weight: 700;
-color: var(--text);
-}
-
-.service-btn small {
-display: block;
-margin-top: 4px;
-color: var(--muted);
-font-weight: 500;
-line-height: 1.35;
-}
-
-.job-card {
-border: 1px solid #ececec;
-border-radius: 16px;
-padding: 14px;
-margin-bottom: 12px;
-background: #fff;
-}
-
-.job-head {
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-gap: 10px;
-}
-
-.job-title {
-font-size: 18px;
-font-weight: 700;
-margin-bottom: 6px;
-}
-
-.job-badge {
-background: var(--primary);
-color: #fff;
-padding: 8px 12px;
-border-radius: 14px;
-font-weight: 700;
-white-space: nowrap;
-}
-
-.job-meta {
-font-size: 14px;
-color: #444;
-line-height: 1.45;
-}
-
-.bottom-nav {
-position: fixed;
-left: 50%;
-transform: translateX(-50%);
-bottom: 0;
-width: 100%;
-max-width: 430px;
-background: var(--nav);
-color: #fff;
-display: flex;
-justify-content: space-around;
-padding: 12px 0 10px;
-border-top-left-radius: 16px;
-border-top-right-radius: 16px;
-z-index: 50;
-}
-
-.nav-item {
-font-size: 12px;
-text-align: center;
-opacity: 0.8;
-cursor: pointer;
-}
-
-.nav-item.active {
-opacity: 1;
-font-weight: 700;
-}
-
-#map {
-width: 100%;
-height: 220px;
-border-radius: 14px;
-margin-top: 8px;
-display: none;
-}
-
-.credit-box {
-font-size: 32px;
-font-weight: 800;
-color: var(--primary);
-margin-bottom: 8px;
-}
-
-.success-text {
-color: var(--success);
-font-weight: 700;
+.job {
+border: 1px solid #ddd;
+padding: 10px;
+margin-top: 10px;
+border-radius: 10px;
 }
 </style>
 </head>
+
 <body>
-<div class="app-shell">
-<div id="home" class="section active">
-<div class="hero">
-<div class="hero-title">MySkillSwapNow</div>
-<p class="hero-subtitle">
-Built for the people who build, wire, weld, lift, haul, repair, clean,
-pour, frame, move, and get the job done.
-</p>
-</div>
+
+<div class="app">
+
+<h2>MySkillSwapNow</h2>
+
+<button class="btn need" onclick="mode='need'">🟥 I NEED HELP</button>
+<button class="btn help" onclick="mode='help'">🟩 I CAN HELP</button>
 
 <div class="card">
-<h3>Built for Trades, Labor, and Skilled Work</h3>
-<div class="mini-note">
-MySkillSwapNow is designed for electricians, HVAC workers, plumbers,
-bricklayers, iron workers, teamsters, welders, laborers, carpenters,
-landscapers, cleaners, barbers, movers, and everyday skilled people who
-want to trade labor, earn cash, or solve local problems.
-</div>
-<div class="chip-row" style="margin-top: 12px;">
-<div class="chip">Electricians</div>
-<div class="chip">Bricklayers</div>
-<div class="chip">Iron Workers</div>
-<div class="chip">Teamsters</div>
-<div class="chip">Welders</div>
-<div class="chip">Laborers</div>
-<div class="chip">HVAC</div>
-<div class="chip">Plumbers</div>
-</div>
+<h3>Login</h3>
+<input id="email" placeholder="email">
+<input id="password" type="password" placeholder="password">
+<button onclick="login()">Login</button>
 </div>
 
-<div class="card">
-<h3>Quick Trade Categories</h3>
-<div class="service-grid">
-<button class="service-btn" onclick="quickFillService('electrical')">
-Electrical
-<small>Panels, outlets, wiring, troubleshooting</small>
-</button>
-<button class="service-btn" onclick="quickFillService('plumbing')">
-Plumbing
-<small>Leaks, drains, fixtures, repairs</small>
-</button>
-<button class="service-btn" onclick="quickFillService('hvac')">
-HVAC
-<small>Cooling, heating, thermostat, airflow</small>
-</button>
-<button class="service-btn" onclick="quickFillService('welding')">
-Welding
-<small>Fabrication, repair, metal work</small>
-</button>
-<button class="service-btn" onclick="quickFillService('handyman')">
-Handyman
-<small>General repairs and small installs</small>
-</button>
-<button class="service-btn" onclick="quickFillService('cleaning')">
-Cleaning
-<small>Deep clean, move-out, labor help</small>
-</button>
-<button class="service-btn" onclick="quickFillService('landscaping')">
-Landscaping
-<small>Yard work, cleanup, labor</small>
-</button>
-<button class="service-btn" onclick="quickFillService('barber')">
-Barber
-<small>Haircuts, trims, grooming</small>
-</button>
-</div>
+<div id="post" class="card">
+<h3>Post Job</h3>
+<input id="title" placeholder="Describe help needed">
+<textarea id="desc"></textarea>
+<input id="budget" placeholder="budget">
+<button onclick="postJob()">Post</button>
 </div>
 
-<div class="card">
-<h3>Payment Filters</h3>
-<div class="filter-row">
-<button class="filter-btn active" id="paymentFilter-all" onclick="setPaymentFilter('all')">All</button>
-<button class="filter-btn" id="paymentFilter-cash" onclick="setPaymentFilter('cash')">Cash</button>
-<button class="filter-btn" id="paymentFilter-credit" onclick="setPaymentFilter('credit')">Credits</button>
-<button class="filter-btn" id="paymentFilter-both" onclick="setPaymentFilter('both')">Cash or Credits</button>
-<button class="filter-btn" id="paymentFilter-emergency" onclick="setPaymentFilter('emergency')">Emergency</button>
-</div>
+<div id="jobs" class="card">
+<h3>Jobs</h3>
 </div>
 
-<div class="card">
-<h3>Smart Search & Match</h3>
-<input
-id="smartSearch"
-type="text"
-placeholder="Try: union electrical help, rural hvac repair, welding, plumbing"
-/>
-<button class="primary-btn" onclick="findBestMatch()">Find Best Match</button>
-<div class="mini-note" id="matchResult">
-Use keywords to rank jobs and quickly fill the request form.
-</div>
-</div>
-
-<div class="card">
-<h3>Login / Sign Up</h3>
-<input id="email" type="email" placeholder="Email" />
-<input id="password" type="password" placeholder="Password" />
-<div class="auth-btn-row">
-<button class="auth-btn primary" onclick="signUp()">Sign Up</button>
-<button class="auth-btn" onclick="login()">Login</button>
-<button class="auth-btn" onclick="logout()">Logout</button>
-</div>
-<div class="status-text" id="authStatus">Not logged in</div>
-</div>
-
-<div class="card">
-<h3>Create Request</h3>
-
-<div class="toggle-row">
-<button id="mode-cash" class="toggle-btn active" onclick="setRequestMode('cash')">Cash Only</button>
-<button id="mode-credit" class="toggle-btn" onclick="setRequestMode('credit')">Credits Only</button>
-<button id="mode-both" class="toggle-btn" onclick="setRequestMode('both')">Cash or Credits</button>
-</div>
-
-<input id="title" type="text" placeholder="Describe the help you need" />
-<textarea
-id="description"
-placeholder="Describe the job, trade, labor, or service needed."
-></textarea>
-
-<select id="category">
-<option>Electrical</option>
-<option>Plumbing</option>
-<option>HVAC</option>
-<option>Welding</option>
-<option>Handyman</option>
-<option>Landscaping</option>
-<option>Cleaning</option>
-<option>Barber</option>
-<option>General Labor</option>
-</select>
-
-<select id="listingArea">
-<option value="urban">Urban</option>
-<option value="rural">Rural</option>
-<option value="suburban">Suburban</option>
-</select>
-
-<input id="budget" type="text" placeholder="80" />
-
-<button class="primary-btn" onclick="postSkill()">Post Job</button>
-<div class="status-text" id="postStatus"></div>
-</div>
-
-<div class="card">
-<h3>Available Jobs</h3>
-<div id="jobsStatus" class="status-text">Loading jobs...</div>
-<div id="jobsList"></div>
-</div>
-</div>
-
-<div id="market" class="section">
-<div class="card">
-<h3>Market</h3>
-<div class="subtle">
-Browse live requests, trade opportunities, and local labor-based matches.
-</div>
-</div>
-
-<div class="card">
-<h3>Live Requests</h3>
-<div id="marketJobsStatus" class="status-text">Loading jobs...</div>
-<div id="marketJobsList"></div>
-</div>
-</div>
-
-<div id="credits" class="section">
-<div class="card">
-<h3>Credits</h3>
-<div class="credit-box">100</div>
-<div class="subtle">
-Credits can be used to swap labor, services, and skills when cash is not
-the first option.
-</div>
-</div>
-</div>
-
-<div id="track" class="section">
-<div class="card">
-<h3>Track</h3>
-<div class="subtle">
-Location and route tracking can be added for workers, deliveries, and job arrival updates.
-</div>
-<div id="map"></div>
-</div>
-</div>
-
-<div id="chat" class="section">
-<div class="card">
-<h3>Chat</h3>
-<div class="subtle" id="chatLockNotice">
-Login is enabled. Messaging rules and premium gates can be added next.
-</div>
-</div>
-</div>
-</div>
-
-<div class="bottom-nav">
-<div class="nav-item active" id="nav-home" onclick="showSection('home')">Home</div>
-<div class="nav-item" id="nav-market" onclick="showSection('market')">Market</div>
-<div class="nav-item" id="nav-credits" onclick="showSection('credits')">Credits</div>
-<div class="nav-item" id="nav-track" onclick="showSection('track')">Track</div>
-<div class="nav-item" id="nav-chat" onclick="showSection('chat')">Chat</div>
 </div>
 
 <script>
-const supabaseUrl = "https://szkbplrqutkedxylhruh.supabase.co";
-const supabaseKey = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
-const app = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-let requestMode = "cash";
-let paymentFilter = "all";
-let cachedJobs = [];
-let map = null;
+const supabase = supabase.createClient(
+"https://szkbplrqutkedxylhruh.supabase.co",
+"YOUR_PUBLISHABLE_KEY"
+);
 
-function escapeHtml(value) {
-return String(value ?? "")
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;")
-.replaceAll("'", "&#039;");
-}
-
-function capitalize(value) {
-const s = String(value || "");
-return s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
-}
-
-function setRequestMode(mode) {
-requestMode = mode;
-document.getElementById("mode-cash").classList.toggle("active", mode === "cash");
-document.getElementById("mode-credit").classList.toggle("active", mode === "credit");
-document.getElementById("mode-both").classList.toggle("active", mode === "both");
-}
-
-function setPaymentFilter(mode) {
-paymentFilter = mode;
-
-["all", "cash", "credit", "both", "emergency"].forEach((id) => {
-const el = document.getElementById("paymentFilter-" + id);
-if (el) el.classList.toggle("active", id === mode);
-});
-
-renderJobs();
-}
-
-function showSection(sectionId) {
-document.querySelectorAll(".section").forEach((section) => {
-section.classList.remove("active");
-});
-
-const selected = document.getElementById(sectionId);
-if (selected) selected.classList.add("active");
-
-document.querySelectorAll(".nav-item").forEach((item) => {
-item.classList.remove("active");
-});
-
-const activeNav = document.getElementById("nav-" + sectionId);
-if (activeNav) activeNav.classList.add("active");
-
-if (sectionId === "track") {
-initMapIfNeeded();
-}
-
-if (sectionId === "market") {
-renderJobs();
-}
-}
-
-function updateChatLockNotice() {
-const notice = document.getElementById("chatLockNotice");
-if (notice) {
-notice.textContent = "Login is enabled. Messaging rules and premium gates can be added next.";
-}
-}
-
-function quickFillService(normalized) {
-const titleEl = document.getElementById("title");
-const categoryEl = document.getElementById("category");
-const descriptionEl = document.getElementById("description");
-
-if (!titleEl || !categoryEl || !descriptionEl) return;
-
-if (normalized.includes("elect")) {
-titleEl.value = "Need electrical help";
-categoryEl.value = "Electrical";
-descriptionEl.value = "Need help with electrical work, wiring, outlets, lights, or troubleshooting.";
-} else if (normalized.includes("plumb")) {
-titleEl.value = "Need plumbing help";
-categoryEl.value = "Plumbing";
-descriptionEl.value = "Need help with plumbing, leaks, drains, fixtures, or repairs.";
-} else if (normalized.includes("hvac")) {
-titleEl.value = "Need HVAC help";
-categoryEl.value = "HVAC";
-descriptionEl.value = "Need help with cooling, heating, thermostat issues, or airflow problems.";
-} else if (normalized.includes("weld")) {
-titleEl.value = "Need welding help";
-categoryEl.value = "Welding";
-descriptionEl.value = "Need help with welding, fabrication, or metal repair.";
-} else if (normalized.includes("barber")) {
-titleEl.value = "Need barber service";
-categoryEl.value = "Barber";
-descriptionEl.value = "Need a haircut, trim, or grooming service.";
-} else if (normalized.includes("clean")) {
-titleEl.value = "Need cleaning help";
-categoryEl.value = "Cleaning";
-descriptionEl.value = "Need cleaning, move-out cleanup, or labor help.";
-} else if (normalized.includes("land")) {
-titleEl.value = "Need landscaping help";
-categoryEl.value = "Landscaping";
-descriptionEl.value = "Need yard work, cleanup, landscaping, or labor help.";
-} else if (normalized.includes("hand")) {
-titleEl.value = "Need handyman help";
-categoryEl.value = "Handyman";
-descriptionEl.value = "Need general repair, install, or maintenance help.";
-} else {
-titleEl.value = "Need general labor help";
-categoryEl.value = "General Labor";
-descriptionEl.value = "Need help with labor, hauling, lifting, or general work.";
-}
-}
-
-function findBestMatch() {
-const raw = document.getElementById("smartSearch").value.trim();
-const normalized = raw.toLowerCase();
-
-if (!normalized) {
-document.getElementById("matchResult").textContent = "Type a trade or service keyword first.";
-return;
-}
-
-quickFillService(normalized);
-document.getElementById("matchResult").textContent =
-`Best match found for "${normalized}". The request form was filled to help you post faster.`;
-}
-
-function updateAuthStatus(user) {
-const statusEl = document.getElementById("authStatus");
-if (!statusEl) return;
-
-if (user) {
-statusEl.textContent = `Logged in as ${user.email}`;
-} else {
-statusEl.textContent = "Not logged in";
-}
-}
-
-async function signUp() {
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value.trim();
-
-if (!email || !password) {
-alert("Email and password required");
-return;
-}
-
-const { data, error } = await app.auth.signUp({
-email,
-password
-});
-
-if (error) {
-alert(error.message);
-return;
-}
-
-updateAuthStatus(data?.user || null);
-alert("Signed up");
-}
+let user = null;
+let mode = "home";
 
 async function login() {
-const email = document.getElementById("email").value.trim();
-const password = document.getElementById("password").value.trim();
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
 
-if (!email || !password) {
-alert("Email and password required");
-return;
-}
+const { data } = await supabase.auth.signInWithPassword({ email, password });
+user = data.user;
 
-const { data, error } = await app.auth.signInWithPassword({
-email,
-password
-});
-
-if (error) {
-alert(error.message);
-return;
-}
-
-updateAuthStatus(data?.user || null);
 alert("Logged in");
 }
 
-async function logout() {
-await app.auth.signOut();
-updateAuthStatus(null);
-alert("Logged out");
-}
+async function postJob() {
+const title = document.getElementById("title").value;
+const desc = document.getElementById("desc").value;
+const budget = document.getElementById("budget").value;
 
-async function checkSession() {
-const { data, error } = await app.auth.getSession();
+await supabase.from("jobs").insert([
+{ title, description: desc, budget }
+]);
 
-if (error) {
-console.error(error);
-updateAuthStatus(null);
-return;
-}
-
-updateAuthStatus(data?.session?.user || null);
-}
-
-function parseArea(description) {
-const text = String(description || "");
-const match = text.match(/\[AREA:(.*?)\]/i);
-return match ? match[1].toLowerCase() : "general";
-}
-
-function cleanDescription(description) {
-return String(description || "").replace(/\s*\[AREA:.*?\]/i, "").trim();
-}
-
-function passesPaymentFilter(job) {
-if (paymentFilter === "all") return true;
-
-const budget = String(job.budget || "").toLowerCase();
-const title = String(job.title || "").toLowerCase();
-const description = String(job.description || "").toLowerCase();
-
-if (paymentFilter === "cash") return budget.includes("$") || /^\d+$/.test(budget);
-if (paymentFilter === "credit") return budget.includes("credit");
-if (paymentFilter === "both") return budget.includes("cash or credits");
-if (paymentFilter === "emergency") {
-return title.includes("emergency") || description.includes("emergency");
-}
-
-return true;
-}
-
-function buildJobsHtml(jobs) {
-return jobs.map((job) => {
-const area = parseArea(job.description);
-const descClean = cleanDescription(job.description);
-
-return `
-<div class="job-card">
-<div class="job-head">
-<div>
-<div class="job-title">${escapeHtml(job.title || "Untitled Job")}</div>
-<div class="job-meta">${escapeHtml(descClean || "No description")}</div>
-</div>
-<div class="job-badge">${escapeHtml(job.budget || "$0")}</div>
-</div>
-
-<div class="job-meta" style="margin-top:10px;">
-Category: <strong>${escapeHtml(job.category || "General")}</strong><br>
-Area: <strong>${escapeHtml(capitalize(area))}</strong><br>
-Posted by: <strong>${escapeHtml(job.user_email || "Unknown")}</strong>
-</div>
-</div>
-`;
-}).join("");
-}
-
-function renderJobs() {
-const jobs = cachedJobs.filter(passesPaymentFilter);
-
-const homeListEl = document.getElementById("jobsList");
-const homeStatusEl = document.getElementById("jobsStatus");
-const marketListEl = document.getElementById("marketJobsList");
-const marketStatusEl = document.getElementById("marketJobsStatus");
-
-if (!jobs.length) {
-if (homeListEl) homeListEl.innerHTML = "";
-if (marketListEl) marketListEl.innerHTML = "";
-
-if (homeStatusEl) homeStatusEl.textContent = "No jobs posted yet.";
-if (marketStatusEl) marketStatusEl.textContent = "No jobs posted yet.";
-return;
-}
-
-const html = buildJobsHtml(jobs);
-
-if (homeStatusEl) homeStatusEl.textContent = "";
-if (marketStatusEl) marketStatusEl.textContent = "";
-
-if (homeListEl) homeListEl.innerHTML = html;
-if (marketListEl) marketListEl.innerHTML = html;
+loadJobs();
 }
 
 async function loadJobs() {
-const homeStatusEl = document.getElementById("jobsStatus");
-const marketStatusEl = document.getElementById("marketJobsStatus");
-const homeListEl = document.getElementById("jobsList");
-const marketListEl = document.getElementById("marketJobsList");
+const { data } = await supabase.from("jobs").select("*");
 
-if (homeStatusEl) homeStatusEl.textContent = "Loading jobs...";
-if (marketStatusEl) marketStatusEl.textContent = "Loading jobs...";
-if (homeListEl) homeListEl.innerHTML = "";
-if (marketListEl) marketListEl.innerHTML = "";
+const container = document.getElementById("jobs");
+container.innerHTML = "<h3>Jobs</h3>";
 
-try {
-const { data, error } = await app
-.from("jobs")
-.select("*")
-.order("created_at", { ascending: false });
-
-if (error) {
-if (homeStatusEl) homeStatusEl.textContent = "Could not load jobs.";
-if (marketStatusEl) marketStatusEl.textContent = "Could not load jobs.";
-console.error("loadJobs error:", error);
-return;
-}
-
-cachedJobs = Array.isArray(data) ? data : [];
-renderJobs();
-} catch (err) {
-if (homeStatusEl) homeStatusEl.textContent = "Could not load jobs.";
-if (marketStatusEl) marketStatusEl.textContent = "Could not load jobs.";
-console.error("loadJobs catch:", err);
-}
-}
-
-async function postSkill() {
-const {
-data: { user }
-} = await app.auth.getUser();
-
-if (!user) {
-alert("Please login before posting a job.");
-return;
-}
-
-const title = document.getElementById("title").value.trim();
-const descriptionRaw = document.getElementById("description").value.trim();
-const category = document.getElementById("category").value;
-const budget = document.getElementById("budget").value.trim();
-const areaType = document.getElementById("listingArea").value;
-const postStatus = document.getElementById("postStatus");
-
-if (!title) {
-alert("Please enter a job title");
-return;
-}
-
-let finalBudget = budget || "$0";
-if (requestMode === "credit") finalBudget = `${budget || "1"} credit trade`;
-if (requestMode === "both") finalBudget = budget || "cash or credits";
-
-const payload = {
-title,
-description: `${descriptionRaw} [AREA:${areaType}]`,
-category,
-budget: finalBudget,
-user_email: user.email
-};
-
-try {
-postStatus.textContent = "Posting job...";
-
-const { error } = await app
-.from("jobs")
-.insert([payload]);
-
-if (error) {
-console.error("postSkill error:", error);
-alert(error.message || "Could not post job");
-postStatus.textContent = "";
-return;
-}
-
-document.getElementById("title").value = "";
-document.getElementById("description").value = "";
-document.getElementById("budget").value = "";
-
-await loadJobs();
-postStatus.textContent = "";
-alert("Job posted successfully");
-} catch (err) {
-console.error("postSkill catch:", err);
-alert("Could not post job: " + (err?.message || JSON.stringify(err)));
-postStatus.textContent = "";
-}
-}
-
-function initMapIfNeeded() {
-const mapEl = document.getElementById("map");
-if (!mapEl) return;
-
-mapEl.style.display = "block";
-
-if (map) {
-setTimeout(() => map.invalidateSize(), 150);
-return;
-}
-
-map = L.map("map").setView([36.0801, -115.1522], 11);
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-attribution: "&copy; OpenStreetMap"
-}).addTo(map);
-
-setTimeout(() => map.invalidateSize(), 150);
-}
-
-app.auth.onAuthStateChange((_event, session) => {
-updateAuthStatus(session?.user || null);
+data.forEach(job => {
+container.innerHTML += `
+<div class="job">
+<b>${job.title}</b>
+<p>${job.description}</p>
+<p>$${job.budget}</p>
+</div>
+`;
 });
+}
 
 loadJobs();
-checkSession();
-updateChatLockNotice();
+
 </script>
+
 </body>
 </html>
