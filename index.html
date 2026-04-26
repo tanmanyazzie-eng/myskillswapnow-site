@@ -1,229 +1,273 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MySkillSwapNow</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-body {
-font-family: Arial;
-margin: 0;
-background: #f5f7fb;
-}
-
-.app {
-max-width: 420px;
-margin: auto;
-padding: 15px;
-}
-
-h1 {
-text-align: center;
-}
-
-button {
-width: 100%;
-padding: 14px;
-margin-top: 8px;
-border-radius: 10px;
-border: none;
-font-weight: bold;
-}
-
-.red { background: red; color: white; }
-.green { background: green; color: white; }
-.black { background: black; color: white; }
-
-.card {
-background: white;
-padding: 15px;
-border-radius: 12px;
-margin-top: 15px;
-}
-
-input, textarea, select {
-width: 100%;
-padding: 10px;
-margin-top: 8px;
-border-radius: 8px;
-border: 1px solid #ccc;
-}
-
-.job {
-border: 1px solid #ddd;
-padding: 10px;
-margin-top: 10px;
-border-radius: 10px;
-}
-
-.chat {
-height: 200px;
-overflow-y: auto;
-border: 1px solid #ddd;
-padding: 10px;
-margin-bottom: 10px;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f4f8;color:#111827}
+.app{max-width:430px;margin:0 auto;padding:18px 14px 95px}
+.logo{text-align:center;font-size:30px;font-weight:900;margin-top:10px}
+.status{text-align:center;color:#555;font-size:14px;margin:6px 0 18px}
+.hero{display:grid;gap:12px;margin-bottom:16px}
+.big{border:0;border-radius:18px;padding:24px 14px;color:#fff;font-size:22px;font-weight:900;box-shadow:0 10px 22px #0002}
+.need{background:#d62828}.can{background:#15803d}
+.card{background:#fff;border-radius:20px;padding:16px;margin:14px 0;box-shadow:0 8px 24px #00000018}
+h3{margin:0 0 12px}
+input,textarea,select{width:100%;padding:14px;margin:8px 0;border:1px solid #d1d5db;border-radius:14px;font-size:15px;background:#fff}
+textarea{min-height:85px;resize:vertical}
+.row{display:flex;gap:8px}
+button{cursor:pointer}
+.btn{width:100%;border:0;border-radius:14px;padding:13px 16px;margin-top:6px;font-weight:800;background:#111827;color:#fff}
+.btn2{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:12px;margin-top:6px;font-weight:800;background:#fff;color:#111827}
+.screen{display:block}.hidden{display:none!important}
+.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#111827;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;border-radius:18px 18px 0 0;z-index:10}
+.tabs button{border:0;border-radius:12px;padding:10px 4px;background:transparent;color:#fff;font-weight:800;font-size:12px}
+.tabs button.active{background:#2563eb}
+.job{border:1px solid #e5e7eb;border-radius:18px;padding:14px;margin:12px 0;background:#fff}
+.urgent{border:2px solid #ef4444;background:#fff5f5}
+.badge{display:inline-block;background:#dc2626;color:#fff;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:900;margin-left:5px}
+.ok{display:inline-block;background:#16a34a;color:#fff;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:900;margin-left:5px}
+.muted{color:#6b7280;font-size:13px}
+.price{display:inline-block;background:#111827;color:#fff;padding:8px 12px;border-radius:12px;font-weight:900}
+.chatbox{height:260px;overflow:auto;border:1px solid #e5e7eb;border-radius:16px;padding:12px;background:#f9fafb;margin-bottom:10px}
+.msg{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0}
 </style>
 </head>
-
 <body>
 <div class="app">
+<div class="logo">MySkillSwapNow</div>
+<div class="status" id="locationStatus">Getting location...</div>
 
-<h1>MySkillSwapNow</h1>
-<p id="locationStatus">Getting location...</p>
+<div class="hero">
+<button class="big need" onclick="showTab('post')">🟥 I NEED HELP</button>
+<button class="big can" onclick="showTab('jobs')">🟩 I CAN HELP</button>
+</div>
 
-<button class="red" onclick="show('post')">I NEED HELP</button>
-<button class="green" onclick="show('jobs')">I CAN HELP</button>
-
-<!-- LOGIN -->
+<section id="home" class="screen">
 <div class="card">
-<h3>Login</h3>
-<input id="email" value="test@test.com">
-<input id="password" type="password" value="password123">
-<button onclick="login()">Login</button>
-<button onclick="signup()">Sign Up</button>
-<p id="user"></p>
+<h3>Login / Sign Up</h3>
+<input id="emailInput" placeholder="Email" value="test@test.com">
+<input id="passwordInput" type="password" placeholder="Password" value="password123">
+<div class="row">
+<button class="btn" onclick="login()">Login</button>
+<button class="btn2" onclick="signUp()">Sign Up</button>
 </div>
-
-<!-- POST -->
-<div id="post" class="card" style="display:none;">
-<h3>Post Job</h3>
-<input id="title" placeholder="Title">
-<textarea id="desc"></textarea>
-<input id="budget" type="number" value="80">
-<button onclick="postJob()">Post Job</button>
+<button class="btn2" onclick="logout()">Logout</button>
+<p class="muted" id="userStatus">Not logged in</p>
 </div>
+<div class="card">
+<h3>What this app does</h3>
+<p class="muted">Post local help requests, accept nearby jobs, chat by job, and update helper tracking.</p>
+</div>
+</section>
 
-<!-- JOBS -->
-<div id="jobs" class="card" style="display:none;">
-<h3>Jobs</h3>
+<section id="post" class="screen hidden">
+<div class="card">
+<h3>Post a Help Request</h3>
+<input id="titleInput" placeholder="Example: Need help moving couch">
+<textarea id="descriptionInput" placeholder="Add job details"></textarea>
+<select id="urgencyInput">
+<option value="normal">Normal</option>
+<option value="urgent">🚨 HELP NOW</option>
+</select>
+<select id="paymentInput">
+<option>Cash Only</option>
+<option>Credits Only</option>
+<option>Cash or Credits</option>
+</select>
+<select id="categoryInput">
+<option>General Labor</option><option>Moving</option><option>Electrical</option><option>Plumbing</option><option>HVAC</option><option>Cleaning</option><option>Lawn</option><option>Welding</option><option>Barber</option>
+</select>
+<input id="budgetInput" type="number" placeholder="Budget" value="80">
+<button class="btn" onclick="postJob()">Post Job</button>
+</div>
+</section>
+
+<section id="jobs" class="screen hidden">
+<div class="card">
+<h3>Jobs Near You</h3>
+<label class="muted">Distance filter: <span id="radiusText">25</span> miles</label>
+<input id="radiusInput" type="range" min="1" max="100" value="25" oninput="updateRadius()">
 <div id="jobList"></div>
 </div>
+</section>
 
-<!-- CHAT -->
-<div id="chat" class="card" style="display:none;">
-<h3>Chat</h3>
-<div class="chat" id="chatBox"></div>
-<input id="msg">
-<button onclick="send()">Send</button>
+<section id="chat" class="screen hidden">
+<div class="card">
+<h3>Job Chat</h3>
+<p class="muted" id="chatJobLabel">Open chat from a job first.</p>
+<div class="chatbox" id="chatBox"></div>
+<input id="messageInput" placeholder="Type message...">
+<button class="btn" onclick="sendMessage()">Send Message</button>
+</div>
+</section>
+
+<section id="track" class="screen hidden">
+<div class="card">
+<h3>Tracking</h3>
+<p class="muted" id="trackJobLabel">Accept a job first.</p>
+<button class="btn" onclick="updateTracking()">Update My Location</button>
+<div id="trackingInfo" class="muted"></div>
+</div>
+</section>
 </div>
 
+<div class="tabs">
+<button id="homeTab" class="active" onclick="showTab('home')">Home</button>
+<button id="jobsTab" onclick="showTab('jobs')">Jobs</button>
+<button id="chatTab" onclick="showTab('chat')">Chat</button>
+<button id="trackTab" onclick="showTab('track')">Track</button>
 </div>
 
 <script>
 const SUPABASE_URL = "https://szkbplrqutkedxylhruh.supabase.co";
 const SUPABASE_KEY = "sb_publishable_RUItc0pMsVY3_QLEWM6vPA_dcRVcILg";
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentUser=null,currentJobId=null,currentJobTitle="",jobs=[],myLat=null,myLng=null;
 
-let user = null;
-let currentJob = null;
-
-function show(tab) {
-document.getElementById("post").style.display = "none";
-document.getElementById("jobs").style.display = "none";
-document.getElementById("chat").style.display = "none";
-
-document.getElementById(tab).style.display = "block";
-
-if (tab === "jobs") loadJobs();
+function showTab(tab){
+document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+document.getElementById(tab).classList.remove("hidden");
+document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+let btn=document.getElementById(tab+"Tab"); if(btn)btn.classList.add("active");
+if(tab==="jobs")loadJobs();
+if(tab==="chat")loadMessages();
 }
 
-async function signup() {
-let { data, error } = await client.auth.signUp({
-email: email.value,
-password: password.value
+function updateRadius(){document.getElementById("radiusText").innerText=document.getElementById("radiusInput").value;renderJobs();}
+
+function distanceMiles(a,b,c,d){
+if(!a||!b||!c||!d)return null;
+const R=3958.8,dLat=(c-a)*Math.PI/180,dLon=(d-b)*Math.PI/180;
+const x=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2;
+return R*(2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)));
+}
+
+function getLocation(){
+if(!navigator.geolocation){locationStatus.innerText="Location not supported";return;}
+navigator.geolocation.getCurrentPosition(p=>{myLat=p.coords.latitude;myLng=p.coords.longitude;locationStatus.innerText="Location active ✅";renderJobs();},()=>{locationStatus.innerText="Location denied";});
+}
+
+async function checkUser(){
+const {data}=await client.auth.getUser();
+currentUser=data.user;
+userStatus.innerText=currentUser?"Logged in as "+currentUser.email:"Not logged in";
+}
+
+async function signUp(){
+const email=emailInput.value,password=passwordInput.value;
+const {data,error}=await client.auth.signUp({email,password});
+if(error)return alert(error.message);
+currentUser=data.user;await checkUser();alert("Signed up");
+}
+
+async function login(){
+const email=emailInput.value,password=passwordInput.value;
+const {data,error}=await client.auth.signInWithPassword({email,password});
+if(error)return alert(error.message);
+currentUser=data.user;await checkUser();alert("Logged in");
+}
+
+async function logout(){
+await client.auth.signOut();currentUser=null;currentJobId=null;currentJobTitle="";await checkUser();
+}
+
+async function postJob(){
+if(!currentUser)return alert("Please login first.");
+const title=titleInput.value.trim(); if(!title)return alert("Enter a job title.");
+const job={title,description:descriptionInput.value,budget:Number(budgetInput.value),category:categoryInput.value,payment_type:paymentInput.value,urgency:urgencyInput.value,posted_by:currentUser.email,lat:myLat,lng:myLng,status:"open"};
+const {error}=await client.from("jobs").insert([job]);
+if(error)return alert(error.message);
+titleInput.value="";descriptionInput.value="";alert("Job posted");showTab("jobs");
+}
+
+async function loadJobs(){
+const {data,error}=await client.from("jobs").select("*").in("status",["open","accepted"]).order("created_at",{ascending:false});
+if(error)return alert(error.message);
+jobs=data||[];renderJobs();
+}
+
+function renderJobs(){
+if(!document.getElementById("jobList"))return;
+const list=jobList,radius=Number(radiusInput.value);list.innerHTML="";
+const sorted=[...jobs].sort((a,b)=>a.urgency==="urgent"&&b.urgency!=="urgent"?-1:a.urgency!=="urgent"&&b.urgency==="urgent"?1:0);
+const filtered=sorted.filter(j=>{const m=distanceMiles(myLat,myLng,j.lat,j.lng);return m===null||m<=radius;});
+if(!filtered.length){list.innerHTML="<p class='muted'>No jobs nearby.</p>";return;}
+filtered.forEach(j=>{
+const m=distanceMiles(myLat,myLng,j.lat,j.lng);
+const urgent=j.urgency==="urgent"?"<span class='badge'>HELP NOW</span>":"";
+const accepted=j.status==="accepted"?"<span class='ok'>ACCEPTED</span>":"";
+list.innerHTML+=`<div class="job ${j.urgency==="urgent"?"urgent":""}">
+<h3>${j.title||"Untitled"} ${urgent} ${accepted}</h3>
+<p>${j.description||"No details"}</p>
+<p><b>Status:</b> ${j.status||"open"}</p>
+<p><b>Category:</b> ${j.category||"General"}</p>
+<p><b>Pay:</b> ${j.payment_type||"Cash"}</p>
+<span class="price">$${j.budget||0}</span>
+<p class="muted">Posted by: ${j.posted_by||"Unknown"}</p>
+<p class="muted">Accepted by: ${j.accepted_by||"Not accepted yet"}</p>
+<p class="muted">${m?m.toFixed(1)+" miles away":"Distance unavailable"}</p>
+${j.status==="open"?`<button class="btn" onclick="acceptJob('${j.id}')">Accept Job</button>`:""}
+<button class="btn2" onclick="openChat('${j.id}')">Open Job Chat</button>
+</div>`;
 });
-
-if (error) alert(error.message);
 }
 
-async function login() {
-let { data, error } = await client.auth.signInWithPassword({
-email: email.value,
-password: password.value
-});
-
-if (error) alert(error.message);
-else {
-user = data.user;
-document.getElementById("user").innerText = user.email;
-}
+async function acceptJob(id){
+if(!currentUser)return alert("Please login first.");
+const {error}=await client.from("jobs").update({accepted_by:currentUser.email,status:"accepted"}).eq("id",id);
+if(error)return alert(error.message);
+currentJobId=id;await loadJobs();openChat(id);
 }
 
-async function postJob() {
-if (!user) return alert("login first");
-
-let { error } = await client.from("jobs").insert([{
-title: title.value,
-description: desc.value,
-budget: budget.value,
-posted_by: user.email,
-status: "open"
-}]);
-
-if (error) alert(error.message);
-else alert("posted");
+function openChat(id){
+currentJobId=id;
+const job=jobs.find(j=>j.id===id);currentJobTitle=job?.title||"Selected Job";
+chatJobLabel.innerText="Chat for: "+currentJobTitle;trackJobLabel.innerText="Tracking for: "+currentJobTitle;
+showTab("chat");loadMessages();
 }
 
-async function loadJobs() {
-let { data } = await client.from("jobs").select("*");
+async function loadMessages(){
+chatBox.innerHTML="";
+if(!currentJobId){chatBox.innerHTML="<p class='muted'>Open a job chat first from the Jobs tab.</p>";return;}
+const {data,error}=await client.from("messages").select("*").eq("job_id",currentJobId).order("created_at",{ascending:true});
+if(error)return alert(error.message);
+(data||[]).forEach(m=>{chatBox.innerHTML+=`<div class="msg"><b>${m.sender}</b><p>${m.message}</p></div>`;});
+chatBox.scrollTop=chatBox.scrollHeight;
+}
 
-jobList.innerHTML = "";
+async function sendMessage(){
+if(!currentUser)return alert("Please login first.");
+if(!currentJobId)return alert("Open a job chat first from the Jobs tab.");
+const message=messageInput.value.trim();if(!message)return;
+const {error}=await client.from("messages").insert([{job_id:currentJobId,sender:currentUser.email,message}]);
+if(error)return alert(error.message);
+messageInput.value="";loadMessages();
+}
 
-data.forEach(j => {
-jobList.innerHTML += `
-<div class="job">
-<b>${j.title}</b>
-<p>${j.description}</p>
-<p>$${j.budget}</p>
-
-<button onclick="openChat('${j.id}')">Chat</button>
-</div>
-`;
+async function updateTracking(){
+if(!currentUser)return alert("Please login first.");
+if(!currentJobId)return alert("Accept a job first or open the job chat.");
+navigator.geolocation.getCurrentPosition(async p=>{
+const lat=p.coords.latitude,lng=p.coords.longitude;
+const {error}=await client.from("tracking").insert([{job_id:currentJobId,helper_email:currentUser.email,lat,lng,status:"en_route"}]);
+if(error)return alert(error.message);
+trackingInfo.innerHTML=`<p>Tracking updated ✅</p><p>Lat: ${lat.toFixed(4)}<br>Lng: ${lng.toFixed(4)}</p>`;
 });
 }
 
-function openChat(id) {
-currentJob = id;
-show("chat");
-loadMessages();
+function startRealtime(){
+client.channel("live-app")
+.on("postgres_changes",{event:"*",schema:"public",table:"jobs"},()=>loadJobs())
+.on("postgres_changes",{event:"*",schema:"public",table:"messages"},()=>loadMessages())
+.subscribe();
 }
 
-async function loadMessages() {
-let { data } = await client
-.from("messages")
-.select("*")
-.eq("job_id", currentJob);
-
-chatBox.innerHTML = "";
-
-data.forEach(m => {
-chatBox.innerHTML += `<p><b>${m.sender}</b>: ${m.message}</p>`;
-});
-}
-
-async function send() {
-if (!user) return alert("login");
-if (!currentJob) return alert("select job");
-
-await client.from("messages").insert([{
-job_id: currentJob,
-sender: user.email,
-message: msg.value
-}]);
-
-msg.value = "";
-loadMessages();
-}
-
-navigator.geolocation.getCurrentPosition(pos => {
-document.getElementById("locationStatus").innerText = "Location active";
-});
-
+getLocation();checkUser();loadJobs();startRealtime();
 </script>
 </body>
 </html>
-
